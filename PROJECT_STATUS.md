@@ -2,7 +2,7 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 2B: Resume intelligence, **implemented and verified, awaiting your review** (branch `feat/m2b-resume-intelligence`)
+**Current milestone:** 2B: Resume intelligence, **approved and merged** (also verified by you with a real resume upload)
 **Next:** Milestone 3: Retrieval engine
 
 ## Milestone 2B: Resume intelligence (verified 2026-11-17)
@@ -14,7 +14,7 @@ _Last updated: 2026-11-17_
 - [x] Review → apply flow (skills merged with source=resume); reprocess; delete (row + file)
 - [x] Live end-to-end run against Gemini with a fictional resume: parsed correctly, 5.5 y computed, alias resolution, no warnings
 - [x] 170 tests (no test ever calls the real LLM), 90% coverage; ruff, mypy --strict, alembic check clean
-- [ ] Your review → merge to main
+- [x] Approved and merged to main (2026-11-17)
 - Deferred: extraction-quality benchmark on labelled resumes (Milestone 7); Celery worker (Milestone 9); OCR (out of scope)
 
 
