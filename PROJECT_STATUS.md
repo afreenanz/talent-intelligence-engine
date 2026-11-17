@@ -2,7 +2,7 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 5B: Personalization engine, **implemented and verified, awaiting your review** (branch `feat/m5-personalization`, includes 5A)
+**Current milestone:** 5: Activity + personalization, **approved and merged** (PR #5)
 **Next:** Milestone 6: AI agent (LangGraph)
 
 ## Milestone 5B: Personalization engine (verified 2026-11-18)
