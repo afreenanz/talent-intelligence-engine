@@ -2,7 +2,7 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 7 (A+B): Evaluation, **implemented and verified, awaiting your review** (branch `feat/m7-evaluation`)
+**Current milestone:** 7: Evaluation, **merged** (PR #7)
 **Next:** Milestone 8: Frontend
 
 ## Milestone 7B: Performance + evaluation API (verified 2026-11-18)
