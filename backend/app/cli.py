@@ -96,6 +96,76 @@ def cmd_embed_jobs(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_eval_retrieval(args: argparse.Namespace) -> int:
+    from dataclasses import replace
+    from datetime import UTC, datetime
+
+    from app.domains.evaluation import retrieval_eval as ev
+    from app.domains.search.indexing import embed_jobs
+    from app.integrations.embeddings.base import KNOWN_MODELS
+    from app.integrations.embeddings.sentence_transformer import SentenceTransformerEmbedder
+
+    dataset_dir = REPO_ROOT / "eval" / "datasets" / args.dataset
+    models = {name: SentenceTransformerEmbedder(KNOWN_MODELS[name]) for name in args.models}
+    primary = args.models[0]
+    # Ablation: same model and same document vectors, query encoded without the instruction.
+    no_prefix = SentenceTransformerEmbedder(replace(KNOWN_MODELS[primary], query_prefix=""))
+    with get_sessionmaker()() as session:
+        for emb in models.values():  # incremental: only missing/changed vectors are computed
+            r = embed_jobs(session, emb)
+            print(
+                f"embeddings[{emb.spec.name}]: {r.embedded} computed, {r.skipped_unchanged} cached"
+            )
+        dataset = ev.load_dataset(session, dataset_dir, args.source)
+        categories = {q.query_id: q.category for q in dataset.queries}
+        best, grid = ev.tune_hybrid(session, dataset, models[primary], primary)
+        short = {name: name.split("/")[-1] for name in args.models}
+        configs = [ev.Config("lexical (FTS)", "lexical", primary)]
+        for name in args.models:
+            configs.append(ev.Config(f"dense ({short[name]})", "dense", name))
+            configs.append(ev.Config(f"hybrid ({short[name]}, k=60)", "hybrid", name))
+        configs.append(
+            ev.Config(
+                f"hybrid (tuned: {short[primary]}, k={best.rrf_k}, w={best.dense_weight})",
+                "hybrid",
+                primary,
+                best.rrf_k,
+                best.dense_weight,
+            )
+        )
+        configs.append(
+            ev.Config(
+                f"dense ({short[primary]}, NO query prefix)", "dense", primary, query_prefix=False
+            )
+        )
+        results = [
+            ev.run_config(
+                session, dataset, c, models[c.model] if c.query_prefix else no_prefix, args.split
+            )
+            for c in configs
+        ]
+        for res in results:
+            ev.persist(
+                session,
+                "retrieval_comparison",
+                dataset,
+                args.split,
+                res,
+                categories,
+                {"tuned_on": "dev"},
+            )
+        stamp = datetime.now(UTC).strftime("%Y-%m-%d")
+        report = REPO_ROOT / "eval" / "reports" / f"{stamp}-{args.dataset}-{args.split}.md"
+        ev.write_report(report, dataset, args.split, results, results[0], grid, best, categories)
+    print(f"report: {report}")
+    for res in results:
+        print(
+            f"  {res.config.name:45} ndcg@10={res.mean('ndcg@10'):.3f} "
+            f"mrr@10={res.mean('mrr@10'):.3f} r@100={res.mean('recall@100'):.3f}"
+        )
+    return 0
+
+
 def cmd_runs(args: argparse.Namespace) -> int:
     with get_sessionmaker()() as session:
         runs = session.scalars(
@@ -135,6 +205,17 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--batch-size", type=int, default=64)
     p.add_argument("--include-inactive", action="store_true")
     p.set_defaults(func=cmd_embed_jobs)
+
+    p = sub.add_parser("eval-retrieval", help="compare lexical/dense/hybrid on a labelled dataset")
+    p.add_argument("--dataset", default="retrieval_v1")
+    p.add_argument("--source", default="synthetic_v1", help="job source the judgments refer to")
+    p.add_argument("--split", choices=["dev", "test"], default="test")
+    p.add_argument(
+        "--models",
+        nargs="+",
+        default=["BAAI/bge-small-en-v1.5", "sentence-transformers/all-MiniLM-L6-v2"],
+    )
+    p.set_defaults(func=cmd_eval_retrieval)
 
     p = sub.add_parser("runs", help="list recent ingestion runs")
     p.add_argument("--limit", type=int, default=10)

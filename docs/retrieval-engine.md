@@ -20,6 +20,53 @@ Measured on this laptop (warm process, 1,593 jobs): query embedding ≈ 8 ms, le
 dense exact scan ≈ 3–6 ms, hybrid total ≈ 20 ms. The first query after start-up takes ≈ 250 ms
 (model warm-up). Embedding all 1,593 jobs takes ≈ 30 s on CPU.
 
+## Evaluation results (Milestone 3B)
+
+Command: `uv run python -m app.cli eval-retrieval --split {dev,test}`. Reports:
+[dev](../eval/reports/2026-11-17-retrieval_v1-dev.md) · [test](../eval/reports/2026-11-17-retrieval_v1-test.md).
+Dataset: [retrieval_v1](../eval/datasets/retrieval_v1/README.md): **synthetic corpus, silver labels**.
+
+NDCG@10 (excerpt from the generated reports):
+
+| Configuration | dev (n=21) | test (n=19) |
+|---|---|---|
+| lexical (FTS) | 0.803 | 0.767 |
+| dense (bge-small) | 0.857 | 0.806 |
+| dense (bge-small, no query prefix) | 0.815 | 0.811 |
+| dense (MiniLM-L6) | 0.771 | 0.861 |
+| **hybrid (bge-small, k=60)**, current default | 0.871 | 0.818 |
+| hybrid (MiniLM-L6, k=60) | 0.862 | 0.823 |
+| hybrid (bge, tuned on dev: k=100, w=2) | 0.892* | 0.823 |
+
+\* tuned on this split, so optimistic by construction.
+
+**What the data supports:**
+1. **Lexical is the weakest on both splits**, and the gap is concentrated in abbreviation
+   queries ("SRE", "SDET", "k8s infra": lexical 0.30 vs 0.45-0.61 for dense on test). That is the
+   expected failure mode of keyword search, and it's the one consistent, interpretable effect.
+2. **Hybrid ≥ lexical on both splits.** On test the 95% CI for hybrid-bge vs lexical is
+   [-0.001, +0.120]: a consistent direction, but not conclusive at n=19.
+
+**What it does NOT support:**
+3. **Which embedding model is better.** bge wins dev by +0.09; MiniLM wins test by +0.06.
+   The ranking flips between splits, so it's dataset noise, not a model property.
+4. **Fusion tuning.** The dev-tuned setting gained +0.005 on test: noise. The default (k=60,
+   equal weights) is kept as the simpler choice.
+5. **The bge query prefix.** It helps on dev (+0.04) and is neutral on test.
+
+**Decision:** keep `hybrid` + `bge-small-en-v1.5` + k=60 as the default. Re-decide the model on a
+real, human-labelled dataset (options below).
+
+## Real datasets considered (licences checked 2026-11-17 against official metadata)
+
+| Dataset | Licence | Contents | Verdict |
+|---|---|---|---|
+| TalentCLEF 2026 (Zenodo record 19652670) | CC BY 4.0 | Human-labelled job-person matching tasks (EN/ES) | **Best candidate**: real relevance labels; most useful for Milestone 4 ranking. Test labels may not be public while the shared task runs. |
+| lukebarousse/data_jobs (HF) | Apache-2.0 | 100k–1M real postings (HF size category), data roles; title, skills, location, salary, **no description** | Usable for a real-world lexical/skill sanity check; weak for dense retrieval |
+| JobVision (HF) | CC BY-NC 4.0 | Persian job posts | Rejected (non-commercial, language) |
+| LinkedIn postings (Kaggle, arshkon) | not verified | 124k postings | Rejected until the licence is confirmed; scraped from LinkedIn |
+| 2024-mcm job-postings-raw (HF) | none declared | 1M+ postings | Rejected: no licence means no permission |
+
 ## Interface
 
 ```python

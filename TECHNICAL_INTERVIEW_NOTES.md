@@ -72,3 +72,14 @@ is the actual exercise.
 57. How do you avoid re-embedding unchanged jobs? What would force a full re-embed?
 58. Why use a hashing embedder in most tests, plus a few tests with the real model?
 59. Why the CPU-only torch index for Linux?
+
+## Milestone 3B: Retrieval evaluation
+60. Define P@K, R@K, MRR and NDCG@K. Why exponential gain? Why must IDCG use *all* judged documents, not just the retrieved ones?
+61. Why is Recall@10 tiny here, and why is that not a bug?
+62. What are "silver" labels? Why are yours independent of the systems, and what are their weaknesses?
+63. Why tune on dev and report on test? What happened when you did (the tuned setting gained +0.005 on test)?
+64. Explain the paired bootstrap. Why *paired*? What does a CI of [-0.001, +0.120] let you claim?
+65. The model ranking flipped between splits. What does that tell you, and what would you need to decide properly?
+66. Lexical search scored 0.30 on abbreviation queries. Why exactly, and how do dense embeddings help?
+67. Why store per-query scores and the git commit with every evaluation run?
+68. Which public datasets did you reject, and why does "no licence" mean you can't use it?

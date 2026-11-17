@@ -31,6 +31,7 @@ See architecture.md §3. Async is reserved for the streaming agent endpoint if i
 **Decision.** Both are 384-dimensional, so they fit the same `vector(384)` column. bge-small is the default candidate and MiniLM is the comparison. The **final default is chosen by our own retrieval evaluation**, not by leaderboard numbers. The model name is configurable via env.
 **Alternatives.** Larger models (bge-base 768-d, e5-large) are slower on CPU; they can be added as experiments. API embeddings (OpenAI) add cost and a network dependency to every search.
 **Consequences.** Note that bge models expect a query instruction prefix for retrieval queries. The embedding service will handle query vs. document encoding explicitly.
+**Update (Milestone 3B, 2026-11-17):** evaluated both models on `retrieval_v1`. The winner **flips between dev and test** (bge +0.09 on dev, MiniLM +0.06 on test), so the synthetic benchmark can't decide. bge stays the default. The decision is reopened when a real, human-labelled dataset is added. The bge query prefix is now set explicitly (its ST config ships empty); its effect was +0.04 on dev and neutral on test.
 
 ## ADR-006 Embeddings in their own tables with a content hash
 See database-design.md §3.5.

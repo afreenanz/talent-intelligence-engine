@@ -4,6 +4,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 3B: Retrieval evaluation
+- Ranking metrics with hand-computed tests; `evaluation_runs` table
+- `retrieval_v1` silver benchmark (40 queries, dev/test) and qrels builder from generator ground truth
+- `eval-retrieval` CLI: tuning on dev, held-out comparison, paired bootstrap CIs, Markdown reports
+- Synthetic jobs now carry a `truth` field (ignored by ingestion)
+
 ### Milestone 3A: Retrieval engine
 - Embedding tables and generated full-text search vector (migration `3dcced24e94a`)
 - Sentence Transformers embedder with explicit query prompts; incremental job embedding CLI
