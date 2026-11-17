@@ -2,7 +2,7 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 6A: AI agent core, **implemented and verified, awaiting your review** (branch `feat/m6a-agent`)
+**Current milestone:** 6A: AI agent, **approved and merged** (PR #6)
 **Next:** 6B: agent hardening (streaming optional, more failure tests), then Milestone 7: evaluation
 
 ## Milestone 6A: AI agent (verified 2026-11-18)
