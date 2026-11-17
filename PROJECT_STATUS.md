@@ -2,8 +2,18 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 3A: Retrieval engine, **approved and merged** (PR #1; CI green on Linux)
-**Next:** 3B: Retrieval evaluation (metrics, labelled queries, comparison report, real-dataset options)
+**Current milestone:** 3B: Retrieval evaluation, **implemented and verified, awaiting your review** (branch `feat/m3b-retrieval-eval`)
+**Next:** Milestone 4: Ranking engine. **Decision needed:** add a real dataset (see docs/retrieval-engine.md)
+
+## Milestone 3B: Retrieval evaluation (verified 2026-11-17)
+- [x] Metrics: P@K, R@K, MRR, NDCG@K (graded) with hand-computed unit tests
+- [x] `evaluation_runs` table (migration `5340709bcd09`); every run stores config, metrics, per-query scores, git commit
+- [x] Dataset `retrieval_v1`: 40 queries in 7 categories, dev/test split, 12,998 silver judgments from generator ground truth
+- [x] Runner: dev-only fusion tuning, held-out evaluation, paired bootstrap CIs, per-category breakdown, latency; Markdown reports
+- [x] Findings: lexical weakest on both splits (abbreviations); hybrid ≥ lexical; **model choice and fusion tuning not decidable** (ranking flips between splits)
+- [x] Real-dataset options with licences checked (TalentCLEF 2026 CC BY 4.0; data_jobs Apache-2.0)
+- [x] 205 tests; ruff, mypy --strict, alembic check clean
+- [ ] Your review → PR → CI → merge
 
 ## Milestone 3A: Retrieval engine (verified 2026-11-17)
 - [x] Migration `3dcced24e94a`: job_embeddings, candidate_embeddings, jobs.skills_text (backfilled), generated weighted search_vector + GIN

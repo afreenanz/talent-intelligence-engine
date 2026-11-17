@@ -434,7 +434,14 @@ def generate(n: int, seed: int, reference: datetime) -> tuple[list[dict[str, Any
             "posted_at": posted.isoformat(),
             "expires_at": (posted + timedelta(days=rng.randint(30, 90))).isoformat(),
             "synthetic": True,
-            "role_family": family,  # ground truth for evaluation; ignored by ingestion
+            # Ground truth for evaluation labels; not part of the job contract, so ingestion
+            # ignores it. Kept even when the posting itself omits its skill lists.
+            "truth": {
+                "role_family": family,
+                "seniority": prefix.strip().lower() or "mid",
+                "required": required,
+                "preferred": preferred,
+            },
             **_salary_fields(rng, lpa_lo, lpa_hi, currency),
             **_experience_fields(rng, exp_lo, exp_hi),
         }

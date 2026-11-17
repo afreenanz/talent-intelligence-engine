@@ -10,7 +10,7 @@ Every dataset in this folder, where it came from, and whether it may be used.
 | `synthetic/jobs_v1_sample.csv` | Same script (first 60 valid records) | **SYNTHETIC** | Project-owned |
 
 Rules:
-- Synthetic records carry `"synthetic": true`. The fictional company names are invented and any
+- Synthetic records carry `"synthetic": true` and a `truth` object (role family, seniority, generating skills) used only to build evaluation labels; ingestion ignores it. The fictional company names are invented and any
   resemblance to a real organisation is coincidental.
 - No real resumes or personal data are committed. `data/private/` is git-ignored for local use.
 - A public dataset may be added only after its licence is checked and recorded in this table.

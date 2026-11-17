@@ -1,6 +1,6 @@
 # Evaluation Framework
 
-> Status: **Design (Milestone 0)**. Metric functions are built and unit-tested from Milestone 3; the full framework lands in Milestone 7.
+> Status: **Retrieval evaluation implemented (Milestone 3B)**: `app/domains/evaluation/` (metrics with hand-computed tests, runner, paired bootstrap, `evaluation_runs` table). Extraction, agent and response-quality evaluation land in Milestone 7.
 
 ## Principles
 - Metrics are pure functions with unit tests against hand-computed examples.

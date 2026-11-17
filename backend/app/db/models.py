@@ -3,6 +3,7 @@
 from app.db.base import Base
 from app.domains.auth.models import RefreshToken, User
 from app.domains.candidates.models import CandidateProfile, CandidateSkill
+from app.domains.evaluation.models import EvaluationRun
 from app.domains.ingestion.models import IngestionError, IngestionRun
 from app.domains.jobs.models import Job, JobSkill
 from app.domains.resumes.models import Resume
@@ -14,6 +15,7 @@ __all__ = [
     "CandidateEmbedding",
     "CandidateProfile",
     "CandidateSkill",
+    "EvaluationRun",
     "IngestionError",
     "IngestionRun",
     "Job",
