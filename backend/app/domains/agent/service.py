@@ -206,9 +206,7 @@ def get_conversation(
     conv = _owned(session, candidate_id, conversation_id)
     msgs = list(
         session.scalars(
-            select(Message)
-            .where(Message.conversation_id == conv.id)
-            .order_by(Message.seq)
+            select(Message).where(Message.conversation_id == conv.id).order_by(Message.seq)
         )
     )
     return conv, msgs
