@@ -4,6 +4,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 7B: Performance and evaluation API
+- `bench-performance` (latency, throughput, query plans, exact vs HNSW); `make-admin` CLI
+- Admin evaluation API: `GET /api/v1/evaluations`, `GET /{id}`, `POST /run` (retrieval only)
+- Generated API reference; performance benchmark doc
+
+### Milestone 7A: LLM-quality benchmarks
+- `eval-agent` (agent_v1, 23 cases) and `eval-extraction` (extraction_v1, 10 resumes) with deterministic scoring
+- Gemini adapter: Retry-After / 429 backoff, client-side pacing, thinking tokens billed as output
+- Resume post-processing: negation filter; dictionary-only skills become suggestions
+
 ### Milestone 6A: AI agent
 - Gemini tool-calling adapter (stateless Interactions API, parallel calls)
 - 10 validated tools; LangGraph graph with confirmation interrupts, grounding check, step limit

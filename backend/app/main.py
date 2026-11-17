@@ -17,6 +17,7 @@ from app.core.logging import configure_logging
 from app.domains.agent.router import router as agent_router
 from app.domains.auth.router import router as auth_router
 from app.domains.candidates.router import router as candidates_router
+from app.domains.evaluation.router import router as evaluations_router
 from app.domains.interactions.router import router as interactions_router
 from app.domains.jobs.router import router as jobs_router
 from app.domains.preferences.router import router as preferences_router
@@ -81,6 +82,7 @@ def create_app() -> FastAPI:
     v1.include_router(interactions_router)
     v1.include_router(preferences_router)
     v1.include_router(agent_router)
+    v1.include_router(evaluations_router)
     app.include_router(health.router)
     app.include_router(v1)
     return app

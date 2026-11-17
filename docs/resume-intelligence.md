@@ -42,7 +42,10 @@ deterministic check:
 | Resume text contains instructions ("ignore the rules…") | Text is fenced as data, the end marker is neutralised, output is schema-constrained, and every fact is still grounding-checked | `test_prompt_cannot_be_closed_early_by_resume_content` |
 
 A dictionary matcher (the same one as job ingestion) runs on the text independently. Each
-skill records its provenance: `llm`, `dictionary` or `both`, which feeds the extraction evaluation in Milestone 7.
+skill records its provenance: `llm`, `dictionary` or `both`. **Since Milestone 7, dictionary-only skills are
+`suggested=true`**: shown for review but not pre-selected. A **negation filter** drops a skill whose every
+mention follows "no / not / never / without / lacking …". Both changes came from the extraction benchmark
+(docs/evaluation-framework.md), where the dictionary re-added a prompt-injected skill.
 
 ## Failure handling
 

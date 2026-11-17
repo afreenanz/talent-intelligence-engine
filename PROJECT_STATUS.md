@@ -2,8 +2,25 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 6A: AI agent, **approved and merged** (PR #6)
-**Next:** 6B: agent hardening (streaming optional, more failure tests), then Milestone 7: evaluation
+**Current milestone:** 7 (A+B): Evaluation, **implemented and verified, awaiting your review** (branch `feat/m7-evaluation`)
+**Next:** Milestone 8: Frontend
+
+## Milestone 7B: Performance + evaluation API (verified 2026-11-18)
+- [x] `bench-performance`: per-stage latency, HTTP end to end (p50 54 ms), throughput, EXPLAIN ANALYZE plans, exact vs HNSW (rolled back)
+- [x] Decisions: no HNSW at 1.6k vectors; GIN index proven usable; random_page_cost note for production
+- [x] Methodology fix: warm cache before EXPLAIN ANALYZE (a cold/warm confound had produced a wrong conclusion)
+- [x] Admin-only evaluation API (list/detail/run-retrieval); `make-admin` CLI
+- [x] `docs/api-documentation.md` generated from OpenAPI (37 endpoints); `docs/performance-benchmarks.md`
+- [x] 317 tests; ruff, mypy --strict clean
+
+## Milestone 7A: Agent and extraction benchmarks (verified 2026-11-18)
+- [x] agent_v1: 23 cases / 14 categories, deterministic checks, factual consistency vs DB, cost at paid-tier prices
+- [x] Two live runs: 23/23 pass both times; groundedness 1.0; factual 40/40 and 39/39; ≈ $0.027/run (paid tier)
+- [x] Rate limiting: Retry-After + longer 429 backoff + client pacing; infra errors reported separately
+- [x] extraction_v1: 10 fictional resumes; v1 found the dictionary re-adding an injected skill → v2 fixes (suggestions + negation filter)
+- [x] Thinking tokens now counted as billable output
+- [x] Weaknesses documented: unrequested employment_type filter, invalid filter not flagged, repeated retries of a failing tool
+- [x] 314 tests; ruff, mypy --strict clean
 
 ## Milestone 6A: AI agent (verified 2026-11-18)
 - [x] Gemini tool calling (stateless Interactions API, parallel calls), verified live before building

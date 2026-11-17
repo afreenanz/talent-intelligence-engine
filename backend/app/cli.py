@@ -224,6 +224,96 @@ def cmd_eval_personalization(_: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_eval_agent(args: argparse.Namespace) -> int:
+    from datetime import UTC, datetime
+
+    from sqlalchemy.orm import Session
+
+    from app.db.session import get_engine
+    from app.domains.agent.checkpointer import close_checkpointer
+    from app.domains.evaluation import agent_eval as ae
+    from app.integrations.embeddings.sentence_transformer import get_embedder
+    from app.integrations.llm.factory import get_tool_calling_llm
+
+    llm = get_tool_calling_llm()
+    # Pace requests to stay under the free tier's per-minute quota (429s observed at full speed).
+    llm.min_interval_seconds = args.min_interval  # type: ignore[attr-defined]
+    embedder = get_embedder()
+    cases = REPO_ROOT / "eval" / "datasets" / "agent_v1" / "cases.jsonl"
+    connection = get_engine().connect()
+    outer = connection.begin()  # benchmark users, saves, conversations: all rolled back
+    try:
+        sim = Session(bind=connection, join_transaction_mode="create_savepoint")
+        results = ae.run(sim, cases, llm, embedder)
+        summary = ae.summarize(results)
+        sim.close()
+    finally:
+        outer.rollback()
+        connection.close()
+    stamp = datetime.now(UTC).strftime("%Y-%m-%d")
+    report = REPO_ROOT / "eval" / "reports" / f"{stamp}-agent-benchmark.md"
+    with get_sessionmaker()() as session:
+        ae.persist_and_report(session, results, summary, llm.model, report)
+    close_checkpointer()
+    print(f"report: {report}")
+    for k, v in summary.items():
+        print(f"  {k}: {v}")
+    return 0
+
+
+def cmd_eval_extraction(args: argparse.Namespace) -> int:
+    from datetime import UTC, datetime
+
+    from app.domains.evaluation import extraction_eval as ee
+    from app.integrations.llm.factory import get_llm_provider
+
+    llm = get_llm_provider()
+    llm.min_interval_seconds = args.min_interval  # type: ignore[attr-defined]
+    dataset = REPO_ROOT / "eval" / "datasets" / "extraction_v1" / "resumes.jsonl"
+    stamp = datetime.now(UTC).strftime("%Y-%m-%d")
+    report = REPO_ROOT / "eval" / "reports" / f"{stamp}-resume-extraction.md"
+    with get_sessionmaker()() as session:  # read-only use of the skill vocabulary
+        results = ee.run(session, dataset, llm)
+        summary = ee.summarize(results)
+        ee.persist_and_report(session, results, summary, llm.model, report)
+    print(f"report: {report}")
+    for k, v in summary.items():
+        print(f"  {k}: {v}")
+    return 0
+
+
+def cmd_bench_performance(_: argparse.Namespace) -> int:
+    from datetime import UTC, datetime
+
+    from app.domains.evaluation import performance as perf
+    from app.domains.ranking.cross_encoder import get_cross_encoder
+    from app.integrations.embeddings.sentence_transformer import get_embedder
+
+    queries = REPO_ROOT / "eval" / "datasets" / "retrieval_v1" / "queries.jsonl"
+    stamp = datetime.now(UTC).strftime("%Y-%m-%d")
+    report = REPO_ROOT / "eval" / "reports" / f"{stamp}-performance.md"
+    with get_sessionmaker()() as session:
+        results = perf.run(session, get_embedder(), get_cross_encoder(), queries)
+        session.rollback()
+        perf.persist_and_report(session, results, report)
+    print(f"report: {report}")
+    return 0
+
+
+def cmd_make_admin(args: argparse.Namespace) -> int:
+    from app.domains.auth.models import User
+
+    with get_sessionmaker()() as session:
+        user = session.scalar(select(User).where(User.email == args.email.lower()))
+        if user is None:
+            print(f"no user with email {args.email}", file=sys.stderr)
+            return 2
+        user.is_admin = True
+        session.commit()
+    print(f"{args.email} is now an admin")
+    return 0
+
+
 def cmd_runs(args: argparse.Namespace) -> int:
     with get_sessionmaker()() as session:
         runs = session.scalars(
@@ -280,6 +370,21 @@ def main(argv: list[str] | None = None) -> int:
 
     p = sub.add_parser("eval-personalization", help="simulated-persona personalization experiment")
     p.set_defaults(func=cmd_eval_personalization)
+
+    p = sub.add_parser("eval-agent", help="agent benchmark against the live LLM (rolled back)")
+    p.add_argument("--min-interval", type=float, default=4.0, help="seconds between LLM calls")
+    p.set_defaults(func=cmd_eval_agent)
+
+    p = sub.add_parser("eval-extraction", help="resume extraction benchmark (live LLM)")
+    p.add_argument("--min-interval", type=float, default=4.0, help="seconds between LLM calls")
+    p.set_defaults(func=cmd_eval_extraction)
+
+    p = sub.add_parser("bench-performance", help="latency, query plans, exact vs HNSW")
+    p.set_defaults(func=cmd_bench_performance)
+
+    p = sub.add_parser("make-admin", help="grant admin rights (evaluation dashboard)")
+    p.add_argument("email")
+    p.set_defaults(func=cmd_make_admin)
 
     p = sub.add_parser("runs", help="list recent ingestion runs")
     p.add_argument("--limit", type=int, default=10)

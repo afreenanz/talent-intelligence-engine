@@ -8,7 +8,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
 from app.core.config import Settings, get_settings
-from app.core.errors import AuthenticationError
+from app.core.errors import AuthenticationError, PermissionDeniedError
 from app.core.security import InvalidTokenError, decode_access_token
 from app.db.session import get_db
 from app.domains.auth.models import User
@@ -42,3 +42,12 @@ def get_current_user(
 
 
 CurrentUser = Annotated[User, Depends(get_current_user)]
+
+
+def get_current_admin(user: CurrentUser) -> User:
+    if not user.is_admin:
+        raise PermissionDeniedError("Admin access required")
+    return user
+
+
+CurrentAdmin = Annotated[User, Depends(get_current_admin)]
