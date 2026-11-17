@@ -21,10 +21,14 @@ import structlog
 from pydantic import BaseModel, ValidationError
 
 from app.integrations.llm.base import (
+    AssistantTurn,
+    ChatItem,
     LLMResponseError,
     LLMUnavailableError,
     LLMUsage,
     StructuredResult,
+    ToolCall,
+    ToolSpec,
 )
 
 log = structlog.get_logger(__name__)
@@ -101,6 +105,68 @@ class GeminiProvider:
             ),
         )
 
+    def chat(self, system: str, history: list[ChatItem], tools: list[ToolSpec]) -> AssistantTurn:
+        """Stateless tool-calling turn (store=false: Google keeps no conversation state).
+
+        Verified live (2026-11-18): the input is the full ordered history, model steps (including
+        `thought` steps with signatures) replayed unchanged, and tool results sent as
+        `function_result` steps. Several function calls can come back in one response.
+        """
+        body = {
+            "model": self._model,
+            "store": False,
+            "system_instruction": system,
+            "input": [step for item in history for step in _to_steps(item)],
+            "tools": [
+                {
+                    "type": "function",
+                    "name": t.name,
+                    "description": t.description,
+                    "parameters": t.parameters,
+                }
+                for t in tools
+            ],
+        }
+        started = time.perf_counter()
+        data = self._post_with_retries(body)
+        latency_ms = int((time.perf_counter() - started) * 1000)
+        if data.get("status") not in (None, "completed", "requires_action"):
+            raise LLMUnavailableError(f"LLM interaction not completed: {data.get('status')}")
+        steps: list[dict[str, Any]] = list(data.get("steps") or [])
+        calls = [
+            ToolCall(
+                call_id=str(st["id"]),
+                name=str(st["name"]),
+                arguments=dict(st.get("arguments") or {}),
+            )
+            for st in steps
+            if st.get("type") == "function_call"
+        ]
+        text = (
+            "".join(
+                part.get("text", "")
+                for st in steps
+                if st.get("type") == "model_output"
+                for part in st.get("content") or []
+                if part.get("type") == "text"
+            ).strip()
+            or None
+        )
+        if not calls and not text:
+            raise LLMResponseError("LLM returned neither text nor tool calls")
+        usage = data.get("usage") or {}
+        return AssistantTurn(
+            text=text,
+            tool_calls=calls,
+            raw=steps,
+            usage=LLMUsage(
+                usage.get("total_input_tokens"),
+                usage.get("total_output_tokens"),
+                latency_ms,
+                str(data.get("model") or self._model),
+            ),
+        )
+
     def _post_with_retries(self, body: dict[str, Any]) -> dict[str, Any]:
         attempt = 0
         while True:
@@ -132,6 +198,25 @@ class GeminiProvider:
             log.warning("llm_retry", attempt=attempt + 1, delay_s=delay, reason=str(error))
             self._sleep(delay)
             attempt += 1
+
+
+def _to_steps(item: ChatItem) -> list[dict[str, Any]]:
+    role = item["role"]
+    if role == "user":
+        return [{"type": "user_input", "content": [{"type": "text", "text": item["text"]}]}]
+    if role == "assistant":
+        raw = item.get("raw")
+        return list(raw) if isinstance(raw, list) else []
+    if role == "tool":
+        return [
+            {
+                "type": "function_result",
+                "name": item["name"],
+                "call_id": item["call_id"],
+                "result": [{"type": "text", "text": json.dumps(item["result"], default=str)}],
+            }
+        ]
+    raise ValueError(f"unknown chat item role {role!r}")
 
 
 def _extract_output_text(data: dict[str, Any]) -> str:

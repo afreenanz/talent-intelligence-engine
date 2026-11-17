@@ -3,7 +3,8 @@
 import re
 import time
 import uuid
-from collections.abc import Awaitable, Callable
+from collections.abc import AsyncIterator, Awaitable, Callable
+from contextlib import asynccontextmanager
 
 import structlog
 from fastapi import APIRouter, FastAPI, Request, Response
@@ -13,6 +14,7 @@ from app.api import health
 from app.core.config import get_settings
 from app.core.errors import register_exception_handlers
 from app.core.logging import configure_logging
+from app.domains.agent.router import router as agent_router
 from app.domains.auth.router import router as auth_router
 from app.domains.candidates.router import router as candidates_router
 from app.domains.interactions.router import router as interactions_router
@@ -29,7 +31,14 @@ def create_app() -> FastAPI:
     configure_logging(settings.log_level, settings.log_json)
     log = structlog.get_logger("http")
 
-    app = FastAPI(title=settings.app_name, version="0.1.0")
+    @asynccontextmanager
+    async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+        yield
+        from app.domains.agent.checkpointer import close_checkpointer
+
+        close_checkpointer()  # release the agent's checkpoint connection pool on shutdown
+
+    app = FastAPI(title=settings.app_name, version="0.1.0", lifespan=lifespan)
 
     app.add_middleware(
         CORSMiddleware,
@@ -71,6 +80,7 @@ def create_app() -> FastAPI:
     v1.include_router(resumes_router)
     v1.include_router(interactions_router)
     v1.include_router(preferences_router)
+    v1.include_router(agent_router)
     app.include_router(health.router)
     app.include_router(v1)
     return app

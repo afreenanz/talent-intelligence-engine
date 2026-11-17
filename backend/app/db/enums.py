@@ -81,3 +81,9 @@ class MemorySource(StrEnum):
     SETTINGS = "settings"
     AGENT = "agent"
     DERIVED = "derived"
+
+
+class MessageRole(StrEnum):
+    USER = "user"
+    ASSISTANT = "assistant"
+    TOOL = "tool"

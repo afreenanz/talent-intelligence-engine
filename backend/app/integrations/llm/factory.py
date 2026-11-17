@@ -1,7 +1,7 @@
 from functools import lru_cache
 
 from app.core.config import get_settings
-from app.integrations.llm.base import LLMProvider, LLMUnavailableError
+from app.integrations.llm.base import LLMProvider, LLMUnavailableError, ToolCallingLLM
 from app.integrations.llm.gemini import GeminiProvider
 
 
@@ -22,3 +22,10 @@ def get_llm_provider() -> LLMProvider:
         timeout_seconds=settings.llm_timeout_seconds,
         max_retries=settings.llm_max_retries,
     )
+
+
+def get_tool_calling_llm() -> ToolCallingLLM:
+    provider = get_llm_provider()
+    if not isinstance(provider, GeminiProvider):  # the only tool-calling provider so far
+        raise LLMUnavailableError("configured LLM provider does not support tool calling")
+    return provider

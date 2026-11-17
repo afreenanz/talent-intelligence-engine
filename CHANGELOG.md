@@ -4,6 +4,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 6A: AI agent
+- Gemini tool-calling adapter (stateless Interactions API, parallel calls)
+- 10 validated tools; LangGraph graph with confirmation interrupts, grounding check, step limit
+- Postgres checkpointer in a separate schema; conversations/messages tables (migration `a68d84800899`)
+- `/api/v1/agent/chat`, `/confirm`, conversation list/get/delete
+
 ### Milestone 5B: Personalization engine
 - Role-category classifier; derived preferences from the event log with explicit evidence rules
 - Bounded personalization adjustment with explanations; explicit preferences override profile facts

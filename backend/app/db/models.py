@@ -1,6 +1,7 @@
 """Import every model so `Base.metadata` is complete (used by Alembic autogenerate and tests)."""
 
 from app.db.base import Base
+from app.domains.agent.models import Conversation, Message
 from app.domains.auth.models import RefreshToken, User
 from app.domains.candidates.models import CandidateProfile, CandidateSkill
 from app.domains.evaluation.models import EvaluationRun
@@ -19,6 +20,7 @@ __all__ = [
     "CandidateEmbedding",
     "CandidateProfile",
     "CandidateSkill",
+    "Conversation",
     "EvaluationRun",
     "IngestionError",
     "IngestionRun",
@@ -26,6 +28,7 @@ __all__ = [
     "JobEmbedding",
     "JobInteraction",
     "JobSkill",
+    "Message",
     "RefreshToken",
     "Resume",
     "SavedJob",
