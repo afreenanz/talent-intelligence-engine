@@ -4,6 +4,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 4A: Ranking engine
+- Candidate-job feature pipeline, weighted ranker with versioned weights, explanations
+- Cross-encoder re-ranking stage (top 50) with calibrated sigmoid blending
+- `ranking` option on `POST /api/v1/jobs/search`; new `GET /api/v1/recommendations`
+
 ### Milestone 3B: Retrieval evaluation
 - Ranking metrics with hand-computed tests; `evaluation_runs` table
 - `retrieval_v1` silver benchmark (40 queries, dev/test) and qrels builder from generator ground truth

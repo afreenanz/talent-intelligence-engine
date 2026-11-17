@@ -1,0 +1,16 @@
+{
+  "version": "weighted_v1",
+  "note": "Hand-set starting weights (sum to 1). Tuned only on a dev split, never on test (Milestone 4B).",
+  "weights": {
+    "required_skill_coverage": 0.30,
+    "semantic_similarity": 0.20,
+    "retrieval_score": 0.15,
+    "experience_fit": 0.10,
+    "preferred_skill_coverage": 0.05,
+    "skill_jaccard": 0.05,
+    "location_fit": 0.05,
+    "salary_fit": 0.04,
+    "employment_type_match": 0.03,
+    "recency": 0.03
+  }
+}

@@ -105,7 +105,7 @@ def retrieve_jobs(
     ]
     _attach_titles(session, results)
     timings["fusion_and_load"] = _ms(t)
-    return RetrievalResult(results, mode, lexical_query, used_candidate, timings)
+    return RetrievalResult(results, mode, lexical_query, used_candidate, timings, vector)
 
 
 def _load_profile(session: Session, candidate_id: uuid.UUID) -> CandidateProfile:

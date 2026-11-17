@@ -2,8 +2,17 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 3B: Retrieval evaluation, **approved and merged** (PR #2)
-**Next:** Milestone 4: Ranking engine, using TalentCLEF 2026 (CC BY 4.0) for real labels (decided 2026-11-17)
+**Current milestone:** 4A: Ranking engine, **implemented and verified, awaiting your review** (branch `feat/m4a-ranking`)
+**Next:** 4B: Ranking evaluation on TalentCLEF 2026 (CC BY 4.0, synthetic CVs, human labels)
+
+## Milestone 4A: Ranking engine (verified 2026-11-17)
+- [x] 10 candidate-job features with explicit neutral handling of missing data (unit-tested policy per feature)
+- [x] Transparent weighted ranker (`weights_v1.json`, validated) with per-feature contributions
+- [x] Cross-encoder stage (ms-marco-MiniLM-L6-v2) on the top 50; sigmoid blending (min-max rejected after a live failure)
+- [x] Feature-derived explanations; `ranking` option on search; `GET /api/v1/recommendations`
+- [x] Live run with real models: profile fit drives order; cross-encoder adds ≈0.4–0.6 s
+- [x] 235 tests; ruff, mypy --strict clean
+- [ ] Your review → PR → CI → merge
 
 ## Milestone 3B: Retrieval evaluation (verified 2026-11-17)
 - [x] Metrics: P@K, R@K, MRR, NDCG@K (graded) with hand-computed unit tests

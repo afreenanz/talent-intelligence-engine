@@ -1,6 +1,6 @@
 import uuid
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -56,6 +56,7 @@ class RetrievalResult:
     lexical_query: str | None
     used_candidate_vector: bool
     timings_ms: dict[str, float] = field(default_factory=dict)
+    query_vector: Any = None  # numpy vector used for dense retrieval (reused by the ranker)
 
 
 # ---------------------------------------------------------------- API
@@ -72,6 +73,11 @@ class SearchRequest(BaseModel):
         default=False,
         description="With no query: search with the candidate's profile (recommendation mode)",
     )
+    ranking: Literal["none", "features", "features+cross_encoder"] = Field(
+        default="features",
+        description="none = retrieval order; features = weighted ranker; "
+        "features+cross_encoder = plus cross-encoder re-ranking of the top 50 (~0.3 s extra)",
+    )
 
 
 class SearchHit(BaseModel):
@@ -80,14 +86,24 @@ class SearchHit(BaseModel):
     company: str
     lexical_rank: int | None
     semantic_rank: int | None
-    lexical_score: float | None
-    similarity: float | None
-    fused_score: float
+    lexical_score: float | None = None
+    similarity: float | None = None
+    fused_score: float | None = None
+    # Present when ranking != "none"
+    score: float | None = None
+    stage1_score: float | None = None
+    cross_encoder_score: float | None = None
+    explanation: list[str] | None = None
+    features: dict[str, float] | None = None
+    contributions: dict[str, float] | None = None
+    missing_features: list[str] | None = None
 
 
 class SearchResponse(BaseModel):
     results: list[SearchHit]
     mode: RetrievalMode
+    ranking: str = "none"
+    weights_version: str | None = None
     lexical_query: str | None
     used_profile: bool
     timings_ms: dict[str, float]
