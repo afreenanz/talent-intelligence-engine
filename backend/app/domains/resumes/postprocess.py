@@ -40,6 +40,25 @@ def appears_in(needle: str | None, folded_haystack: str) -> bool:
     return folded.strip() != "" and folded in folded_haystack
 
 
+# ---------------------------------------------------------------- negation
+
+_NEGATION = re.compile(
+    r"\b(no|not|never|without|lack(?:ing)?|unfamiliar with|zero)\b(?:\W+\w+){0,4}\W+$", re.I
+)
+
+
+def only_negated_mentions(terms: set[str], text: str) -> bool:
+    """True if the skill occurs, but every occurrence follows a negation cue within 5 words,
+    e.g. "I have no experience with Java" or "never used Cypress"."""
+    hits = 0
+    for term in {t for t in terms if t}:
+        for m in re.finditer(r"(?<![\w+#])" + re.escape(term) + r"(?![\w+#])", text, re.I):
+            hits += 1
+            if not _NEGATION.search(text[max(0, m.start() - 60) : m.start()]):
+                return False
+    return hits > 0
+
+
 # ---------------------------------------------------------------- experience
 
 
@@ -127,17 +146,26 @@ def postprocess(
     for raw in raw_llm:
         norm = normalize_skill_name(raw)
         skill_id, canonical, terms = resolved.get(norm, (None, raw.strip(), [norm]))
-        if any(appears_in(t, folded) for t in {raw, canonical, *terms}):
+        match_terms = {raw, canonical, *terms}
+        if not any(appears_in(t, folded) for t in match_terms):
+            warnings.append(f"Skill '{raw}' was not found in the resume text and was removed.")
+        elif only_negated_mentions(match_terms, resume_text):
+            warnings.append(
+                f"Skill '{raw}' only appears in a negated phrase (e.g. 'no experience "
+                f"with') and was removed."
+            )
+        else:
             key = canonical.lower()
             skills.setdefault(key, ParsedSkill(name=canonical, skill_id=skill_id, provenance="llm"))
-        else:
-            warnings.append(f"Skill '{raw}' was not found in the resume text and was removed.")
     for skill_id, name in dictionary_skills.items():
         key = name.lower()
         if key in skills:
             skills[key] = skills[key].model_copy(update={"provenance": "both"})
-        else:
-            skills[key] = ParsedSkill(name=name, skill_id=skill_id, provenance="dictionary")
+        elif not only_negated_mentions({name}, resume_text):
+            # Found by the dictionary only: offered as a suggestion, not pre-selected.
+            skills[key] = ParsedSkill(
+                name=name, skill_id=skill_id, provenance="dictionary", suggested=True
+            )
 
     # ---- identity fields: drop rather than invent
     full_name = extraction.full_name if appears_in(extraction.full_name, folded) else None

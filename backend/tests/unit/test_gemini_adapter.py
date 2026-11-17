@@ -77,7 +77,7 @@ def test_retries_on_429_then_succeeds_with_backoff() -> None:
         ]
     )
     assert p.generate_structured("x", Out).value.skills == []
-    assert len(seen) == 3 and sleeps == [1.0, 2.0]
+    assert len(seen) == 3 and sleeps == [10.0, 2.0]  # 429 backs off longer than a 503
 
 
 def test_gives_up_after_max_retries() -> None:
@@ -127,3 +127,32 @@ def test_schema_conversion_keeps_fields_named_title_and_flattens_nullables() -> 
     assert set(item["properties"]) == {"title", "company"}  # regression: "title" was stripped
     assert item["properties"]["title"]["type"] == ["string", "null"]
     assert "$defs" not in schema and "title" not in schema
+
+
+def test_billable_output_includes_thinking_tokens() -> None:
+    body = ok_body('{"name": null, "skills": []}')
+    body["usage"] = {"total_input_tokens": 10, "total_output_tokens": 7, "total_thought_tokens": 30}
+    p, _, _ = make([httpx.Response(200, json=body)])
+    assert p.generate_structured("x", Out).usage.output_tokens == 37
+
+
+def test_rate_limit_honours_retry_after_and_backs_off_longer() -> None:
+    p, _, sleeps = make(
+        [
+            httpx.Response(
+                429, headers={"retry-after": "7"}, json={"error": {"status": "RESOURCE_EXHAUSTED"}}
+            ),
+            httpx.Response(429, json={"error": {"status": "RESOURCE_EXHAUSTED"}}),
+            httpx.Response(200, json=ok_body('{"name": null, "skills": []}')),
+        ]
+    )
+    p.generate_structured("x", Out)
+    assert sleeps == [7.0, 20.0]  # Retry-After first; then 10 * 2**1 for a bare 429
+
+
+def test_min_interval_paces_requests() -> None:
+    p, _, sleeps = make([httpx.Response(200, json=ok_body('{"name": null, "skills": []}'))] * 2)
+    p.min_interval_seconds = 5.0
+    p.generate_structured("x", Out)
+    p.generate_structured("x", Out)
+    assert len(sleeps) == 1 and 4.0 < sleeps[0] <= 5.0

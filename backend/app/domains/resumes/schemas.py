@@ -64,6 +64,10 @@ class ParsedSkill(BaseModel):
     name: str
     skill_id: int | None
     provenance: Literal["llm", "dictionary", "both"]
+    # Dictionary-only finds are shown to the candidate as suggestions but not pre-selected:
+    # the extraction benchmark showed the dictionary re-adding an injected skill and skills
+    # mentioned only in passing (see docs/resume-intelligence.md).
+    suggested: bool = False
 
 
 class ParsedWork(ExtractedWork):

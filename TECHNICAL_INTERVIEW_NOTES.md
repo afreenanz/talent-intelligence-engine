@@ -142,3 +142,22 @@ is the actual exercise.
 115. Bug: messages came back in random order in tests. Why does `now()` cause that, and why is `seq` the right fix?
 116. How do you test an LLM agent deterministically? (scripted LLM turns that depend on real tool results)
 117. The live agent added an unrequested filter. How would you measure and reduce that? (Milestone 7 benchmark)
+
+## Milestone 7A: Evaluating LLM systems
+118. Why deterministic checks rather than LLM-as-judge? What can deterministic checks *not* measure?
+119. How is "factual consistency" computed for agent replies? What error would it still miss?
+120. The first agent run had 6 failures. Why were they excluded from quality metrics, and why are they still reported?
+121. 23/23 passed. List three weaknesses you found anyway, and why the checks didn't catch them.
+122. Why run the benchmark twice? What does variation between runs tell you about LLM systems?
+123. How did the extraction benchmark reveal that *your* code reintroduced a prompt injection? What was the fix and its trade-off?
+124. Why is the v2 extraction score optimistic? What would a proper confirmation look like?
+125. Why must thinking tokens be counted in the cost estimate?
+126. How do you stay within a free tier's rate limits in batch jobs? (pacing, Retry-After, backoff)
+
+## Milestone 7B: Performance
+127. Walk through where the 54 ms of a search request goes. What would you optimise first, and why not before measuring?
+128. Why isn't there an HNSW index? What numbers would change your mind?
+129. The planner chose a seq scan over the GIN index. Why might that be right at 1.6k rows, and what is random_page_cost?
+130. Your first plan comparison was wrong. What confounded it, and how did you rule out stale statistics?
+131. Why is the cross-encoder opt-in? Quote its latency.
+132. Why can only the retrieval benchmark be started over HTTP?

@@ -48,10 +48,15 @@ class GeminiProvider:
         max_retries: int,
         transport: httpx.BaseTransport | None = None,
         sleep: Any = time.sleep,
+        min_interval_seconds: float = 0.0,
     ) -> None:
         self._model = model
         self._max_retries = max_retries
         self._sleep = sleep
+        # Client-side pacing: minimum gap between requests (0 = off). Keeps batch jobs such as
+        # benchmarks under a requests-per-minute quota instead of hitting 429s.
+        self.min_interval_seconds = min_interval_seconds
+        self._last_request = 0.0
         self._client = httpx.Client(
             base_url=base_url,
             timeout=httpx.Timeout(timeout_seconds, connect=10.0),
@@ -99,11 +104,18 @@ class GeminiProvider:
             raw_text=text,
             usage=LLMUsage(
                 input_tokens=usage.get("total_input_tokens"),
-                output_tokens=usage.get("total_output_tokens"),
+                output_tokens=_billable_output(usage),
                 latency_ms=latency_ms,
                 model=str(data.get("model") or self._model),
             ),
         )
+
+    def _respect_min_interval(self) -> None:
+        if self.min_interval_seconds > 0:
+            wait = self._last_request + self.min_interval_seconds - time.monotonic()
+            if wait > 0:
+                self._sleep(wait)
+        self._last_request = time.monotonic()
 
     def chat(self, system: str, history: list[ChatItem], tools: list[ToolSpec]) -> AssistantTurn:
         """Stateless tool-calling turn (store=false: Google keeps no conversation state).
@@ -161,7 +173,7 @@ class GeminiProvider:
             raw=steps,
             usage=LLMUsage(
                 usage.get("total_input_tokens"),
-                usage.get("total_output_tokens"),
+                _billable_output(usage),
                 latency_ms,
                 str(data.get("model") or self._model),
             ),
@@ -170,6 +182,8 @@ class GeminiProvider:
     def _post_with_retries(self, body: dict[str, Any]) -> dict[str, Any]:
         attempt = 0
         while True:
+            retry_after: float | None = None
+            self._respect_min_interval()
             try:
                 response = self._client.post("/interactions", json=body)
             except httpx.TimeoutException as exc:
@@ -191,13 +205,39 @@ class GeminiProvider:
                 error = LLMUnavailableError(
                     f"LLM unavailable: HTTP {response.status_code} {_error_status(response)}"
                 )
+                if response.status_code == 429:
+                    retry_after = _retry_after_seconds(response)
 
             if attempt >= self._max_retries:
                 raise error
-            delay = 2.0**attempt  # 1s, 2s, 4s
+            # 429 = quota/rate limit: honour Retry-After, otherwise back off much longer than for
+            # transient 5xx errors (observed on the free tier during the agent benchmark).
+            if retry_after is not None:
+                delay = min(retry_after, 60.0)
+            elif isinstance(error, LLMUnavailableError) and "HTTP 429" in str(error):
+                delay = 10.0 * 2**attempt  # 10s, 20s, 40s
+            else:
+                delay = 2.0**attempt  # 1s, 2s, 4s
             log.warning("llm_retry", attempt=attempt + 1, delay_s=delay, reason=str(error))
             self._sleep(delay)
             attempt += 1
+
+
+def _retry_after_seconds(response: httpx.Response) -> float | None:
+    value = response.headers.get("retry-after")
+    try:
+        return float(value) if value is not None else None
+    except ValueError:
+        return None
+
+
+def _billable_output(usage: dict[str, Any]) -> int | None:
+    """Output tokens as billed: visible output PLUS thinking tokens (the pricing page bills
+    thinking as output, verified 2026-11-18)."""
+    out = usage.get("total_output_tokens")
+    if out is None:
+        return None
+    return int(out) + int(usage.get("total_thought_tokens") or 0)
 
 
 def _to_steps(item: ChatItem) -> list[dict[str, Any]]:
