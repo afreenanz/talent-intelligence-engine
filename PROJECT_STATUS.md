@@ -2,7 +2,7 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 4B: Ranking evaluation, **implemented and verified, awaiting your review** (branch `feat/m4b-ranking-eval`)
+**Current milestone:** 4B: Ranking evaluation, **approved and merged** (PR #4)
 **Next:** Milestone 5: Personalization
 
 ## Milestone 4B: Ranking evaluation on real labels (verified 2026-11-18)
@@ -12,7 +12,7 @@ _Last updated: 2026-11-17_
 - [x] Exploratory LambdaMART (leave-one-query-out) in an isolated process (torch + LightGBM OpenMP crash on macOS reproduced and fixed)
 - [x] Findings: features +0.040 MAP ✱, features + cross-encoder +0.067 MAP ✱; lexical hurts hybrid on long queries (hypothesis, not tuned)
 - [x] 243 tests; ruff, mypy --strict clean
-- [ ] Your review → PR → CI → merge
+- [x] Approved and merged (PR #4)
 
 ## Milestone 4A: Ranking engine (verified 2026-11-17)
 - [x] 10 candidate-job features with explicit neutral handling of missing data (unit-tested policy per feature)
