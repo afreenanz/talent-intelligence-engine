@@ -1,7 +1,44 @@
 # Agent Architecture
 
-> Status: **Design (Milestone 0)**. Implementation is in Milestone 6. APIs were checked
-> against the LangGraph docs (persistence, interrupts) in Nov 2026.
+> Status: **Implemented (Milestone 6A)**: `backend/app/domains/agent/` (tools, graph, prompts,
+> checkpointer, service, router). Verified live against Gemini 3.5 Flash-Lite on 2026-11-18. The
+> design notes below are the original Milestone 0 plan; the **As built** section is authoritative.
+
+## As built (6A)
+
+```mermaid
+stateDiagram-v2
+    [*] --> agent
+    agent --> tools: tool calls (model_calls < 6)
+    agent --> ground: final text
+    agent --> fail_safe: tool calls at step limit
+    tools --> confirm: any consequential call (save_job, update_candidate_preferences)
+    tools --> agent: all results ready
+    confirm --> agent: interrupt() resumed: executed, or "declined_by_user"
+    ground --> agent: ungrounded, 1 corrective retry
+    ground --> [*]: final {text, grounded, issues}
+    fail_safe --> [*]
+```
+
+| Concern | Implementation |
+|---|---|
+| LLM protocol | Gemini REST Interactions API, **stateless** (`store: false`): our full history is replayed each call, with model steps (including `thought` signatures) unchanged. Parallel `function_call`s supported. Verified live. |
+| Tool I/O | 10 tools, Pydantic input (`extra="forbid"`) and output models; errors are structured results, never exceptions |
+| Identity | `candidate_id` comes from the authenticated request; an LLM-supplied `candidate_id` is an *invalid argument* (tested) |
+| Confirmation | `interrupt()` in the confirm node; **no side effects before it** (the node re-runs on resume, verified); `POST /agent/conversations/{id}/confirm`; new messages are blocked (409) while an action is pending |
+| Grounding | Deterministic: every job_id in the answer must have appeared in a tool result; "saved"/"updated" claims require that tool to have succeeded this turn. One corrective retry; if it persists, `grounded=false` + issues are returned, never hidden |
+| Memory | Candidate context (profile + stated/learned preferences) is rebuilt from Postgres **every model call**; conversation history is in LangGraph checkpoints (`langgraph` schema) plus the `messages` table (ordered by a `seq` identity, not `created_at`) |
+| Limits | Max 6 model calls per turn (`fail_safe`); every outstanding call gets a result before stopping |
+| Failure | LLM unavailable → 503; tool DB error → rollback + `tool_failed` result |
+
+**Live run (2026-11-18), the brief's two examples:** "backend jobs in Bangalore, Python, distributed
+systems, preferably above 15 LPA" → `search_jobs(city=Bengaluru, min_salary=1500000, …)`, 3 real
+jobs cited by id, grounded. "Save the first one" → paused → approved → saved (DB-verified). "Remember
+I prefer backend over frontend" → `role_categories {prefer:[backend], avoid:[frontend]}` → confirmed
+→ stored (`source=agent`) → recalled in a **new** conversation. Latency 1-11 s per turn.
+**Observed weaknesses** (to measure in Milestone 7): it added an unrequested `employment_type=full_time`,
+and it treated "preferably above 15 LPA" as a hard filter.
+
 
 ## State
 

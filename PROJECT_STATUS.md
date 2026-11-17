@@ -2,8 +2,19 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 5: Activity + personalization, **approved and merged** (PR #5)
-**Next:** Milestone 6: AI agent (LangGraph)
+**Current milestone:** 6A: AI agent core, **implemented and verified, awaiting your review** (branch `feat/m6a-agent`)
+**Next:** 6B: agent hardening (streaming optional, more failure tests), then Milestone 7: evaluation
+
+## Milestone 6A: AI agent (verified 2026-11-18)
+- [x] Gemini tool calling (stateless Interactions API, parallel calls), verified live before building
+- [x] 10 tools with Pydantic I/O over the real services; identity from auth, never from the LLM
+- [x] LangGraph graph: agent → tools → confirm (interrupt) → ground → fail_safe; Postgres checkpointer in its own schema
+- [x] Confirmation before save/preference changes; decline path; pending-action lock
+- [x] Deterministic grounding check with one corrective retry; step limit
+- [x] conversations/messages tables (migration a68d84800899), chat/confirm/list/get/delete API
+- [x] Live end-to-end run with both brief examples, plus cross-session memory
+- [x] Bugs found: message ordering by transaction timestamp (fixed with `seq`), unclosed pool (lifespan close)
+- [x] 301 tests (17 agent tests with a scripted LLM); ruff, mypy --strict, alembic check clean
 
 ## Milestone 5B: Personalization engine (verified 2026-11-18)
 - [x] Deterministic role-category classifier (title rules + skill fallback)

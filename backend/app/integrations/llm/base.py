@@ -49,3 +49,46 @@ class LLMProvider(Protocol):
     def generate_structured[T: BaseModel](
         self, prompt: str, schema: type[T]
     ) -> StructuredResult[T]: ...
+
+
+# ---------------------------------------------------------------- tool calling (agent)
+
+
+@dataclass(frozen=True)
+class ToolSpec:
+    name: str
+    description: str
+    parameters: dict[str, object]  # JSON Schema of the arguments
+
+
+@dataclass(frozen=True)
+class ToolCall:
+    call_id: str
+    name: str
+    arguments: dict[str, object]
+
+
+@dataclass(frozen=True)
+class AssistantTurn:
+    """One model response. `raw` is provider-specific and must be replayed unchanged."""
+
+    text: str | None
+    tool_calls: list[ToolCall]
+    raw: list[dict[str, object]]
+    usage: LLMUsage
+
+
+# Provider-neutral conversation items (all JSON-serialisable, so they can be checkpointed):
+#   {"role": "user", "text": str}
+#   {"role": "assistant", "text": str | None, "tool_calls": [...], "raw": [...]}
+#   {"role": "tool", "call_id": str, "name": str, "result": dict}
+ChatItem = dict[str, object]
+
+
+class ToolCallingLLM(Protocol):
+    @property
+    def model(self) -> str: ...
+
+    def chat(
+        self, system: str, history: list[ChatItem], tools: list[ToolSpec]
+    ) -> AssistantTurn: ...

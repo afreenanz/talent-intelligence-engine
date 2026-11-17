@@ -81,3 +81,72 @@ class KeywordReranker:
     def score(self, pairs: list[tuple[str, str]]) -> list[float]:
         self.calls.append(len(pairs))
         return [float(sum(w in d.lower() for w in q.lower().split())) for q, d in pairs]
+
+
+class ScriptedToolLLM:
+    """Test-only tool-calling LLM. Each script entry is a function(history) -> AssistantTurn,
+    so a turn can depend on earlier tool results (e.g. cite a job_id that search returned)."""
+
+    def __init__(self, *script):  # type: ignore[no-untyped-def]
+        self.script = list(script)
+        self.calls: list[list[dict]] = []  # type: ignore[type-arg]
+
+    @property
+    def model(self) -> str:
+        return "scripted-tool-llm"
+
+    def chat(self, system, history, tools):  # type: ignore[no-untyped-def]
+        self.calls.append([dict(h) for h in history])
+        self.system = system
+        step = self.script.pop(0)
+        if isinstance(step, Exception):
+            raise step
+        return step(history)
+
+
+def tool_turn(*calls):  # type: ignore[no-untyped-def]
+    """Assistant turn requesting tool calls: tool_turn(("search_jobs", {...}), ...)."""
+    from app.integrations.llm.base import AssistantTurn, LLMUsage, ToolCall
+
+    def make(history):  # type: ignore[no-untyped-def]
+        resolved = [(n, a(history) if callable(a) else a) for n, a in calls]
+        return AssistantTurn(
+            text=None,
+            tool_calls=[
+                ToolCall(f"call_{len(history)}_{i}", n, a) for i, (n, a) in enumerate(resolved)
+            ],
+            raw=[
+                {
+                    "type": "function_call",
+                    "id": f"call_{len(history)}_{i}",
+                    "name": n,
+                    "arguments": a,
+                }
+                for i, (n, a) in enumerate(resolved)
+            ],
+            usage=LLMUsage(10, 5, 1, "scripted"),
+        )
+
+    return make
+
+
+def text_turn(text):  # type: ignore[no-untyped-def]
+    """Final assistant text; `text` may be a function(history) -> str."""
+    from app.integrations.llm.base import AssistantTurn, LLMUsage
+
+    def make(history):  # type: ignore[no-untyped-def]
+        t = text(history) if callable(text) else text
+        return AssistantTurn(
+            text=t,
+            tool_calls=[],
+            raw=[{"type": "model_output", "content": [{"type": "text", "text": t}]}],
+            usage=LLMUsage(10, 5, 1, "scripted"),
+        )
+
+    return make
+
+
+def last_tool_result(history, name):  # type: ignore[no-untyped-def]
+    return next(
+        h["result"] for h in reversed(history) if h.get("role") == "tool" and h["name"] == name
+    )

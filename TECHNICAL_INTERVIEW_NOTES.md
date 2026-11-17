@@ -128,3 +128,17 @@ is the actual exercise.
 103. Why evaluate on *un-interacted* jobs only? What would go wrong otherwise?
 104. Why is the persona experiment not evidence of real-user benefit? What would you need instead? (online A/B test, logged real behaviour)
 105. Cold start for users and for jobs: what happens in each case, and why is "no popularity signal" a feature?
+
+## Milestone 6A: AI agent
+106. Draw the agent graph. Which edges are conditional, and on what?
+107. Why stateless (`store: false`) LLM calls? What must you replay exactly, and why do thought signatures matter?
+108. Why must every function_call get a result before the next model call? What happens in the step-limit path?
+109. Explain `interrupt()` + `Command(resume=...)`. Why must the confirm node have no side effects before interrupt()? How did you verify it?
+110. Where does `candidate_id` come from, and why is an LLM-supplied one rejected?
+111. How does the grounding check work? What does it catch, and what can't it catch? (correct id, wrong salary)
+112. Why one corrective retry and then `grounded=false` instead of hiding the answer?
+113. Why rebuild the candidate context from the DB on every model call instead of trusting chat history?
+114. Why two persistence paths (checkpoints + messages)? Why put LangGraph's tables in their own schema?
+115. Bug: messages came back in random order in tests. Why does `now()` cause that, and why is `seq` the right fix?
+116. How do you test an LLM agent deterministically? (scripted LLM turns that depend on real tool results)
+117. The live agent added an unrequested filter. How would you measure and reduce that? (Milestone 7 benchmark)

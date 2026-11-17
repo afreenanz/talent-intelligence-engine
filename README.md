@@ -2,8 +2,8 @@
 
 Intelligent job discovery through retrieval, ranking and agentic AI.
 
-> **Status:** Milestones 1 and 2 (backend foundation, job ingestion, resume intelligence) are complete.
-> Retrieval, ranking, the agent and the frontend are not built yet. See [ROADMAP.md](ROADMAP.md) and [PROJECT_STATUS.md](PROJECT_STATUS.md).
+> **Status:** Backend through Milestone 6A (agent) is built. The full evaluation suite, frontend and
+> deployment are next. See [PROJECT_STATUS.md](PROJECT_STATUS.md). See [ROADMAP.md](ROADMAP.md) and [PROJECT_STATUS.md](PROJECT_STATUS.md).
 
 ## What works today
 - PostgreSQL 17 + pgvector and Redis via Docker Compose
@@ -15,10 +15,14 @@ Intelligent job discovery through retrieval, ranking and agentic AI.
 - Job ingestion from CSV/JSON/JSONL: normalization, skill extraction, idempotent upserts,
   near-duplicate detection, expiry, retry of failed records ([docs/ingestion.md](docs/ingestion.md))
 - `GET /api/v1/jobs` (cursor pagination, filters) and `GET /api/v1/jobs/{id}`
+- Hybrid search + explainable ranking (`POST /api/v1/jobs/search`), recommendations, saved jobs,
+  applications, preferences (stated and learned)
+- **AI assistant** (`POST /api/v1/agent/chat`): LangGraph + Gemini, 10 tools, confirmation before
+  actions, grounding checks, memory across sessions ([docs/agent-architecture.md](docs/agent-architecture.md))
 - A labelled **synthetic** job dataset ([data/README.md](data/README.md))
 - Resume upload → PDF text → Gemini structured extraction → grounding checks → candidate review → profile
   ([docs/resume-intelligence.md](docs/resume-intelligence.md))
-- 170 tests (unit, integration, API; none call a real LLM) against a real Postgres database; ruff, mypy (strict) and a migration drift check in CI
+- 301 tests (unit, integration, API; none call a real LLM) against a real Postgres database; ruff, mypy (strict) and a migration drift check in CI
 
 ## Prerequisites
 - Docker (Docker Desktop or OrbStack)

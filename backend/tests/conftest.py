@@ -57,6 +57,9 @@ def engine() -> Iterator[Engine]:
     command.upgrade(cfg, "head")
     eng = create_engine(url)
     yield eng
+    from app.domains.agent.checkpointer import close_checkpointer
+
+    close_checkpointer()
     eng.dispose()
 
 
