@@ -2,7 +2,7 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 4A: Ranking engine, **implemented and verified, awaiting your review** (branch `feat/m4a-ranking`)
+**Current milestone:** 4A: Ranking engine, **approved and merged** (PR #3)
 **Next:** 4B: Ranking evaluation on TalentCLEF 2026 (CC BY 4.0, synthetic CVs, human labels)
 
 ## Milestone 4A: Ranking engine (verified 2026-11-17)
@@ -12,7 +12,7 @@ _Last updated: 2026-11-17_
 - [x] Feature-derived explanations; `ranking` option on search; `GET /api/v1/recommendations`
 - [x] Live run with real models: profile fit drives order; cross-encoder adds ≈0.4–0.6 s
 - [x] 235 tests; ruff, mypy --strict clean
-- [ ] Your review → PR → CI → merge
+- [x] Approved and merged (PR #3)
 
 ## Milestone 3B: Retrieval evaluation (verified 2026-11-17)
 - [x] Metrics: P@K, R@K, MRR, NDCG@K (graded) with hand-computed unit tests
