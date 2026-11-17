@@ -12,8 +12,8 @@ _Last updated: 2026-11-17_
 - [x] Candidate profile `GET`/`PUT /me` with skill normalization and alias resolution
 - [x] Health: live + ready (DB + Redis)
 - [x] 52 tests passing, 95% line coverage; ruff + mypy --strict clean
-- [x] GitHub Actions CI workflow written. **Not yet run on GitHub**: no remote is configured.
-- [ ] Commit (after your approval)
+- [x] GitHub Actions CI: first run green on GitHub (private repo afreenanz/talent-intelligence-engine)
+- [x] Committed and pushed (bbc5164)
 
 Deferred deliberately (in the roadmap):
 - Rate limiting on auth endpoints → Milestone 9 (needs the Redis limiter; noted as an enumeration mitigation)
