@@ -28,9 +28,11 @@ def test_query_prefix_is_applied(bge: SentenceTransformerEmbedder) -> None:
 
 def test_semantics_beyond_keywords(bge: SentenceTransformerEmbedder) -> None:
     q = bge.encode_queries(["people who build data pipelines"])[0]
-    docs = bge.encode_documents([
-        "Data Engineer: build and maintain batch and streaming ETL with Spark and Airflow.",
-        "Frontend Engineer: build responsive React interfaces and design systems.",
-    ])
+    docs = bge.encode_documents(
+        [
+            "Data Engineer: build and maintain batch and streaming ETL with Spark and Airflow.",
+            "Frontend Engineer: build responsive React interfaces and design systems.",
+        ]
+    )
     data, frontend = docs @ q
     assert data > frontend + 0.05
