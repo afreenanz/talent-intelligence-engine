@@ -2,7 +2,7 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 2A: Job ingestion, **implemented and verified, awaiting your review** (branch `feat/m2a-job-ingestion`)
+**Current milestone:** 2A: Job ingestion, **approved and merged**
 **Next:** 2B: Resume intelligence (needs the Gemini API key)
 
 ## Milestone 2A: Job ingestion (verified 2026-11-17)
@@ -17,7 +17,7 @@ _Last updated: 2026-11-17_
 - [x] Synthetic dataset generator (deterministic, labelled, with injected ground truth)
 - [x] `GET /api/v1/jobs` (keyset pagination, filters) and `GET /api/v1/jobs/{id}`
 - [x] 133 tests passing; ruff, mypy --strict and `alembic check` clean
-- [ ] Your review → merge to main
+- [x] Approved and merged to main (2026-11-17)
 - Not yet: scheduled ingestion (Celery beat → Milestone 9), external job API adapter (needs a provider with usable terms; interface planned for Milestone 9)
 
 
