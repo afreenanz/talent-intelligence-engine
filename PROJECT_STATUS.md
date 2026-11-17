@@ -2,8 +2,21 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 2A: Job ingestion, **approved and merged**
-**Next:** 2B: Resume intelligence (needs the Gemini API key)
+**Current milestone:** 2B: Resume intelligence, **implemented and verified, awaiting your review** (branch `feat/m2b-resume-intelligence`)
+**Next:** Milestone 3: Retrieval engine
+
+## Milestone 2B: Resume intelligence (verified 2026-11-17)
+- [x] LLM provider interface + Gemini adapter (REST Interactions API, retries, schema adaptation)
+- [x] Gemini key configured; model choice measured (3.5 Flash-Lite ≈ 7 s; 3.8 Flash timed out)
+- [x] PDF upload (magic-byte check, 5 MB limit, UUID paths, 0600 files), text extraction + cleaning
+- [x] Versioned extraction prompt; Pydantic-validated structured output
+- [x] Grounding: ungrounded skills dropped, name/location dropped, employers flagged; experience computed from dates
+- [x] Review → apply flow (skills merged with source=resume); reprocess; delete (row + file)
+- [x] Live end-to-end run against Gemini with a fictional resume: parsed correctly, 5.5 y computed, alias resolution, no warnings
+- [x] 170 tests (no test ever calls the real LLM), 90% coverage; ruff, mypy --strict, alembic check clean
+- [ ] Your review → merge to main
+- Deferred: extraction-quality benchmark on labelled resumes (Milestone 7); Celery worker (Milestone 9); OCR (out of scope)
+
 
 ## Milestone 2A: Job ingestion (verified 2026-11-17)
 - [x] Migration `265b9963294b`: jobs, job_skills, ingestion_runs, ingestion_errors, skills.is_ambiguous

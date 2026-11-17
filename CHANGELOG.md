@@ -4,6 +4,13 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 2B: Resume intelligence
+- LLM provider protocol; Gemini adapter over the REST Interactions API with retries and schema adaptation
+- Resume upload/list/get/reprocess/apply/delete endpoints with ownership checks
+- PDF text extraction (pypdf) with clear failure reasons; versioned extraction prompt
+- Deterministic post-processing: skill grounding, computed experience, warnings, provenance
+- `resumes` table (migration `f244ee3f984c`)
+
 ### Milestone 2A: Job ingestion
 - Jobs schema (jobs, job_skills, ingestion_runs, ingestion_errors) with integrity constraints
 - Curated skill taxonomy v1 and idempotent seeding

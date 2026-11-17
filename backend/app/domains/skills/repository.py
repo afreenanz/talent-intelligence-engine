@@ -45,3 +45,39 @@ def resolve_or_create_skills(session: Session, raw_names: Iterable[str]) -> dict
             resolved[skill.normalized_name] = skill
 
     return resolved
+
+
+def lookup_skills(
+    session: Session, raw_names: Iterable[str]
+) -> dict[str, tuple[int | None, str, list[str]]]:
+    """Read-only resolution (creates nothing): {normalized: (skill_id, canonical, match terms)}.
+
+    Match terms = canonical normalized name + every alias, used to check whether a skill is
+    actually present in a piece of text.
+    """
+    norms = {normalize_skill_name(n) for n in raw_names} - {""}
+    if not norms:
+        return {}
+    by_alias = dict(
+        session.execute(
+            select(SkillAlias.alias, SkillAlias.skill_id).where(SkillAlias.alias.in_(norms))
+        ).all()
+    )
+    direct = {
+        s.normalized_name: s
+        for s in session.scalars(select(Skill).where(Skill.normalized_name.in_(norms)))
+    }
+    ids = {*by_alias.values(), *(s.id for s in direct.values())}
+    skills = {s.id: s for s in session.scalars(select(Skill).where(Skill.id.in_(ids)))}
+    aliases: dict[int, list[str]] = {}
+    for alias, skill_id in session.execute(
+        select(SkillAlias.alias, SkillAlias.skill_id).where(SkillAlias.skill_id.in_(ids))
+    ).all():
+        aliases.setdefault(skill_id, []).append(alias)
+
+    out: dict[str, tuple[int | None, str, list[str]]] = {}
+    for norm in norms:
+        skill = direct.get(norm) or skills.get(by_alias.get(norm, -1))
+        if skill is not None:
+            out[norm] = (skill.id, skill.name, [skill.normalized_name, *aliases.get(skill.id, [])])
+    return out

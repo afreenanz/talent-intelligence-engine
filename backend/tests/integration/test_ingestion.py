@@ -1,7 +1,6 @@
 """End-to-end ingestion behaviour against a real database."""
 
 from datetime import UTC, datetime, timedelta
-from pathlib import Path
 from typing import Any
 
 import pytest
@@ -12,10 +11,8 @@ from app.db.enums import IngestionMode, JobStatus, SkillImportance
 from app.domains.ingestion import service
 from app.domains.ingestion.models import IngestionError
 from app.domains.jobs.models import Job, JobSkill
-from app.domains.skills.seed import load_taxonomy, seed_skills
 
 NOW = datetime(2026, 11, 15, 12, 0, tzinfo=UTC)
-TAXONOMY = Path(__file__).resolve().parents[3] / "data" / "taxonomy" / "skills_v1.json"
 
 DESC = (
     "Acme is a fintech company building payment products. We are hiring a Backend Engineer "
@@ -24,9 +21,7 @@ DESC = (
 )
 
 
-@pytest.fixture(autouse=True)
-def taxonomy(db_session: Session) -> None:
-    seed_skills(db_session, load_taxonomy(TAXONOMY))
+pytestmark = pytest.mark.usefixtures("taxonomy")
 
 
 def job(**overrides: Any) -> dict[str, Any]:

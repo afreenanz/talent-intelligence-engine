@@ -39,6 +39,19 @@ class Settings(BaseSettings):
     access_token_ttl_minutes: int = Field(default=15, ge=1, le=120)
     refresh_token_ttl_days: int = Field(default=14, ge=1, le=90)
 
+    # LLM (see ADR-008). No key -> LLM-backed features return 503; nothing is faked.
+    llm_provider: str = "gemini"
+    llm_model: str = "gemini-3.5-flash-lite"
+    llm_timeout_seconds: float = Field(default=90.0, gt=0, le=600)
+    llm_max_retries: int = Field(default=2, ge=0, le=5)
+    gemini_api_key: SecretStr | None = None
+    gemini_base_url: str = "https://generativelanguage.googleapis.com/v1beta"
+    gemini_api_revision: str = "2026-05-20"
+
+    # Resume uploads. Stored outside the web root, in a git-ignored folder.
+    upload_dir: str = "../data/private/uploads"
+    max_resume_bytes: int = Field(default=5 * 1024 * 1024, ge=1024)
+
     cors_origins: list[str] = ["http://localhost:5173"]
     log_level: str = "INFO"
     log_json: bool = False

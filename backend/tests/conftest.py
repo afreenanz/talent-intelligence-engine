@@ -11,8 +11,13 @@ Strategy:
 """
 
 import os
+import tempfile
 
 os.environ.setdefault("ENVIRONMENT", "test")
+# Tests must never call a real LLM or touch real uploads: env vars override the .env file,
+# so a developer's GEMINI_API_KEY is ignored and uploads go to a throwaway directory.
+os.environ["GEMINI_API_KEY"] = ""
+os.environ["UPLOAD_DIR"] = tempfile.mkdtemp(prefix="tie-test-uploads-")
 os.environ.setdefault(
     "DATABASE_URL",
     os.environ.get(
@@ -33,9 +38,11 @@ from sqlalchemy.orm import Session
 
 from app.core.config import get_settings
 from app.db.session import get_db
+from app.domains.skills.seed import load_taxonomy, seed_skills
 from app.main import app
 
 BACKEND_DIR = Path(__file__).resolve().parents[1]
+TAXONOMY = BACKEND_DIR.parent / "data" / "taxonomy" / "skills_v1.json"
 
 
 @pytest.fixture(scope="session")
@@ -66,6 +73,12 @@ def db_session(engine: Engine) -> Iterator[Session]:
         session.close()
         outer.rollback()
         connection.close()
+
+
+@pytest.fixture
+def taxonomy(db_session: Session) -> None:
+    """Load the curated skill taxonomy into the test transaction."""
+    seed_skills(db_session, load_taxonomy(TAXONOMY))
 
 
 @pytest.fixture

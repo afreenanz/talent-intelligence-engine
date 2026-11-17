@@ -44,3 +44,11 @@ class IngestionRunStatus(StrEnum):
     RUNNING = "running"
     COMPLETED = "completed"
     FAILED = "failed"
+
+
+class ResumeStatus(StrEnum):
+    PENDING = "pending"  # uploaded, waiting for processing
+    PROCESSING = "processing"
+    PARSED = "parsed"  # extraction ready for the candidate to review
+    FAILED = "failed"  # see parsing_error; can be reprocessed
+    REVIEWED = "reviewed"  # candidate confirmed it and it was applied to the profile

@@ -47,3 +47,16 @@ is the actual exercise.
 36. Keyset vs OFFSET pagination: two concrete problems OFFSET has. Why fetch `limit + 1` rows?
 37. Why is `listed_at` a separate column from `posted_at`?
 38. Your dedup scores 1.0/1.0. Why shouldn't you claim that in an interview without qualification?
+
+## Milestone 2B: Resume intelligence
+39. Where exactly can the LLM "invent" something, and what deterministic control catches each case? (docs/resume-intelligence.md table)
+40. Why is `experience_years` computed from date ranges instead of asked of the LLM? How are overlapping jobs handled?
+41. Why does the upload return 202 instead of 200? What happens to the work if the server restarts (and how does Milestone 9 fix it)?
+42. How does the atomic claim (`UPDATE ... WHERE status IN (...) RETURNING`) prevent double processing?
+43. Why check magic bytes instead of the Content-Type header? Why is the user's filename never used in the storage path?
+44. Why return 404 rather than 403 for someone else's resume?
+45. Why a REST adapter over the SDK here? What would make you switch back?
+46. The first live call failed with HTTP 400. What was the bug and how did you find it? (schema `title` stripping)
+47. How does the prompt defend against injection inside the resume, and why isn't the prompt the main defence?
+48. Why does the test suite force GEMINI_API_KEY to empty? What could go wrong otherwise?
+49. Free-tier data may be used for training. What does that change about how you test?

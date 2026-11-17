@@ -45,6 +45,17 @@ See database-design.md §3.5.
 **Provider choice (2026-11-17):** Gemini free tier is the default. OpenRouter (free models) is the secondary option through the OpenAI-compatible adapter. Free-tier rate limits are checked when the integration is built (Milestone 2), and the model name is recorded in every evaluation run.
 **Why.** This satisfies the rule "do not silently replace a failed integration with a fake implementation". If the configured provider is down, the API returns `503 upstream_unavailable` and never falls back silently.
 
+**Update (Milestone 2B, 2026-11-17) — implemented and Accepted:**
+- Implemented as a thin REST adapter over the Gemini **Interactions API** with `httpx`, not the
+  `google-genai` SDK: `generateContent` returned 404 for current free-tier models and the docs had
+  moved to `interactions.create`, so a small adapter over the verified REST contract (pinned with
+  `Api-Revision`) is easier to test (mock transport) and reason about.
+- Default model `gemini-3.5-flash-lite`, chosen by measurement: ~7–13 s per call, while `gemini-3.8-flash`
+  timed out at the 600 s server deadline on the free tier.
+- Retries: 429/5xx/timeouts, 2 retries with exponential backoff; 4xx is not retried.
+- Free-tier data may be used by Google to improve products → only fictional or own resumes.
+- The OpenAI-compatible adapter is not built yet; it will be added when needed (Milestone 6 agent work).
+
 ## ADR-009 Agent memory: own tables, LangGraph checkpointer for execution state only
 **Context.** LangGraph offers a checkpointer for thread state and a `PostgresStore` for long-term memory.
 **Decision.**

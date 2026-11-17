@@ -5,6 +5,7 @@ from app.domains.auth.models import RefreshToken, User
 from app.domains.candidates.models import CandidateProfile, CandidateSkill
 from app.domains.ingestion.models import IngestionError, IngestionRun
 from app.domains.jobs.models import Job, JobSkill
+from app.domains.resumes.models import Resume
 from app.domains.skills.models import Skill, SkillAlias
 
 __all__ = [
@@ -16,6 +17,7 @@ __all__ = [
     "Job",
     "JobSkill",
     "RefreshToken",
+    "Resume",
     "Skill",
     "SkillAlias",
     "User",

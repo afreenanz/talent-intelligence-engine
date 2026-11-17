@@ -2,8 +2,8 @@
 
 Intelligent job discovery through retrieval, ranking and agentic AI.
 
-> **Status:** Milestones 1 and 2A (backend foundation, job ingestion) are complete. Resume parsing,
-> retrieval, ranking, the agent and the frontend are not built yet. See [ROADMAP.md](ROADMAP.md) and [PROJECT_STATUS.md](PROJECT_STATUS.md).
+> **Status:** Milestones 1 and 2 (backend foundation, job ingestion, resume intelligence) are complete.
+> Retrieval, ranking, the agent and the frontend are not built yet. See [ROADMAP.md](ROADMAP.md) and [PROJECT_STATUS.md](PROJECT_STATUS.md).
 
 ## What works today
 - PostgreSQL 17 + pgvector and Redis via Docker Compose
@@ -16,7 +16,9 @@ Intelligent job discovery through retrieval, ranking and agentic AI.
   near-duplicate detection, expiry, retry of failed records ([docs/ingestion.md](docs/ingestion.md))
 - `GET /api/v1/jobs` (cursor pagination, filters) and `GET /api/v1/jobs/{id}`
 - A labelled **synthetic** job dataset ([data/README.md](data/README.md))
-- 133 tests (unit, integration, API) against a real Postgres database; ruff, mypy (strict) and a migration drift check in CI
+- Resume upload → PDF text → Gemini structured extraction → grounding checks → candidate review → profile
+  ([docs/resume-intelligence.md](docs/resume-intelligence.md))
+- 170 tests (unit, integration, API; none call a real LLM) against a real Postgres database; ruff, mypy (strict) and a migration drift check in CI
 
 ## Prerequisites
 - Docker (Docker Desktop or OrbStack)
@@ -24,7 +26,7 @@ Intelligent job discovery through retrieval, ranking and agentic AI.
 
 ## Run locally
 ```bash
-cp .env.example .env                 # defaults work for local development
+cp .env.example .env                 # then set GEMINI_API_KEY for resume parsing
 docker compose up -d                 # Postgres on :5433, Redis on :6380
 cd backend
 uv sync                              # creates .venv from the lockfile
