@@ -4,6 +4,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 4B: Ranking evaluation (TalentCLEF 2026)
+- Checksum-verified dataset fetch; deterministic job/CV parsing
+- `eval-ranking` CLI comparing retrieval and ranking stages on human labels, with bootstrap CIs
+- MAP metric; `skills_known` feature flag; exploratory LambdaMART in an isolated process
+
 ### Milestone 4A: Ranking engine
 - Candidate-job feature pipeline, weighted ranker with versioned weights, explanations
 - Cross-encoder re-ranking stage (top 50) with calibrated sigmoid blending

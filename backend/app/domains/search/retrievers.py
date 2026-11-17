@@ -54,16 +54,21 @@ def apply_filters(stmt: Select[Any], f: JobFilters) -> Select[Any]:
     return stmt
 
 
+def or_tsquery(query: str) -> Any:
+    """plainto_tsquery stems and drops stop words, giving e.g. 'python' & 'backend'. We swap & for |
+    and cast straight back to tsquery. Passing it through to_tsquery again would re-stem the
+    already-stemmed lexemes. Shared with the offline evaluation so both use identical logic."""
+    return cast(func.replace(cast(func.plainto_tsquery("english", query), Text), "&", "|"), TSQUERY)
+
+
+LEXICAL_RANK_NORMALIZATION = 1 | 32
+
+
 def lexical_search(
     session: Session, query: str, filters: JobFilters, limit: int
 ) -> list[tuple[uuid.UUID, float]]:
-    # plainto_tsquery stems and drops stop words, giving e.g. 'python' & 'backend'. We swap & for |
-    # and cast straight back to tsquery. Passing it through to_tsquery again would re-stem the
-    # already-stemmed lexemes.
-    tsquery = cast(
-        func.replace(cast(func.plainto_tsquery("english", query), Text), "&", "|"), TSQUERY
-    )
-    score = func.ts_rank_cd(Job.search_vector, tsquery, 1 | 32).label("score")
+    tsquery = or_tsquery(query)
+    score = func.ts_rank_cd(Job.search_vector, tsquery, LEXICAL_RANK_NORMALIZATION).label("score")
     stmt = select(Job.id, score).where(Job.search_vector.op("@@")(tsquery))
     stmt = apply_filters(stmt, filters).order_by(score.desc(), Job.id).limit(limit)
     return [(row.id, float(row.score)) for row in session.execute(stmt)]

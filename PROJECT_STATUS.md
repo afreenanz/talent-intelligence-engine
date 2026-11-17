@@ -2,8 +2,17 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 4A: Ranking engine, **approved and merged** (PR #3)
-**Next:** 4B: Ranking evaluation on TalentCLEF 2026 (CC BY 4.0, synthetic CVs, human labels)
+**Current milestone:** 4B: Ranking evaluation, **implemented and verified, awaiting your review** (branch `feat/m4b-ranking-eval`)
+**Next:** Milestone 5: Personalization
+
+## Milestone 4B: Ranking evaluation on real labels (verified 2026-11-18)
+- [x] Checksum-pinned TalentCLEF fetch (MD5 matches Zenodo), safe extraction, git-ignored, CC BY attribution
+- [x] Deterministic job/CV parsing (skills from each job's own list, experience from the experience section only)
+- [x] Comparison with production code paths: lexical / dense / hybrid / + features / + cross-encoder / ablations, MAP added
+- [x] Exploratory LambdaMART (leave-one-query-out) in an isolated process (torch + LightGBM OpenMP crash on macOS reproduced and fixed)
+- [x] Findings: features +0.040 MAP ✱, features + cross-encoder +0.067 MAP ✱; lexical hurts hybrid on long queries (hypothesis, not tuned)
+- [x] 243 tests; ruff, mypy --strict clean
+- [ ] Your review → PR → CI → merge
 
 ## Milestone 4A: Ranking engine (verified 2026-11-17)
 - [x] 10 candidate-job features with explicit neutral handling of missing data (unit-tested policy per feature)

@@ -93,3 +93,20 @@ def test_semantic_similarity_is_clipped() -> None:
         f.CandidateFacts(), f.JobFacts(), semantic_similarity=-0.2, retrieval_score=None, now=NOW
     )
     assert fv.values["semantic_similarity"] == 0.0
+
+
+def test_known_but_unmatched_skills_score_zero_not_neutral() -> None:
+    job = f.JobFacts(required_skill_ids=frozenset({1, 2}))
+    unknown = f.compute_features(
+        f.CandidateFacts(), job, semantic_similarity=None, retrieval_score=None, now=NOW
+    )
+    known_none = f.compute_features(
+        f.CandidateFacts(skills_known=True),
+        job,
+        semantic_similarity=None,
+        retrieval_score=None,
+        now=NOW,
+    )
+    assert unknown.values["required_skill_coverage"] == 0.5
+    assert known_none.values["required_skill_coverage"] == 0.0
+    assert "required_skill_coverage" not in known_none.missing

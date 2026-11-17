@@ -30,6 +30,9 @@ FEATURE_NAMES = (
 @dataclass(frozen=True)
 class CandidateFacts:
     skill_ids: frozenset[int] = frozenset()
+    # True when we *know* the candidate's skills (even if none match): coverage is then a real
+    # 0 rather than "unknown". An empty profile in production leaves this False.
+    skills_known: bool = False
     experience_years: float | None = None
     city: str | None = None
     preferred_location_type: LocationType | None = None
@@ -131,16 +134,15 @@ def compute_features(
     retrieval_score: float | None,
     now: datetime,
 ) -> FeatureVector:
+    known = bool(c.skill_ids) or c.skills_known
     raw: dict[str, float | None] = {
-        "required_skill_coverage": _coverage(c.skill_ids, j.core_skill_ids)
-        if c.skill_ids
-        else None,
+        "required_skill_coverage": _coverage(c.skill_ids, j.core_skill_ids) if known else None,
         "preferred_skill_coverage": _coverage(c.skill_ids, j.preferred_skill_ids)
-        if c.skill_ids
+        if known
         else None,
         "skill_jaccard": (
             len(c.skill_ids & j.all_skill_ids) / len(c.skill_ids | j.all_skill_ids)
-            if c.skill_ids and j.all_skill_ids
+            if known and (c.skill_ids | j.all_skill_ids)
             else None
         ),
         "semantic_similarity": None

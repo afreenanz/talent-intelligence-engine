@@ -44,6 +44,22 @@ def reciprocal_rank[K: Hashable](
     return 0.0
 
 
+def average_precision[K: Hashable](
+    ranked: Sequence[K], judgments: Mapping[K, int], k: int | None = None
+) -> float:
+    """AP: mean of P@i over the ranks i of relevant hits, divided by *all* relevant documents
+    (unretrieved relevant documents count as zero precision). MAP = mean AP over queries."""
+    rel = _relevant(judgments)
+    if not rel:
+        raise ValueError("AP is undefined for a query with no relevant documents")
+    hits, total = 0, 0.0
+    for i, d in enumerate(ranked[:k] if k else ranked, start=1):
+        if d in rel:
+            hits += 1
+            total += hits / i
+    return total / len(rel)
+
+
 def dcg_at_k(gains: Sequence[int], k: int) -> float:
     return math.fsum((2**g - 1) / math.log2(i + 1) for i, g in enumerate(gains[:k], start=1))
 
