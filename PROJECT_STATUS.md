@@ -2,8 +2,27 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 4B: Ranking evaluation, **approved and merged** (PR #4)
-**Next:** Milestone 5: Personalization
+**Current milestone:** 5B: Personalization engine, **implemented and verified, awaiting your review** (branch `feat/m5-personalization`, includes 5A)
+**Next:** Milestone 6: AI agent (LangGraph)
+
+## Milestone 5B: Personalization engine (verified 2026-11-18)
+- [x] Deterministic role-category classifier (title rules + skill fallback)
+- [x] Derived preferences from events (confirmed clicks only, no negative impressions, decay, support thresholds, confidence < 1), recomputed on each action
+- [x] Bounded adjustment (±0.1), explicit-over-derived precedence, explicit prefs override profile facts; explanations say "you prefer" vs "based on your activity"
+- [x] Preference retrieval channel + exploration slots (added after the v1 experiment exposed a feedback loop and a retrieval ceiling)
+- [x] Persona experiment v1 → v2: learned +0.091 → +0.240 NDCG@10; explicit +0.341 → +0.410 (simulated, synthetic)
+- [x] `personalize` flag on search and recommendations; 284 tests; ruff, mypy --strict clean
+
+## Milestone 5A: Activity & explicit preferences (verified 2026-11-18)
+- [x] Migration `dbd166f11fd2`: search_logs, job_interactions, saved_jobs, applications, agent_memory
+- [x] Search/recommendations log each search plus one impression per result (positions); `search_log_id` returned
+- [x] Feedback (click/dismiss) with ownership-checked search attribution
+- [x] Saved jobs (idempotent; state + event in one transaction; keyset pagination)
+- [x] Applications with a status state machine (409 + allowed transitions on invalid moves)
+- [x] Explicit preferences: fixed validated vocabulary, upsert returns previous value, delete; 422 (not 500) on bad values
+- [x] Recent searches endpoint
+- [x] 259 tests; ruff, mypy --strict, alembic check clean
+- [x] Approved (2026-11-18)
 
 ## Milestone 4B: Ranking evaluation on real labels (verified 2026-11-18)
 - [x] Checksum-pinned TalentCLEF fetch (MD5 matches Zenodo), safe extraction, git-ignored, CC BY attribution

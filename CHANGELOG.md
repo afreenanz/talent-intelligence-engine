@@ -4,6 +4,17 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 5B: Personalization engine
+- Role-category classifier; derived preferences from the event log with explicit evidence rules
+- Bounded personalization adjustment with explanations; explicit preferences override profile facts
+- Preference-aware retrieval channel and exploration slots in recommendations
+- `eval-personalization` simulated-persona experiment (v1 and v2 reports)
+
+### Milestone 5A: Activity and explicit preferences
+- search_logs / job_interactions / saved_jobs / applications / agent_memory (migration `dbd166f11fd2`)
+- Server-side impression logging; click/dismiss feedback; recent searches
+- Saved-jobs and applications APIs (state machine); explicit preference memory API
+
 ### Milestone 4B: Ranking evaluation (TalentCLEF 2026)
 - Checksum-verified dataset fetch; deterministic job/CV parsing
 - `eval-ranking` CLI comparing retrieval and ranking stages on human labels, with bootstrap CIs

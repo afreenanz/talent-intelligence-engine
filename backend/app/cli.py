@@ -195,6 +195,35 @@ def cmd_eval_ranking(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_eval_personalization(_: argparse.Namespace) -> int:
+    from datetime import UTC, datetime
+
+    from sqlalchemy.orm import Session
+
+    from app.db.session import get_engine
+    from app.domains.evaluation import personalization_eval as pe
+    from app.integrations.embeddings.sentence_transformer import get_embedder
+
+    truth = REPO_ROOT / "data" / "synthetic" / "jobs_v1.jsonl"
+    stamp = datetime.now(UTC).strftime("%Y-%m-%d")
+    report = REPO_ROOT / "eval" / "reports" / f"{stamp}-personalization-personas.md"
+    embedder = get_embedder()
+    # Simulated users and their activity live in one transaction that is rolled back.
+    connection = get_engine().connect()
+    outer = connection.begin()
+    try:
+        sim = Session(bind=connection, join_transaction_mode="create_savepoint")
+        outcomes = pe.run(sim, embedder, truth, "synthetic_v1")
+        sim.close()
+    finally:
+        outer.rollback()
+        connection.close()
+    with get_sessionmaker()() as session:  # only the evaluation_runs rows are kept
+        pe.persist_and_report(session, outcomes, report)
+    print(f"report: {report}")
+    return 0
+
+
 def cmd_runs(args: argparse.Namespace) -> int:
     with get_sessionmaker()() as session:
         runs = session.scalars(
@@ -248,6 +277,9 @@ def main(argv: list[str] | None = None) -> int:
 
     p = sub.add_parser("eval-ranking", help="ranking comparison on TalentCLEF 2026 Task A (dev)")
     p.set_defaults(func=cmd_eval_ranking)
+
+    p = sub.add_parser("eval-personalization", help="simulated-persona personalization experiment")
+    p.set_defaults(func=cmd_eval_personalization)
 
     p = sub.add_parser("runs", help="list recent ingestion runs")
     p.add_argument("--limit", type=int, default=10)

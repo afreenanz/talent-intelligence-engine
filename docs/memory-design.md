@@ -1,6 +1,15 @@
 # Memory Design
 
-> Status: **Design (Milestone 0)**. Implementation is in Milestones 5–6. See ADR-009.
+> Status: **Explicit preferences implemented (Milestone 5A)**: `agent_memory` table, fixed validated
+> vocabulary (`app/domains/preferences/schemas.py`), `GET/PUT/DELETE /api/v1/candidates/me/preferences`.
+> Every write returns the previous value. **Derived preferences implemented (5B)**: rebuilt from the event
+> log after each save/unsave/apply/feedback (rules in ranking-engine.md, Personalization). Agent writes are Milestone 6.
+> See ADR-009.
+
+Implemented vocabulary: `role_categories {prefer, avoid}` (backend, frontend, fullstack, data, ml,
+devops, mobile, qa, security, design, product; a category can't be both), `locations {cities}`,
+`location_type {value}`, `min_salary {amount, currency}`, `employment_type {value}`,
+`company_avoid {companies}`, `skills_to_use {skills}`. An invalid value returns 422 with field details.
 
 ## Three kinds of memory, three stores
 

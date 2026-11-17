@@ -113,3 +113,8 @@ def test_recommendations_with_empty_profile_is_clear_error(client: TestClient) -
     h = auth_header(register_and_login(client))
     r = client.get("/api/v1/recommendations", headers=h)
     assert r.status_code == 400 and "profile is empty" in r.json()["error"]["message"]
+
+
+def test_docs_example_for_search_has_no_placeholder_filters(client: TestClient) -> None:
+    schema = client.get("/openapi.json").json()["components"]["schemas"]["SearchRequest"]
+    assert schema["examples"] == [{"query": "backend engineer", "top_k": 5}]

@@ -63,7 +63,12 @@ class RetrievalResult:
 
 
 class SearchRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    # A working example for the API docs. Without it, Swagger pre-fills every filter with
+    # placeholder values ("city": "string", ...) that silently filter out every job.
+    model_config = ConfigDict(
+        extra="forbid",
+        json_schema_extra={"examples": [{"query": "backend engineer", "top_k": 5}]},
+    )
 
     query: str | None = Field(default=None, max_length=500)
     filters: JobFilters = Field(default_factory=JobFilters)
@@ -72,6 +77,10 @@ class SearchRequest(BaseModel):
     use_profile: bool = Field(
         default=False,
         description="With no query: search with the candidate's profile (recommendation mode)",
+    )
+    personalize: bool = Field(
+        default=True,
+        description="Apply your stated and learned preferences (bounded adjustment, ±0.1)",
     )
     ranking: Literal["none", "features", "features+cross_encoder"] = Field(
         default="features",
@@ -94,6 +103,9 @@ class SearchHit(BaseModel):
     stage1_score: float | None = None
     cross_encoder_score: float | None = None
     explanation: list[str] | None = None
+    personalization: float | None = None
+    role_categories: list[str] | None = None
+    exploration: bool | None = None
     features: dict[str, float] | None = None
     contributions: dict[str, float] | None = None
     missing_features: list[str] | None = None
@@ -104,6 +116,9 @@ class SearchResponse(BaseModel):
     mode: RetrievalMode
     ranking: str = "none"
     weights_version: str | None = None
+    search_log_id: uuid.UUID | None = Field(
+        default=None, description="Pass back with click/dismiss feedback to attribute it"
+    )
     lexical_query: str | None
     used_profile: bool
     timings_ms: dict[str, float]

@@ -105,3 +105,26 @@ is the actual exercise.
 84. Explain the torch + LightGBM crash and why a spawned worker process fixes it.
 85. Why does "no skills matched" need to be 0, not "missing"? (skills_known)
 86. Why pin a checksum for a downloaded dataset?
+
+## Milestone 5A: Activity & explicit preferences
+87. Why log impressions server-side instead of trusting the client? What does an impression give you that a click alone doesn't?
+88. Why are `saved_jobs` (state) and `job_interactions` (events) written in the same transaction?
+89. How is saving idempotent, and why does a repeated save *not* create a second event? (INSERT ... ON CONFLICT DO NOTHING RETURNING)
+90. Walk through the application state machine. Why are rejected/withdrawn terminal? Why return the allowed transitions in the 409?
+91. Why a fixed preference vocabulary instead of free-text memories?
+92. Why does a preference write return the previous value? (the agent will say "changed from X to Y")
+93. Bug found: `updated_at` wasn't changing on upsert. Why doesn't `onupdate=` fire for INSERT ... ON CONFLICT?
+94. Bug found: a bad preference value produced a 500. Why, and why is a 422 with details the right answer?
+95. Bug found: search logging silently didn't apply after a formatter change. What process change prevents that? (asserting every scripted edit; tests that check the behaviour, not just the code)
+
+## Milestone 5B: Personalization
+96. Why doesn't a bare click count as a positive signal? When does it count?
+97. Why are impressions without clicks *not* negative feedback? (position bias, skimming)
+98. Why the support threshold (≥ 3 jobs) and confidence < 1 for derived preferences?
+99. Why does an explicit preference beat a derived one? Which profile facts can an explicit preference override, and why?
+100. Why is the adjustment capped at ±0.1? What exactly does the cap protect against, and what does it cost (the ML/frontend personas)?
+101. The v1 experiment learned nothing for the backend persona. Explain the feedback loop, and how exploration slots break it.
+102. Why can't re-ranking alone surface jobs the retriever never returned? How does the preference channel fix it?
+103. Why evaluate on *un-interacted* jobs only? What would go wrong otherwise?
+104. Why is the persona experiment not evidence of real-user benefit? What would you need instead? (online A/B test, logged real behaviour)
+105. Cold start for users and for jobs: what happens in each case, and why is "no popularity signal" a feature?
