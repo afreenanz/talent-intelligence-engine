@@ -52,3 +52,32 @@ class ResumeStatus(StrEnum):
     PARSED = "parsed"  # extraction ready for the candidate to review
     FAILED = "failed"  # see parsing_error; can be reprocessed
     REVIEWED = "reviewed"  # candidate confirmed it and it was applied to the profile
+
+
+class InteractionType(StrEnum):
+    IMPRESSION = "impression"  # shown in a result list (logged by the server)
+    CLICK = "click"  # opened the job
+    SAVE = "save"
+    UNSAVE = "unsave"
+    DISMISS = "dismiss"  # "not interested"
+    APPLY = "apply"
+
+
+class ApplicationStatus(StrEnum):
+    APPLIED = "applied"
+    SCREENING = "screening"
+    INTERVIEWING = "interviewing"
+    OFFER = "offer"
+    REJECTED = "rejected"
+    WITHDRAWN = "withdrawn"
+
+
+class MemoryType(StrEnum):
+    EXPLICIT_PREFERENCE = "explicit_preference"  # stated by the candidate (settings or agent)
+    DERIVED_PREFERENCE = "derived_preference"  # inferred from behaviour (Milestone 5B)
+
+
+class MemorySource(StrEnum):
+    SETTINGS = "settings"
+    AGENT = "agent"
+    DERIVED = "derived"

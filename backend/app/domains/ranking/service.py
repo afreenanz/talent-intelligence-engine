@@ -17,6 +17,8 @@ from sqlalchemy.orm import Session, selectinload
 from app.db.enums import SkillImportance
 from app.domains.candidates.models import CandidateProfile, CandidateSkill
 from app.domains.jobs.models import Job, JobSkill
+from app.domains.personalization.adjust import PersonalizationContext
+from app.domains.personalization.categories import job_role_categories
 from app.domains.ranking.cross_encoder import Reranker, sigmoid
 from app.domains.ranking.explain import explain
 from app.domains.ranking.features import CandidateFacts, FeatureVector, JobFacts, compute_features
@@ -44,6 +46,9 @@ class RankedJob:
     explanation: list[str]
     lexical_rank: int | None
     semantic_rank: int | None
+    personalization: float = 0.0
+    role_categories: list[str] = field(default_factory=list)
+    exploration: bool = False
 
 
 @dataclass
@@ -107,6 +112,8 @@ def rank_jobs(
     reranker: Reranker | None = None,
     top_k: int = 20,
     now: datetime | None = None,
+    personalization: PersonalizationContext | None = None,
+    explore_slots: int = 0,
 ) -> RankingOutput:
     now = now or datetime.now(UTC)
     timings: dict[str, float] = {}
@@ -122,6 +129,8 @@ def rank_jobs(
     }
     profile = _load_profile(session, candidate_id) if candidate_id else None
     cand = candidate_facts(profile)
+    if personalization is not None:
+        cand = personalization.apply_to_candidate(cand)
     similarities = _similarities(session, retrieved, ids, embedding_model)
     max_fused = max((r.fused_score for r in retrieved.jobs), default=0.0) or 1.0
 
@@ -138,6 +147,7 @@ def rank_jobs(
         )
         contrib = ranker.contributions(fv)
         names = {js.skill_id: js.skill.name for js in job.skills}
+        cats = job_role_categories(job.title, (js.skill.category for js in job.skills))
         s1 = sum(contrib.values())
         ranked.append(
             RankedJob(
@@ -153,6 +163,7 @@ def rank_jobs(
                 explanation=explain(fv, contrib, jf, names, has_candidate=profile is not None),
                 lexical_rank=r.lexical_rank,
                 semantic_rank=r.semantic_rank,
+                role_categories=sorted(c.value for c in cats),
             )
         )
     # Ties broken by retrieval order (stable sort), so output is deterministic.
@@ -173,7 +184,55 @@ def rank_jobs(
         ranked = head + ranked[CROSS_ENCODER_TOP_N:]
         timings["cross_encoder"] = _ms(t)
 
+    if personalization is not None and not personalization.is_empty:
+        t = time.perf_counter()
+        for item in ranked:
+            delta, reasons = personalization.adjustment(
+                frozenset(item.role_categories), item.company
+            )
+            item.personalization = delta
+            item.score += delta
+            item.explanation = reasons + item.explanation
+        ranked.sort(key=lambda x: -x.score)
+        timings["personalization"] = _ms(t)
+
+    if explore_slots > 0:
+        ranked = _explore(ranked, top_k, explore_slots)
+
     return RankingOutput(ranked[:top_k], stage, ranker.version, timings)
+
+
+def _explore(ranked: list[RankedJob], top_k: int, slots: int) -> list[RankedJob]:
+    """Put the best job from each of `slots` categories *absent* from the top_k into evenly
+    spaced positions (e.g. 10 and 20 of 20). Without this, the system can only learn about
+    kinds of job it already shows: a feedback loop that hid backend jobs from a backend-loving
+    persona in the v1 experiment."""
+    head, tail = ranked[:top_k], ranked[top_k:]
+    present = {c for r in head for c in r.role_categories}
+    picks: list[RankedJob] = []
+    used: set[str] = set()
+    for r in tail:
+        cats = set(r.role_categories)
+        if cats and not cats & present and not cats & used:
+            picks.append(r)
+            used |= cats
+        if len(picks) == slots:
+            break
+    if not picks:
+        return ranked
+    step = max(1, top_k // slots)
+    for i, pick in enumerate(picks, start=1):
+        pos = min(top_k, step * i) - 1
+        pick.exploration = True
+        pick.explanation = [
+            "Exploring: different from your usual results, to learn what you like",
+            *pick.explanation,
+        ]
+        tail.remove(pick)
+        displaced = head[pos]
+        head[pos] = pick
+        tail.insert(0, displaced)
+    return head + tail
 
 
 def _similarities(

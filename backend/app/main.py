@@ -15,7 +15,9 @@ from app.core.errors import register_exception_handlers
 from app.core.logging import configure_logging
 from app.domains.auth.router import router as auth_router
 from app.domains.candidates.router import router as candidates_router
+from app.domains.interactions.router import router as interactions_router
 from app.domains.jobs.router import router as jobs_router
+from app.domains.preferences.router import router as preferences_router
 from app.domains.resumes.router import router as resumes_router
 from app.domains.search.router import router as search_router
 
@@ -67,6 +69,8 @@ def create_app() -> FastAPI:
     v1.include_router(search_router)
     v1.include_router(jobs_router)
     v1.include_router(resumes_router)
+    v1.include_router(interactions_router)
+    v1.include_router(preferences_router)
     app.include_router(health.router)
     app.include_router(v1)
     return app

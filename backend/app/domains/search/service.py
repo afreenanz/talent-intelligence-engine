@@ -38,6 +38,7 @@ def retrieve_jobs(
     embedder: Embedder,
     mode: RetrievalMode = "hybrid",
     params: RetrievalParams | None = None,
+    extra_lexical_queries: list[str] | None = None,
 ) -> RetrievalResult:
     """Retrieve jobs by query text, or by candidate profile when no query is given."""
     params = params or RetrievalParams()
@@ -77,6 +78,17 @@ def retrieve_jobs(
             )
             timings["dense"] = _ms(t)
 
+    # Extra lexical channels (e.g. the candidate's preferred role categories). Each is fused as
+    # its own RRF list, so it widens the candidate pool without diluting the main query.
+    extra: dict[str, list[uuid.UUID]] = {}
+    if mode == "hybrid":
+        for i, q in enumerate(extra_lexical_queries or []):
+            t = time.perf_counter()
+            extra[f"pref{i}"] = [
+                j for j, _ in retrievers.lexical_search(session, q, filters, params.depth)
+            ]
+            timings[f"preference_channel_{i}"] = _ms(t)
+
     t = time.perf_counter()
     lex_rank = {jid: (r, s) for r, (jid, s) in enumerate(lexical, start=1)}
     den_rank = {jid: (r, s) for r, (jid, s) in enumerate(dense, start=1)}
@@ -86,7 +98,7 @@ def retrieve_jobs(
         ordered = [(jid, s) for jid, s in dense]
     else:
         ordered = reciprocal_rank_fusion(
-            {"lexical": [j for j, _ in lexical], "dense": [j for j, _ in dense]},
+            {"lexical": [j for j, _ in lexical], "dense": [j for j, _ in dense], **extra},
             k=params.rrf_k,
             weights={"lexical": params.lexical_weight, "dense": params.dense_weight},
         )

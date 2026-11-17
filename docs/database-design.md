@@ -59,6 +59,11 @@ erDiagram
 
 ## 2. Tables beyond the required minimum, and why
 
+> Milestone 5A (implemented): `search_logs`, `job_interactions` (impressions are logged
+> server-side with 1-based positions), `saved_jobs`, `applications` (plus `notes`, and a status
+> state machine with terminal states rejected/withdrawn), `agent_memory` (plus `source`,
+> `created_at`). Migration `dbd166f11fd2`.
+
 > Changes made during Milestone 2A (implemented): `jobs` gained `city`, `country`, `normalized_company`,
 > `listed_at` (sort key = `posted_at` if the source gave one, else first-seen time, so `posted_at`
 > is never invented), `first_seen_at`, `last_seen_at` (needed for snapshot mode). `job_skills.importance`

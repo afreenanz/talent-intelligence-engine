@@ -237,3 +237,29 @@ def test_cold_start_profile_has_no_vector(db_session: Session, corpus: HashingEm
             top_k=3,
             embedder=corpus,
         )
+
+
+def test_extra_lexical_channel_widens_the_candidate_pool(
+    db_session: Session, corpus: HashingEmbedder
+) -> None:
+    retrieve_jobs(  # baseline call: must not error without extra channels
+        db_session,
+        query="python services",
+        candidate_id=None,
+        filters=JobFilters(),
+        top_k=10,
+        embedder=corpus,
+        mode="hybrid",
+    )
+    widened = retrieve_jobs(
+        db_session,
+        query="python services",
+        candidate_id=None,
+        filters=JobFilters(),
+        top_k=10,
+        embedder=corpus,
+        mode="hybrid",
+        extra_lexical_queries=["react typescript"],
+    )
+    assert "Frontend Engineer" in [j.title for j in widened.jobs]
+    assert any(k.startswith("preference_channel") for k in widened.timings_ms)

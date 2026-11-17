@@ -51,6 +51,39 @@ experience is neutral). Long-phrase "skills" (e.g. the HVAC job) never match CV 
 is left as a documented limitation rather than tuned on labelled data. LambdaMART stays
 exploratory (ADR-011: < 50 queries).
 
+## Personalization (Milestone 5B, implemented)
+
+Code: `backend/app/domains/personalization/` (categories, derived, adjust) plus `_explore` in the ranking service.
+
+| Piece | Rule |
+|---|---|
+| Role categories | Title rules, then a skill-majority fallback (≥ 2 taxonomy skills). On synthetic titles: 2080/2080 vs ground truth, which is easy because titles are templated. |
+| Evidence | apply +3, save +2, dismiss −2, unsave −1; a click counts (+0.5) **only if** later saved or applied to; impressions never negative; one contribution per job per event type; 30-day exponential decay |
+| Derived preference | ≥ 3 distinct jobs and \|score\| ≥ 2; confidence = min(0.9, 1 − e^(−support/5)); company avoid after ≥ 2 dismissals and no positive signal. Recomputed right after each save/unsave/apply/feedback |
+| Precedence | Explicit beats derived for the same key; explicit salary, work mode, job type, city and skills override profile facts |
+| Adjustment | `final = score + clip(0.1·match, −0.1, +0.1)`: re-orders similar-relevance jobs, can't override a large fit gap |
+| Preference channel | Preferred categories become extra lexical retrieval lists in RRF (recommendation mode), so those jobs enter the pool |
+| Exploration | Recommendations reserve 2 of 20 slots (positions 10 and 20) for the best jobs from categories not otherwise shown, labelled "Exploring" |
+| Cold start | No history → no derived preferences → adjustment 0; new jobs rely on content features only (no popularity signal) |
+
+### Persona experiment (simulated users, synthetic jobs; mechanism check only)
+Command: `uv run python -m app.cli eval-personalization`. 4 personas × 5 seeds, identical generic
+profile, 4 rounds of 20 recommendations, NDCG@10 on *un-interacted* jobs, relevance from generator ground truth.
+
+| Version | generic | learned (Δ, 95% CI) | explicit (Δ, 95% CI) |
+|---|---|---|---|
+| v1: re-ranking only ([report](../eval/reports/2026-11-17-personalization-personas-v1-before-fixes.md)) | 0.036 | 0.127 (+0.091 [+0.022, +0.166]) | 0.376 (+0.341) |
+| **v2: + preference channel + exploration** ([report](../eval/reports/2026-11-17-personalization-personas.md)) | 0.036 | **0.276 (+0.240 [+0.095, +0.409])** | **0.446 (+0.410 [+0.250, +0.578])** |
+
+**What v1 revealed:** (1) a feedback loop, where personas never saw jobs they'd like, so nothing could be
+learned (backend persona: learned preferences `{}`); (2) re-ranking can't surface jobs retrieval never
+returned (ML/frontend: even explicit preferences scored 0). v2 fixes are structural, not tuned.
+
+**Deliberate trade-off that remains:** the ML and frontend personas stay near 0 because their profile
+(Python/SQL) lacks those roles' skills, and the ±0.1 cap prevents personalization from overriding
+a large skill-fit gap. A real user in that position should add skills or search explicitly.
+**Not evidence of real-user benefit**: there are no real users yet.
+
 ## Pipeline
 
 ```mermaid

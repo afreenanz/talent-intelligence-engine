@@ -27,6 +27,13 @@ class AppError(Exception):
         self.details = details
 
 
+class ValidationFailedError(AppError):
+    """Domain-level validation (e.g. a JSON value checked against a key-specific schema)."""
+
+    status_code = status.HTTP_422_UNPROCESSABLE_CONTENT
+    code = "validation_error"
+
+
 class NotFoundError(AppError):
     status_code = status.HTTP_404_NOT_FOUND
     code = "not_found"
