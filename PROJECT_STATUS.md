@@ -2,7 +2,7 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 3A: Retrieval engine, **implemented and verified, awaiting your review** (branch `feat/m3a-retrieval`)
+**Current milestone:** 3A: Retrieval engine, **approved and merged** (PR #1; CI green on Linux)
 **Next:** 3B: Retrieval evaluation (metrics, labelled queries, comparison report, real-dataset options)
 
 ## Milestone 3A: Retrieval engine (verified 2026-11-17)
@@ -13,7 +13,7 @@ _Last updated: 2026-11-17_
 - [x] `POST /api/v1/jobs/search` with ranks, scores and per-stage timings
 - [x] CPU-only torch on Linux; HF model cache in CI
 - [x] 193 tests (incl. 3 against the real model); ruff, mypy --strict, alembic check clean
-- [ ] Your review → merge to main
+- [x] Approved and merged to main (2026-11-17)
 
 ## Milestone 2B: Resume intelligence (verified 2026-11-17)
 - [x] LLM provider interface + Gemini adapter (REST Interactions API, retries, schema adaptation)
