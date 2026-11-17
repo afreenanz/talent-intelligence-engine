@@ -4,6 +4,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 3A: Retrieval engine
+- Embedding tables and generated full-text search vector (migration `3dcced24e94a`)
+- Sentence Transformers embedder with explicit query prompts; incremental job embedding CLI
+- Lexical, dense and RRF hybrid retrieval with shared SQL filters; profile-based retrieval
+- `POST /api/v1/jobs/search`
+
 ### Milestone 2B: Resume intelligence
 - LLM provider protocol; Gemini adapter over the REST Interactions API with retries and schema adaptation
 - Resume upload/list/get/reprocess/apply/delete endpoints with ownership checks

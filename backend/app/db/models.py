@@ -6,15 +6,18 @@ from app.domains.candidates.models import CandidateProfile, CandidateSkill
 from app.domains.ingestion.models import IngestionError, IngestionRun
 from app.domains.jobs.models import Job, JobSkill
 from app.domains.resumes.models import Resume
+from app.domains.search.models import CandidateEmbedding, JobEmbedding
 from app.domains.skills.models import Skill, SkillAlias
 
 __all__ = [
     "Base",
+    "CandidateEmbedding",
     "CandidateProfile",
     "CandidateSkill",
     "IngestionError",
     "IngestionRun",
     "Job",
+    "JobEmbedding",
     "JobSkill",
     "RefreshToken",
     "Resume",

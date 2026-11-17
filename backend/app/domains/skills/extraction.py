@@ -8,7 +8,7 @@ appears as a whole token sequence. Limitations (documented, tested):
 """
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -44,6 +44,7 @@ _RIGHT = r"(?![a-z0-9+#]|\.[a-z0-9])"
 @dataclass(frozen=True)
 class SkillMatcher:
     patterns: tuple[tuple[re.Pattern[str], int], ...]
+    names: dict[int, str] = field(default_factory=dict)  # skill_id -> canonical display name
 
     def find(self, text: str) -> set[int]:
         lowered = text.lower()
@@ -57,10 +58,12 @@ def _compile(term: str) -> re.Pattern[str]:
 def build_matcher(session: Session) -> SkillMatcher:
     """Load curated (category NOT NULL), non-ambiguous skills and safe aliases."""
     terms: dict[str, int] = {}
+    names: dict[int, str] = {}
     for skill in session.scalars(
         select(Skill).where(Skill.category.is_not(None), Skill.is_ambiguous.is_(False))
     ):
         terms[skill.normalized_name] = skill.id
+        names[skill.id] = skill.name
     alias_rows = session.execute(
         select(SkillAlias.alias, SkillAlias.skill_id)
         .join(Skill)
@@ -69,4 +72,5 @@ def build_matcher(session: Session) -> SkillMatcher:
     for alias, skill_id in alias_rows:
         if len(alias) >= _MIN_ALIAS_LEN and alias not in _UNSAFE_TEXT_ALIASES:
             terms.setdefault(alias, skill_id)
-    return SkillMatcher(tuple((_compile(term), sid) for term, sid in sorted(terms.items())))
+    patterns = tuple((_compile(term), sid) for term, sid in sorted(terms.items()))
+    return SkillMatcher(patterns, names)

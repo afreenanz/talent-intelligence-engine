@@ -48,6 +48,10 @@ class Settings(BaseSettings):
     gemini_base_url: str = "https://generativelanguage.googleapis.com/v1beta"
     gemini_api_revision: str = "2026-05-20"
 
+    # Embeddings (ADR-005). The final default is decided by the Milestone 3B evaluation.
+    embedding_model: str = "BAAI/bge-small-en-v1.5"
+    embedding_device: str = "cpu"  # "mps" on Apple Silicon is possible; cpu is reproducible
+
     # Resume uploads. Stored outside the web root, in a git-ignored folder.
     upload_dir: str = "../data/private/uploads"
     max_resume_bytes: int = Field(default=5 * 1024 * 1024, ge=1024)

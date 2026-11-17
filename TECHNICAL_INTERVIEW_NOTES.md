@@ -60,3 +60,15 @@ is the actual exercise.
 47. How does the prompt defend against injection inside the resume, and why isn't the prompt the main defence?
 48. Why does the test suite force GEMINI_API_KEY to empty? What could go wrong otherwise?
 49. Free-tier data may be used for training. What does that change about how you test?
+
+## Milestone 3A: Retrieval engine
+50. Why OR the query terms for lexical retrieval? What does AND do to a query like "python backend bangalore startup"?
+51. Why cast the rewritten query straight to `tsquery` instead of passing it through `to_tsquery` again? (double stemming)
+52. Why is `search_vector` a GENERATED column, and why does `skills_text` exist?
+53. Derive why a document ranked #2 by both retrievers always beats one ranked #1 by a single retriever under RRF (any k > 0). When does k matter? (test_k_controls_consensus_vs_single_top_hit)
+54. What is the bge query instruction, why does it only apply to queries, and how did you notice it was missing?
+55. Why exact vector scan instead of HNSW right now? What would make you add the index, and what does `hnsw.iterative_scan` solve?
+56. Why keep jobs with unknown salary when a salary filter is applied? What's the trade-off?
+57. How do you avoid re-embedding unchanged jobs? What would force a full re-embed?
+58. Why use a hashing embedder in most tests, plus a few tests with the real model?
+59. Why the CPU-only torch index for Linux?

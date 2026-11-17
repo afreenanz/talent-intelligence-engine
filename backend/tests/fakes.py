@@ -29,3 +29,42 @@ class ScriptedLLM:
             raw_text=item.model_dump_json(),
             usage=LLMUsage(input_tokens=100, output_tokens=50, latency_ms=5, model=self.model),
         )
+
+
+class HashingEmbedder:
+    """Deterministic bag-of-words embedder for tests: identical words -> overlapping vectors.
+
+    It has no semantic knowledge at all; tests that need real semantics use the real model
+    (marked `model`). This keeps SQL, fusion and indexing tests fast and exact.
+    """
+
+    def __init__(self, name: str = "test/hashing-384") -> None:
+        from app.integrations.embeddings.base import ModelSpec
+
+        self._spec = ModelSpec(name, 384)
+        self.calls = 0
+
+    @property
+    def spec(self):  # type: ignore[no-untyped-def]
+        return self._spec
+
+    def _vec(self, text: str):  # type: ignore[no-untyped-def]
+        import hashlib
+        import re
+
+        import numpy as np
+
+        v = np.zeros(384, dtype=np.float32)
+        for tok in re.findall(r"[a-z0-9+#]+", text.lower()):
+            v[int(hashlib.md5(tok.encode()).hexdigest(), 16) % 384] += 1.0  # noqa: S324
+        n = float(np.linalg.norm(v))
+        return v / n if n else v
+
+    def encode_queries(self, texts):  # type: ignore[no-untyped-def]
+        import numpy as np
+
+        self.calls += len(texts)
+        return np.stack([self._vec(t) for t in texts])
+
+    def encode_documents(self, texts, batch_size=64):  # type: ignore[no-untyped-def]
+        return self.encode_queries(texts)

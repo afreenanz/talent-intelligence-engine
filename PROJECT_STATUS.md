@@ -2,8 +2,18 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 2B: Resume intelligence, **approved and merged** (also verified by you with a real resume upload)
-**Next:** Milestone 3: Retrieval engine
+**Current milestone:** 3A: Retrieval engine, **implemented and verified, awaiting your review** (branch `feat/m3a-retrieval`)
+**Next:** 3B: Retrieval evaluation (metrics, labelled queries, comparison report, real-dataset options)
+
+## Milestone 3A: Retrieval engine (verified 2026-11-17)
+- [x] Migration `3dcced24e94a`: job_embeddings, candidate_embeddings, jobs.skills_text (backfilled), generated weighted search_vector + GIN
+- [x] Embedding service (Sentence Transformers, bge-small-en-v1.5, explicit query prefix), incremental `embed-jobs` (1,593 in ~30 s; re-run 0.11 s)
+- [x] Lexical (FTS, OR semantics, weighted), dense (pgvector cosine), hybrid (RRF) behind one `retrieve_jobs`
+- [x] Profile/recommendation mode with cached candidate embeddings; cold-start handling
+- [x] `POST /api/v1/jobs/search` with ranks, scores and per-stage timings
+- [x] CPU-only torch on Linux; HF model cache in CI
+- [x] 193 tests (incl. 3 against the real model); ruff, mypy --strict, alembic check clean
+- [ ] Your review → merge to main
 
 ## Milestone 2B: Resume intelligence (verified 2026-11-17)
 - [x] LLM provider interface + Gemini adapter (REST Interactions API, retries, schema adaptation)
