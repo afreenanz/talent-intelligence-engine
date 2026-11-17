@@ -29,3 +29,6 @@ data/private/
 .DS_Store
 .idea/
 .vscode/
+
+# Third-party datasets: downloaded by scripts, never committed
+data/external/

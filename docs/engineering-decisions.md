@@ -43,6 +43,8 @@ See database-design.md §3.5.
 
 **Update (Milestone 4A):** implemented for the top 50. Blending uses the model's sigmoid, not per-list min-max (see ranking-engine.md for the live failure that ruled min-max out). Usefulness is measured in 4B.
 
+**Update (Milestone 4B, TalentCLEF, human labels):** features + cross-encoder gave the best MAP@100 (+0.067 vs hybrid, 95% CI [+0.038, +0.106]). The cross-encoder is kept as an opt-in stage because of its ≈0.5 s cost.
+
 ## ADR-008 LLM provider abstraction with three adapters
 **Decision.** A `LLMProvider` protocol with `generate_structured(schema, messages)` and `chat_with_tools(messages, tools)`. Adapters: Gemini, OpenAI, and an **OpenAI-compatible local endpoint** (Ollama/LM Studio) as the clearly labelled local-development alternative. A deterministic scripted fake exists **only in the test suite** and is never selectable at runtime.
 **Provider choice (2026-11-17):** Gemini free tier is the default. OpenRouter (free models) is the secondary option through the OpenAI-compatible adapter. Free-tier rate limits are checked when the integration is built (Milestone 2), and the model name is recorded in every evaluation run.
@@ -76,6 +78,8 @@ See database-design.md §3.5.
 
 ## ADR-011 Learning-to-rank is gated on data
 LambdaMART (LightGBM `lambdarank`) is trained **only if** we have at least a few hundred labelled query-job pairs across ≥ 50 queries. Otherwise the experiment is reported as "insufficient data". Below that threshold it would just memorize the labels.
+
+**Update (Milestone 4B):** run as an exploratory leave-one-query-out experiment on TalentCLEF (10 queries). It gained +0.048 MAP vs hybrid, which is less than features + cross-encoder. By this ADR's threshold it is not used in production. LightGBM runs in a spawned worker process: in one process with PyTorch on macOS it segfaulted (duplicate OpenMP runtimes).
 
 ## ADR-012 Local infrastructure via Docker Compose
 Postgres (`pgvector/pgvector:pg17`), Redis, API, worker, beat and frontend run in Docker Compose. A native fallback (Homebrew `postgresql@17` + `brew install pgvector`, which supports pg17/pg18) is documented for running tests without Docker.

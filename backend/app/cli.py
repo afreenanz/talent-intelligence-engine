@@ -166,6 +166,35 @@ def cmd_eval_retrieval(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_eval_ranking(args: argparse.Namespace) -> int:
+    from datetime import UTC, datetime
+
+    from app.domains.evaluation import ranking_eval as rk
+    from app.domains.evaluation.talentclef import load
+    from app.domains.ranking.cross_encoder import get_cross_encoder
+    from app.domains.ranking.weighted import WeightedRanker
+    from app.integrations.embeddings.sentence_transformer import get_embedder
+
+    root = REPO_ROOT / "data" / "external" / "talentclef2026"
+    if not (root / "TaskA").exists():
+        print("TalentCLEF data not found. Run: uv run python -m scripts.fetch_talentclef")
+        return 2
+    dataset_name = "talentclef2026_taskA_dev_en"
+    ds = load(root, "development", "en")
+    with get_sessionmaker()() as session:
+        results, info = rk.evaluate(
+            session, ds, get_embedder(), get_cross_encoder(), WeightedRanker.from_file()
+        )
+        rk.persist(session, results, info, dataset_name)
+    stamp = datetime.now(UTC).strftime("%Y-%m-%d")
+    report = REPO_ROOT / "eval" / "reports" / f"{stamp}-{dataset_name}.md"
+    rk.write_report(report, results, info, dataset_name)
+    print(f"report: {report}")
+    for r in results:
+        print(f"  {r.name:50} ndcg@10={r.mean('ndcg@10'):.3f} map@100={r.mean('map@100'):.3f}")
+    return 0
+
+
 def cmd_runs(args: argparse.Namespace) -> int:
     with get_sessionmaker()() as session:
         runs = session.scalars(
@@ -216,6 +245,9 @@ def main(argv: list[str] | None = None) -> int:
         default=["BAAI/bge-small-en-v1.5", "sentence-transformers/all-MiniLM-L6-v2"],
     )
     p.set_defaults(func=cmd_eval_retrieval)
+
+    p = sub.add_parser("eval-ranking", help="ranking comparison on TalentCLEF 2026 Task A (dev)")
+    p.set_defaults(func=cmd_eval_ranking)
 
     p = sub.add_parser("runs", help="list recent ingestion runs")
     p.add_argument("--limit", type=int, default=10)

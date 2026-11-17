@@ -9,19 +9,18 @@ k (default 60) damps the advantage of the very top ranks: with k=60, rank 1 vs r
 only ~1.6%, so a document ranked well by *both* retrievers beats one ranked first by only one.
 """
 
-import uuid
-from collections.abc import Mapping, Sequence
+from collections.abc import Hashable, Mapping, Sequence
 
 
-def reciprocal_rank_fusion(
-    ranked_lists: Mapping[str, Sequence[uuid.UUID]],
+def reciprocal_rank_fusion[K: Hashable](
+    ranked_lists: Mapping[str, Sequence[K]],
     *,
     k: int = 60,
     weights: Mapping[str, float] | None = None,
-) -> list[tuple[uuid.UUID, float]]:
+) -> list[tuple[K, float]]:
     if k <= 0:
         raise ValueError("k must be positive")
-    scores: dict[uuid.UUID, float] = {}
+    scores: dict[K, float] = {}
     for name, ids in ranked_lists.items():
         w = (weights or {}).get(name, 1.0)
         for rank, doc_id in enumerate(ids, start=1):

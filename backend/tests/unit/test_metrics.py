@@ -59,3 +59,11 @@ def test_validate_judgments() -> None:
     assert m.validate_judgments({"q1": J}) == []
     problems = m.validate_judgments({"q1": {"x": 1}, "q2": {"x": 7}})
     assert problems == ["q1: no document with grade >= 2", "q2: grades out of range [7]"]
+
+
+def test_average_precision_hand_computed() -> None:
+    # relevant = {a, c, z}; hits at ranks 1 (a) and 3 (c): AP = (1/1 + 2/3) / 3
+    assert m.average_precision(RANKED, J) == pytest.approx((1 + 2 / 3) / 3)
+    assert m.average_precision(["a", "c", "z"], J) == pytest.approx(1.0)
+    assert m.average_precision(["b", "d"], J) == 0.0
+    assert m.average_precision(RANKED, J, k=1) == pytest.approx(1 / 3)

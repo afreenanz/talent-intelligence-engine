@@ -18,6 +18,39 @@
 | Latency (laptop CPU, live) | stage 1 ≈ 20–35 ms for 100 jobs; cross-encoder ≈ 0.4–0.6 s for 50 pairs (first call also loads the model, ≈ 8 s). |
 | Explanations | Built only from computed features ("Matches 2 of 3 required skills (PostgreSQL, Python)", "Missing: REST APIs", "Biggest factor: …"). No LLM. |
 
+## Evaluation on real human labels (Milestone 4B)
+
+Command: `uv run python -m scripts.fetch_talentclef && uv run python -m app.cli eval-ranking`.
+Report: [eval/reports/2026-11-17-talentclef2026_taskA_dev_en.md](../eval/reports/2026-11-17-talentclef2026_taskA_dev_en.md).
+Data: TalentCLEF 2026 Task A dev (EN), 10 job queries × 472 **synthetic CVs**, **human expert**
+binary labels, CC BY 4.0. Direction: job → candidates (features are symmetric).
+
+| Configuration | NDCG@10 | MAP@100 | Δ MAP vs hybrid [95% CI] |
+|---|---|---|---|
+| lexical (FTS) | 0.761 | 0.529 | −0.212 [−0.263, −0.161] ✱ |
+| dense (bge-small) | 0.969 | 0.777 | +0.036 [−0.004, +0.088] |
+| hybrid (RRF k=60) | 0.926 | 0.741 | (baseline) |
+| hybrid + features (weighted_v1) | 0.918 | 0.782 | +0.040 [+0.030, +0.052] ✱ |
+| hybrid + features + cross-encoder | 0.950 | **0.808** | **+0.067 [+0.038, +0.106] ✱** |
+| LambdaMART LOQO (exploratory) | 0.943 | 0.790 | +0.048 [+0.022, +0.088] ✱ |
+
+**Supported by the data:**
+1. Lexical is clearly worst. With a whole job description as the query, OR-matching every term is noisy.
+2. Feature ranking improves the ranking *beyond* the top 10 (MAP), not the top 10 itself (NDCG@10 −0.007, n.s.).
+3. **The cross-encoder helps on real data** (best MAP, significant). This is the opposite of the
+   worry that a web-trained model wouldn't transfer. It costs ≈0.5 s, so it stays an opt-in stage.
+
+**Suggested, not acted on:**
+4. Dense alone beats hybrid at the top (NDCG@10 +0.044, CI touches 0), driven by one query
+   (q9: lexical 0.29). Lowering the lexical weight for long queries is a hypothesis. We did
+   **not** tune it on these 10 queries: with no held-out split, that would be fitting the test set.
+
+**Caveats:** 10 queries; only skill coverage, semantic similarity and retrieval score vary here
+(salary, location, job type and recency are absent; no job states a "N years" requirement, so
+experience is neutral). Long-phrase "skills" (e.g. the HVAC job) never match CV text verbatim. That
+is left as a documented limitation rather than tuned on labelled data. LambdaMART stays
+exploratory (ADR-011: < 50 queries).
+
 ## Pipeline
 
 ```mermaid
