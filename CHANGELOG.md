@@ -4,6 +4,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 2A: Job ingestion
+- Jobs schema (jobs, job_skills, ingestion_runs, ingestion_errors) with integrity constraints
+- Curated skill taxonomy v1 and idempotent seeding
+- CSV/JSON/JSONL ingestion: validation, normalization, skill extraction, content hashing,
+  idempotent upserts, near-duplicate linking, expiry, snapshot mode, retry of failed records
+- Deterministic synthetic job dataset (2,084 records) with injected ground truth
+- `GET /api/v1/jobs` (cursor pagination + filters), `GET /api/v1/jobs/{id}`
+- CLI: `seed-skills`, `ingest-jobs`, `runs`, `retry-failed`, `expire-jobs`
+
 ### Milestone 1: Backend foundation
 - Docker Compose: `pgvector/pgvector:0.8.7-pg17-trixie` and `redis:8.2-alpine` with health checks and volumes
 - FastAPI app factory, structlog logging, request-ID middleware, JSON error envelope

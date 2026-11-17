@@ -59,6 +59,11 @@ erDiagram
 
 ## 2. Tables beyond the required minimum, and why
 
+> Changes made during Milestone 2A (implemented): `jobs` gained `city`, `country`, `normalized_company`,
+> `listed_at` (sort key = `posted_at` if the source gave one, else first-seen time, so `posted_at`
+> is never invented), `first_seen_at`, `last_seen_at` (needed for snapshot mode). `job_skills.importance`
+> gained `mentioned` (found in text, importance unknown). `skills.is_ambiguous` was added. See [ingestion.md](ingestion.md).
+
 | Table | Why it exists |
 |---|---|
 | `skill_aliases` | "Postgres", "postgresql" and "PostgreSQL" must map to one `skills` row, or skill-overlap features are wrong. Lookup is an exact match on a lowercased alias, with `pg_trgm` fuzzy fallback for suggestions. |

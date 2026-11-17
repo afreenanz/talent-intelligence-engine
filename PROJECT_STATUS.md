@@ -2,7 +2,24 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 1: Backend foundation, **implemented and verified, awaiting your review**
+**Current milestone:** 2A: Job ingestion, **implemented and verified, awaiting your review** (branch `feat/m2a-job-ingestion`)
+**Next:** 2B: Resume intelligence (needs the Gemini API key)
+
+## Milestone 2A: Job ingestion (verified 2026-11-17)
+- [x] Migration `265b9963294b`: jobs, job_skills, ingestion_runs, ingestion_errors, skills.is_ambiguous
+- [x] Curated skill taxonomy (138 skills, 92 aliases) + idempotent `seed-skills`
+- [x] CSV / JSON / JSONL streaming readers; `JobRecordIn` validation contract
+- [x] Normalization: HTML cleaning, salary (LPA/lakh/crore/k, monthly/hourly → annual), experience, city/country/remote, title & company keys
+- [x] Skill identification: explicit lists via aliases + conservative dictionary matching in text
+- [x] Idempotent incremental ingestion (re-import = 2,080 unchanged, 0 writes)
+- [x] Near-duplicate detection with lifetime rule: 80/80 injected duplicates, 0 false positives (synthetic, see docs/ingestion.md caveat)
+- [x] Expiry, snapshot mode with safety valve, failed-record storage + retry
+- [x] Synthetic dataset generator (deterministic, labelled, with injected ground truth)
+- [x] `GET /api/v1/jobs` (keyset pagination, filters) and `GET /api/v1/jobs/{id}`
+- [x] 133 tests passing; ruff, mypy --strict and `alembic check` clean
+- [ ] Your review → merge to main
+- Not yet: scheduled ingestion (Celery beat → Milestone 9), external job API adapter (needs a provider with usable terms; interface planned for Milestone 9)
+
 
 ## Milestone 1: Backend foundation (verified 2026-11-17)
 - [x] Docker Compose: Postgres 17.12 + pgvector 0.8.7, Redis 8.2, both healthy

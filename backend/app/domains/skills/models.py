@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey, Identity, Integer, Text
+from sqlalchemy import Boolean, ForeignKey, Identity, Integer, Text, text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
@@ -13,6 +13,11 @@ class Skill(Base):
     name: Mapped[str] = mapped_column(Text, nullable=False)  # display form, e.g. "PostgreSQL"
     normalized_name: Mapped[str] = mapped_column(Text, unique=True, nullable=False)
     category: Mapped[str | None] = mapped_column(Text)
+    # Ambiguous names ("Go", "R", "C", "Swift") collide with ordinary words, so they are only
+    # taken from explicit skill lists and never matched inside free text.
+    is_ambiguous: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("false")
+    )
 
 
 class SkillAlias(Base):

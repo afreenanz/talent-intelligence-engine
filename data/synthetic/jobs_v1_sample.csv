@@ -1,0 +1,1000 @@
+external_id,title,company,description,location,employment_type,salary_min,salary_max,salary_currency,salary_text,experience_min,experience_max,experience_text,required_skills,preferred_skills,posted_at,expires_at
+syn-42-00705,Senior Data Engineer,Vantara Analytics,"Vantara Analytics is a healthtech company building products for customers across India and beyond. We are hiring a Senior Data Engineer to join a small, product-focused team.
+
+What you will do:
+- Partner with analysts and scientists to productionise datasets
+- Build and maintain batch and streaming data pipelines
+- Model the warehouse for analytics and machine learning use cases
+- Own data quality checks and SLAs for critical datasets
+
+What we are looking for:
+- Strong hands-on experience with Airflow
+- Strong hands-on experience with ETL
+
+Nice to have:
+- Exposure to BigQuery
+- Exposure to Tableau
+- Exposure to Data Warehousing
+- Exposure to Pandas
+
+Benefits:
+- Home-office setup allowance
+- ESOPs
+- Annual learning budget","Noida, Uttar Pradesh",contract,1500000,2200000,INR,,2,5,,Airflow; ETL,BigQuery; Tableau; Data Warehousing; Pandas,2026-09-23T10:00:00+00:00,2026-12-12T10:00:00+00:00
+syn-42-01989,Senior Quality Engineer,Bluefin Systems,"Bluefin Systems is a travel company building products for customers across India and beyond. We are hiring a Senior Quality Engineer to join a small, product-focused team.
+
+What you will do:
+- Design automated test suites for web and API layers
+- Build performance and load testing harnesses
+- Own release quality gates in CI
+
+What we are looking for:
+- Strong hands-on experience with Python
+- Strong hands-on experience with Java
+- Strong hands-on experience with Selenium
+
+Nice to have:
+- Exposure to CI/CD
+- Exposure to REST APIs
+
+Benefits:
+- Annual learning budget
+- Generous parental leave
+- Flexible working hours",Gurgaon,full_time,,,,17-27 LPA,,,,Python; Java; Selenium,CI/CD; REST APIs,2026-11-07T04:00:00+00:00,2027-01-18T04:00:00+00:00
+syn-42-00859,Backend Engineer,Orchid Systems,"Orchid Systems is a insurance company building products for customers across India and beyond. We are hiring a Backend Engineer to join a small, product-focused team.
+
+What you will do:
+- Improve reliability, latency and observability of core APIs
+- Build event-driven pipelines with message queues
+- Own services end to end, from design review to production on-call
+- Model data and write efficient SQL for high-traffic workloads
+
+What we are looking for:
+- Strong hands-on experience with Node.js
+- Strong hands-on experience with Microservices
+
+Nice to have:
+- Exposure to Docker
+- Exposure to System Design
+- Exposure to FastAPI
+- Exposure to Django
+
+Benefits:
+- Generous parental leave
+- Quarterly team offsites
+- Flexible working hours",Delhi NCR - New Delhi,full_time,1600000,2200000,INR,,,,2+ years,Node.js; Microservices,Docker; System Design; FastAPI; Django,2026-10-15T02:00:00+00:00,2026-11-29T02:00:00+00:00
+syn-42-01201,Cloud Engineer,Tamarind Works,"<p>Tamarind Works is a fintech company building products for customers across India and beyond. We are hiring a Cloud Engineer to join a small, product-focused team.</p><h3>What you will do</h3><ul><li>own monitoring, alerting and incident response tooling</li><li>automate infrastructure provisioning with infrastructure as code</li><li>build CI/CD pipelines that ship safely many times a day</li></ul><h3>What we are looking for</h3><ul><li>Strong hands-on experience with AWS</li><li>Strong hands-on experience with Terraform</li></ul><h3>Nice to have</h3><ul><li>Exposure to Ansible</li><li>Exposure to Python</li></ul><h3>Benefits</h3><ul><li>Home-office setup allowance</li><li>Generous parental leave</li><li>Annual learning budget</li></ul>",Gurgaon,full_time,,,,16-25 LPA,2,5,,AWS; Terraform,Ansible; Python,2026-09-19T23:00:00+00:00,2026-12-05T23:00:00+00:00
+syn-42-00957,Lead Test Automation Engineer,Northwind Software,"<p>Northwind Software is a logistics company building products for customers across India and beyond. We are hiring a Lead Test Automation Engineer to join a small, product-focused team.</p><h3>What you will do</h3><ul><li>build performance and load testing harnesses</li><li>own release quality gates in CI</li><li>design automated test suites for web and API layers</li></ul><h3>What we are looking for</h3><ul><li>Strong hands-on experience with Java</li><li>Strong hands-on experience with Test Automation</li><li>Strong hands-on experience with Selenium</li><li>Strong hands-on experience with Python</li></ul><h3>Nice to have</h3><ul><li>Exposure to Pytest</li><li>Exposure to Agile</li><li>Exposure to CI/CD</li></ul><h3>Benefits</h3><ul><li>Flexible working hours</li><li>Home-office setup allowance</li><li>ESOPs</li></ul>","Mumbai, Maharashtra",full_time,2000000,3100000,INR,,,,8+ years,Java; Test Automation; Selenium; Python,Pytest; Agile; CI/CD,2026-10-30T02:00:00+00:00,2026-12-28T02:00:00+00:00
+syn-42-00458,Frontend Developer,Bluefin Networks,"<p>Bluefin Networks is a B2B SaaS company building products for customers across India and beyond. We are hiring a Frontend Developer to join a small, product-focused team.</p><h3>What you will do</h3><ul><li>own the component library and design-system integration</li><li>collaborate closely with designers on interaction details</li><li>optimise Core Web Vitals and bundle size</li></ul><h3>What we are looking for</h3><ul><li>Strong hands-on experience with TypeScript</li><li>Strong hands-on experience with CSS</li></ul><h3>Nice to have</h3><ul><li>Exposure to Tailwind CSS</li><li>Exposure to Figma</li><li>Exposure to GraphQL</li></ul><h3>Benefits</h3><ul><li>Quarterly team offsites</li><li>Generous parental leave</li><li>Annual learning budget</li></ul>","Bangalore, Karnataka, India",full_time,,,,15-22 LPA,2,5,,TypeScript; CSS,Tailwind CSS; Figma; GraphQL,2026-10-01T22:00:00+00:00,2026-12-02T22:00:00+00:00
+syn-42-00086,Junior AI Engineer,Zephyr Inc,"Zephyr Inc is a media streaming company building products for customers across India and beyond. We are hiring a Junior AI Engineer to join a small, product-focused team.
+
+What you will do:
+- Build retrieval and ranking systems over large catalogues
+- Design offline and online evaluation for model quality
+- Train, evaluate and deploy models that power product features
+
+What we are looking for:
+- Strong hands-on experience with scikit-learn
+- Strong hands-on experience with PyTorch
+- Strong hands-on experience with Python
+- Strong hands-on experience with Machine Learning
+
+Nice to have:
+- Exposure to Statistics
+- Exposure to Docker
+- Exposure to Recommender Systems
+
+Benefits:
+- Flexible working hours
+- Annual learning budget
+- Health insurance for you and your family","Noida, Uttar Pradesh",full_time,800000,1200000,INR,,0,2,,scikit-learn; PyTorch; Python; Machine Learning,Statistics; Docker; Recommender Systems,2026-09-24T15:00:00+00:00,2026-12-07T15:00:00+00:00
+syn-42-00136,Lead Software Engineer - Frontend,Juniper Networks,"Juniper Networks is a e-commerce company building products for customers across India and beyond. We are hiring a Lead Software Engineer - Frontend to join a small, product-focused team.
+
+What you will do:
+- Write well-tested UI code with strong typing
+- Build responsive, accessible interfaces used by millions of customers
+- Own the component library and design-system integration
+- Optimise Core Web Vitals and bundle size
+
+What we are looking for:
+- Strong hands-on experience with JavaScript
+- Strong hands-on experience with HTML
+- Strong hands-on experience with React
+
+Nice to have:
+- Exposure to Figma
+- Exposure to Next.js
+
+Benefits:
+- Generous parental leave
+- Health insurance for you and your family
+- Annual learning budget","Noida, Uttar Pradesh",full_time,3300000,4800000,INR,,,,8-14 years,JavaScript; HTML; React,Figma; Next.js,2026-09-27T01:00:00+00:00,2026-11-24T01:00:00+00:00
+syn-42-01218,Senior DevOps Engineer,Saffron Systems,"Saffron Systems is a B2B SaaS company building products for customers across India and beyond. We are hiring a Senior DevOps Engineer to join a small, product-focused team.
+
+What you will do:
+- Run and scale Kubernetes clusters in production
+- Automate infrastructure provisioning with infrastructure as code
+- Build CI/CD pipelines that ship safely many times a day
+
+What we are looking for:
+- Strong hands-on experience with AWS
+- Strong hands-on experience with Docker
+
+Nice to have:
+- Exposure to Bash
+- Exposure to Helm
+
+Benefits:
+- Flexible working hours
+- ESOPs
+- Quarterly team offsites","Bangalore, Karnataka, India",full_time,,,,"₹2,500,000 - ₹3,000,000 per annum",,,5-9 years,AWS; Docker,Bash; Helm,2026-11-05T17:00:00+00:00,2026-12-23T17:00:00+00:00
+syn-42-00331,Lead Frontend Developer,Kestrel Digital,"Kestrel Digital is a B2B SaaS company building products for customers across India and beyond. We are hiring a Lead Frontend Developer to join a small, product-focused team.
+
+What you will do:
+- Own the component library and design-system integration
+- Collaborate closely with designers on interaction details
+- Write well-tested UI code with strong typing
+
+What we are looking for:
+- Strong hands-on experience with React
+- Strong hands-on experience with JavaScript
+- Strong hands-on experience with CSS
+
+Nice to have:
+- Exposure to Vue.js
+- Exposure to Accessibility
+- Exposure to Cypress
+
+Benefits:
+- Annual learning budget
+- Flexible working hours
+- Generous parental leave","Bangalore, Karnataka, India",full_time,3100000,4200000,INR,,8,14,,React; JavaScript; CSS,Vue.js; Accessibility; Cypress,2026-10-11T11:00:00+00:00,2026-12-14T11:00:00+00:00
+syn-42-00939,QA Engineer,Orchid Technologies,"Orchid Technologies is a media streaming company building products for customers across India and beyond. We are hiring a QA Engineer to join a small, product-focused team.
+
+What you will do:
+- Design automated test suites for web and API layers
+- Own release quality gates in CI
+- Build performance and load testing harnesses
+
+What we are looking for:
+- Strong hands-on experience with Test Automation
+- Strong hands-on experience with Java
+
+Nice to have:
+- Exposure to Pytest
+- Exposure to Performance Testing
+- Exposure to Agile
+- Exposure to REST APIs
+
+Benefits:
+- Annual learning budget
+- Home-office setup allowance
+- Flexible working hours",Delhi NCR - New Delhi,full_time,1100000,1400000,INR,,,,,,,2026-10-18T10:00:00+00:00,2026-11-18T10:00:00+00:00
+syn-42-00644,Senior Cloud Engineer,Marigold Works,"Marigold Works is a logistics company building products for customers across India and beyond. We are hiring a Senior Cloud Engineer to join a small, product-focused team.
+
+What you will do:
+- Automate infrastructure provisioning with infrastructure as code
+- Run and scale Kubernetes clusters in production
+- Own monitoring, alerting and incident response tooling
+- Build CI/CD pipelines that ship safely many times a day
+
+What we are looking for:
+- Strong hands-on experience with AWS
+- Strong hands-on experience with Docker
+- Strong hands-on experience with Terraform
+
+Nice to have:
+- Exposure to Observability
+- Exposure to Grafana
+- Exposure to Nginx
+
+Benefits:
+- Quarterly team offsites
+- Home-office setup allowance
+- Annual learning budget","Mumbai, Maharashtra",full_time,2900000,3800000,INR,,,,5+ years,,,2026-10-29T22:00:00+00:00,2026-12-26T22:00:00+00:00
+syn-42-00093,Senior Backend Engineer,Northwind Digital,"Northwind Digital is a edtech company building products for customers across India and beyond. We are hiring a Senior Backend Engineer to join a small, product-focused team.
+
+What you will do:
+- Build event-driven pipelines with message queues
+- Own services end to end, from design review to production on-call
+- Improve reliability, latency and observability of core APIs
+- Model data and write efficient SQL for high-traffic workloads
+- Break a monolith into well-defined services
+
+What we are looking for:
+- Strong hands-on experience with Node.js
+- Strong hands-on experience with Java
+
+Nice to have:
+- Exposure to System Design
+- Exposure to Spring Boot
+- Exposure to Django
+- Exposure to Distributed Systems
+
+Benefits:
+- Quarterly team offsites
+- Flexible working hours
+- Health insurance for you and your family","Mumbai, Maharashtra",full_time,,,,"₹2,800,000 - ₹4,000,000 per annum",,,5+ years,Node.js; Java,System Design; Spring Boot; Django; Distributed Systems,2026-11-04T10:00:00+00:00,2026-12-12T10:00:00+00:00
+syn-42-00488,Lead Cloud Engineer,Indigo Technologies,"Indigo Technologies is a media streaming company building products for customers across India and beyond. We are hiring a Lead Cloud Engineer to join a small, product-focused team.
+
+What you will do:
+- Own monitoring, alerting and incident response tooling
+- Automate infrastructure provisioning with infrastructure as code
+- Build CI/CD pipelines that ship safely many times a day
+- Run and scale Kubernetes clusters in production
+
+What we are looking for:
+- Strong hands-on experience with Docker
+- Strong hands-on experience with AWS
+
+Nice to have:
+- Exposure to Jenkins
+- Exposure to Observability
+- Exposure to Prometheus
+- Exposure to Grafana
+
+Benefits:
+- Quarterly team offsites
+- Health insurance for you and your family
+- ESOPs","Noida, Uttar Pradesh",full_time,3200000,4100000,INR,,,,8+ years,Docker; AWS,Jenkins; Observability; Prometheus; Grafana,2026-10-26T11:00:00+00:00,2026-12-23T11:00:00+00:00
+syn-42-01248,DevOps Engineer,Saffron Technologies Pvt Ltd,"Saffron Technologies Pvt Ltd is a edtech company building products for customers across India and beyond. We are hiring a DevOps Engineer to join a small, product-focused team.
+
+What you will do:
+- Own monitoring, alerting and incident response tooling
+- Automate infrastructure provisioning with infrastructure as code
+- Build CI/CD pipelines that ship safely many times a day
+- Run and scale Kubernetes clusters in production
+
+What we are looking for:
+- Strong hands-on experience with Kubernetes
+- Strong hands-on experience with AWS
+- Strong hands-on experience with Linux
+- Strong hands-on experience with Docker
+
+Nice to have:
+- Exposure to Azure
+- Exposure to CI/CD
+
+Benefits:
+- Generous parental leave
+- Flexible working hours
+- Quarterly team offsites","Noida, Uttar Pradesh",full_time,,,,15-22 LPA,,,2+ years,,,2026-09-26T13:00:00+00:00,2026-12-14T13:00:00+00:00
+syn-42-00014,Site Reliability Engineer,Arcadia Software,"Arcadia Software is a e-commerce company building products for customers across India and beyond. We are hiring a Site Reliability Engineer to join a small, product-focused team.
+
+What you will do:
+- Own monitoring, alerting and incident response tooling
+- Build CI/CD pipelines that ship safely many times a day
+- Automate infrastructure provisioning with infrastructure as code
+- Run and scale Kubernetes clusters in production
+
+What we are looking for:
+- Strong hands-on experience with Kubernetes
+- Strong hands-on experience with Linux
+- Strong hands-on experience with AWS
+- Strong hands-on experience with Docker
+
+Nice to have:
+- Exposure to Observability
+- Exposure to Prometheus
+
+Benefits:
+- ESOPs
+- Quarterly team offsites
+- Flexible working hours",Remote (India),full_time,1500000,1800000,INR,,,,2-5 years,,,2026-10-15T05:00:00+00:00,2026-12-28T05:00:00+00:00
+syn-42-00929,Junior Backend Developer,Vantara Networks,"Vantara Networks is a insurance company building products for customers across India and beyond. We are hiring a Junior Backend Developer to join a small, product-focused team.
+
+What you will do:
+- Improve reliability, latency and observability of core APIs
+- Model data and write efficient SQL for high-traffic workloads
+- Design and build scalable REST and gRPC services
+- Build event-driven pipelines with message queues
+
+What we are looking for:
+- Strong hands-on experience with PostgreSQL
+- Strong hands-on experience with Go
+- Strong hands-on experience with Java
+
+Nice to have:
+- Exposure to Django
+- Exposure to System Design
+- Exposure to Redis
+- Exposure to Distributed Systems
+
+Benefits:
+- Annual learning budget
+- Quarterly team offsites
+- ESOPs",Pune,full_time,600000,800000,INR,,,,Fresher / 0-2 yrs,PostgreSQL; Go; Java,Django; System Design; Redis; Distributed Systems,2026-09-15T13:00:00+00:00,2026-11-09T13:00:00+00:00
+syn-42-01237-repost,Junior Data Engineer,Arcadia Software,"Arcadia Software is a e-commerce company building products for customers across India and beyond. We are urgently hiring a Junior Data Engineer to join a small, product-focused team.
+
+What you will do:
+- Own data quality checks and SLAs for critical datasets
+- Partner with analysts and scientists to productionise datasets
+- Model the warehouse for analytics and machine learning use cases
+- Build and maintain batch and streaming data pipelines
+
+What we are looking for:
+- Strong hands-on experience with Apache Spark
+- Strong hands-on experience with Airflow
+
+Nice to have:
+- Exposure to Hadoop
+- Exposure to Kafka
+
+Benefits:
+- Generous parental leave
+- Home-office setup allowance
+- Annual learning budget
+
+Apply today.","Mumbai, Maharashtra",full_time,,,,"₹700,000 - ₹900,000 per annum",0,2,,,,2026-10-01T07:00:00+00:00,2026-12-14T07:00:00+00:00
+syn-42-01899,Mobile Engineer,Marigold Software,"Marigold Software is a gaming company building products for customers across India and beyond. We are hiring a Mobile Engineer to join a small, product-focused team.
+
+What you will do:
+- Build smooth, offline-friendly mobile experiences
+- Own app performance, crash rates and release quality
+- Work with backend teams on API contracts
+
+What we are looking for:
+- Strong hands-on experience with iOS
+- Strong hands-on experience with Android
+- Strong hands-on experience with Kotlin
+
+Nice to have:
+- Exposure to REST APIs
+- Exposure to SwiftUI
+- Exposure to Jetpack Compose
+
+Benefits:
+- Generous parental leave
+- Flexible working hours
+- Home-office setup allowance",Remote (India),full_time,1200000,1600000,INR,,,,2-5 years,iOS; Android; Kotlin,REST APIs; SwiftUI; Jetpack Compose,2026-10-14T04:00:00+00:00,2026-11-22T04:00:00+00:00
+syn-42-01975,Backend Engineer,Vantara Systems,"<p>Vantara Systems is a insurance company building products for customers across India and beyond. We are hiring a Backend Engineer to join a small, product-focused team.</p><h3>What you will do</h3><ul><li>model data and write efficient SQL for high-traffic workloads</li><li>design and build scalable REST and gRPC services</li><li>own services end to end, from design review to production on-call</li><li>break a monolith into well-defined services</li></ul><h3>What we are looking for</h3><ul><li>Strong hands-on experience with Node.js</li><li>Strong hands-on experience with Java</li><li>Strong hands-on experience with Python</li></ul><h3>Nice to have</h3><ul><li>Exposure to AWS</li><li>Exposure to Distributed Systems</li><li>Exposure to MongoDB</li><li>Exposure to GraphQL</li></ul><h3>Benefits</h3><ul><li>Home-office setup allowance</li><li>Flexible working hours</li><li>Annual learning budget</li></ul>",Hybrid - Pune,full_time,,,,"₹1,500,000 - ₹1,900,000 per annum",,,2-5 years,Node.js; Java; Python,AWS; Distributed Systems; MongoDB; GraphQL,2026-10-31T19:00:00+00:00,2026-12-03T19:00:00+00:00
+syn-42-01736,Senior Flutter Developer,Quillon Technologies,"Quillon Technologies is a insurance company building products for customers across India and beyond. We are hiring a Senior Flutter Developer to join a small, product-focused team.
+
+What you will do:
+- Work with backend teams on API contracts
+- Build smooth, offline-friendly mobile experiences
+- Own app performance, crash rates and release quality
+
+What we are looking for:
+- Strong hands-on experience with iOS
+- Strong hands-on experience with Swift
+
+Nice to have:
+- Exposure to Jetpack Compose
+- Exposure to Unit Testing
+
+Benefits:
+- Health insurance for you and your family
+- Quarterly team offsites
+- Home-office setup allowance",Delhi NCR - New Delhi,full_time,2400000,3400000,INR,,,,5+ years,iOS; Swift,Jetpack Compose; Unit Testing,2026-10-19T00:00:00+00:00,2026-12-08T00:00:00+00:00
+syn-42-00501,Senior SDET,Coral Works,"Coral Works is a B2B SaaS company building products for customers across India and beyond. We are hiring a Senior SDET to join a small, product-focused team.
+
+What you will do:
+- Build performance and load testing harnesses
+- Design automated test suites for web and API layers
+- Own release quality gates in CI
+
+What we are looking for:
+- Strong hands-on experience with Selenium
+- Strong hands-on experience with Test Automation
+- Strong hands-on experience with Python
+- Strong hands-on experience with Java
+
+Nice to have:
+- Exposure to Playwright
+- Exposure to Cypress
+
+Benefits:
+- Flexible working hours
+- Annual learning budget
+- Home-office setup allowance",Bengaluru,full_time,1600000,2500000,INR,,5,9,,Selenium; Test Automation; Python; Java,Playwright; Cypress,2026-10-02T03:00:00+00:00,2026-12-08T03:00:00+00:00
+syn-42-00592,Lead Backend Engineer,Lumen Pvt Ltd,"Lumen Pvt Ltd is a healthtech company building products for customers across India and beyond. We are hiring a Lead Backend Engineer to join a small, product-focused team.
+
+What you will do:
+- Model data and write efficient SQL for high-traffic workloads
+- Break a monolith into well-defined services
+- Own services end to end, from design review to production on-call
+- Improve reliability, latency and observability of core APIs
+
+What we are looking for:
+- Strong hands-on experience with Go
+- Strong hands-on experience with Java
+- Strong hands-on experience with Node.js
+
+Nice to have:
+- Exposure to MongoDB
+- Exposure to gRPC
+- Exposure to Kubernetes
+
+Benefits:
+- Flexible working hours
+- Health insurance for you and your family
+- Generous parental leave",Hybrid - Bangalore,full_time,4000000,5700000,INR,,,,8+ years,,,2026-10-16T07:00:00+00:00,2026-11-29T07:00:00+00:00
+syn-42-01056,Senior Mobile Engineer,Halcyon Works,"Halcyon Works is a B2B SaaS company building products for customers across India and beyond. We are hiring a Senior Mobile Engineer to join a small, product-focused team.
+
+What you will do:
+- Work with backend teams on API contracts
+- Build smooth, offline-friendly mobile experiences
+- Own app performance, crash rates and release quality
+
+What we are looking for:
+- Strong hands-on experience with Swift
+- Strong hands-on experience with Kotlin
+- Strong hands-on experience with iOS
+- Strong hands-on experience with Android
+
+Nice to have:
+- Exposure to REST APIs
+- Exposure to Flutter
+- Exposure to Git
+- Exposure to Jetpack Compose
+
+Benefits:
+- ESOPs
+- Flexible working hours
+- Generous parental leave",Hybrid - Bangalore,full_time,2100000,3100000,INR,,5,9,,Swift; Kotlin; iOS; Android,REST APIs; Flutter; Git; Jetpack Compose,2026-10-05T17:00:00+00:00,2026-12-19T17:00:00+00:00
+syn-42-00650,Data Engineer,Lumen Analytics,"Lumen Analytics is a B2B SaaS company building products for customers across India and beyond. We are hiring a Data Engineer to join a small, product-focused team.
+
+What you will do:
+- Partner with analysts and scientists to productionise datasets
+- Model the warehouse for analytics and machine learning use cases
+- Build and maintain batch and streaming data pipelines
+
+What we are looking for:
+- Strong hands-on experience with SQL
+- Strong hands-on experience with ETL
+
+Nice to have:
+- Exposure to Pandas
+- Exposure to Hadoop
+- Exposure to Docker
+
+Benefits:
+- Quarterly team offsites
+- ESOPs
+- Generous parental leave",Pune,full_time,,,,"₹1,500,000 - ₹2,200,000 per annum",2,5,,,,2026-10-03T11:00:00+00:00,2026-12-20T11:00:00+00:00
+syn-42-00816,Flutter Developer,Arcadia Technologies Pvt Ltd,"<p>Arcadia Technologies Pvt Ltd is a media streaming company building products for customers across India and beyond. We are hiring a Flutter Developer to join a small, product-focused team.</p><h3>What you will do</h3><ul><li>build smooth, offline-friendly mobile experiences</li><li>own app performance, crash rates and release quality</li><li>work with backend teams on API contracts</li></ul><h3>What we are looking for</h3><ul><li>Strong hands-on experience with iOS</li><li>Strong hands-on experience with Android</li></ul><h3>Nice to have</h3><ul><li>Exposure to SwiftUI</li><li>Exposure to React Native</li><li>Exposure to Jetpack Compose</li><li>Exposure to Unit Testing</li></ul><h3>Benefits</h3><ul><li>Generous parental leave</li><li>Quarterly team offsites</li><li>Annual learning budget</li></ul>",Remote (India),full_time,,,,"₹1,400,000 - ₹1,700,000 per annum",2,5,,iOS; Android,SwiftUI; React Native; Jetpack Compose; Unit Testing,2026-10-21T21:00:00+00:00,2026-11-22T21:00:00+00:00
+syn-42-01493,Big Data Engineer,Saffron Analytics,"Saffron Analytics is a edtech company building products for customers across India and beyond. We are hiring a Big Data Engineer to join a small, product-focused team.
+
+What you will do:
+- Own data quality checks and SLAs for critical datasets
+- Partner with analysts and scientists to productionise datasets
+- Build and maintain batch and streaming data pipelines
+- Model the warehouse for analytics and machine learning use cases
+
+What we are looking for:
+- Strong hands-on experience with ETL
+- Strong hands-on experience with Airflow
+- Strong hands-on experience with Apache Spark
+- Strong hands-on experience with Python
+
+Nice to have:
+- Exposure to Kafka
+- Exposure to BigQuery
+- Exposure to Hadoop
+
+Benefits:
+- ESOPs
+- Generous parental leave
+- Home-office setup allowance","Kochi, Kerala",full_time,1600000,2200000,INR,,,,2+ years,ETL; Airflow; Apache Spark; Python,Kafka; BigQuery; Hadoop,2026-09-30T11:00:00+00:00,2026-11-02T11:00:00+00:00
+syn-42-01386,Senior Cloud Engineer,Saffron Digital,"<p>Saffron Digital is a travel company building products for customers across India and beyond. We are hiring a Senior Cloud Engineer to join a small, product-focused team.</p><h3>What you will do</h3><ul><li>build CI/CD pipelines that ship safely many times a day</li><li>own monitoring, alerting and incident response tooling</li><li>automate infrastructure provisioning with infrastructure as code</li><li>run and scale Kubernetes clusters in production</li></ul><h3>What we are looking for</h3><ul><li>Strong hands-on experience with Terraform</li><li>Strong hands-on experience with Docker</li><li>Strong hands-on experience with AWS</li><li>Strong hands-on experience with Kubernetes</li></ul><h3>Nice to have</h3><ul><li>Exposure to Jenkins</li><li>Exposure to Helm</li><li>Exposure to Python</li></ul><h3>Benefits</h3><ul><li>Generous parental leave</li><li>Health insurance for you and your family</li><li>Flexible working hours</li></ul>","Mumbai, Maharashtra",full_time,,,,"₹2,700,000 - ₹3,300,000 per annum",5,9,,Terraform; Docker; AWS; Kubernetes,Jenkins; Helm; Python,2026-11-02T08:00:00+00:00,2026-12-08T08:00:00+00:00
+syn-42-00242,Junior Infrastructure Engineer,Monsoon Technologies,"<p>Monsoon Technologies is a logistics company building products for customers across India and beyond. We are hiring a Junior Infrastructure Engineer to join a small, product-focused team.</p><h3>What you will do</h3><ul><li>own monitoring, alerting and incident response tooling</li><li>build CI/CD pipelines that ship safely many times a day</li><li>run and scale Kubernetes clusters in production</li><li>automate infrastructure provisioning with infrastructure as code</li></ul><h3>What we are looking for</h3><ul><li>Strong hands-on experience with Kubernetes</li><li>Strong hands-on experience with Terraform</li><li>Strong hands-on experience with Docker</li><li>Strong hands-on experience with Linux</li></ul><h3>Nice to have</h3><ul><li>Exposure to CI/CD</li><li>Exposure to GitHub Actions</li><li>Exposure to Azure</li><li>Exposure to Python</li></ul><h3>Benefits</h3><ul><li>Annual learning budget</li><li>Flexible working hours</li><li>Home-office setup allowance</li></ul>",Hybrid - Bangalore,full_time,,,,,0,2,,Kubernetes; Terraform; Docker; Linux,CI/CD; GitHub Actions; Azure; Python,2026-10-20T23:00:00+00:00,2027-01-05T23:00:00+00:00
+syn-42-00197,Senior Frontend Engineer,Halcyon Software,"Halcyon Software is a healthtech company building products for customers across India and beyond. We are hiring a Senior Frontend Engineer to join a small, product-focused team.
+
+What you will do:
+- Optimise Core Web Vitals and bundle size
+- Collaborate closely with designers on interaction details
+- Write well-tested UI code with strong typing
+- Build responsive, accessible interfaces used by millions of customers
+- Own the component library and design-system integration
+
+What we are looking for:
+- Strong hands-on experience with CSS
+- Strong hands-on experience with React
+
+Nice to have:
+- Exposure to Next.js
+- Exposure to Accessibility
+- Exposure to Tailwind CSS
+
+Benefits:
+- ESOPs
+- Quarterly team offsites
+- Home-office setup allowance",Bengaluru,full_time,,,,"₹2,500,000 - ₹3,000,000 per annum",5,9,,CSS; React,Next.js; Accessibility; Tailwind CSS,2026-11-12T03:00:00+00:00,2027-01-30T03:00:00+00:00
+syn-42-00989,Senior Data Engineer,Indigo Inc,"<p>Indigo Inc is a healthtech company building products for customers across India and beyond. We are hiring a Senior Data Engineer to join a small, product-focused team.</p><h3>What you will do</h3><ul><li>partner with analysts and scientists to productionise datasets</li><li>build and maintain batch and streaming data pipelines</li><li>own data quality checks and SLAs for critical datasets</li></ul><h3>What we are looking for</h3><ul><li>Strong hands-on experience with SQL</li><li>Strong hands-on experience with Airflow</li><li>Strong hands-on experience with ETL</li><li>Strong hands-on experience with Apache Spark</li></ul><h3>Nice to have</h3><ul><li>Exposure to Pandas</li><li>Exposure to Snowflake</li><li>Exposure to BigQuery</li><li>Exposure to Docker</li></ul><h3>Benefits</h3><ul><li>Generous parental leave</li><li>Home-office setup allowance</li><li>ESOPs</li></ul>",Chennai,full_time,3000000,4500000,INR,,5,9,,SQL; Airflow; ETL; Apache Spark,Pandas; Snowflake; BigQuery; Docker,2026-10-12T07:00:00+00:00,2026-11-18T07:00:00+00:00
+syn-42-00250,Senior Software Engineer - Frontend,Lumen Pvt Ltd,"Lumen Pvt Ltd is a healthtech company building products for customers across India and beyond. We are hiring a Senior Software Engineer - Frontend to join a small, product-focused team.
+
+What you will do:
+- Write well-tested UI code with strong typing
+- Optimise Core Web Vitals and bundle size
+- Build responsive, accessible interfaces used by millions of customers
+- Collaborate closely with designers on interaction details
+- Own the component library and design-system integration
+
+What we are looking for:
+- Strong hands-on experience with HTML
+- Strong hands-on experience with React
+- Strong hands-on experience with CSS
+- Strong hands-on experience with TypeScript
+
+Nice to have:
+- Exposure to Webpack
+- Exposure to Redux
+
+Benefits:
+- Generous parental leave
+- Annual learning budget
+- Flexible working hours",Delhi NCR - New Delhi,full_time,,,,"₹2,100,000 - ₹2,800,000 per annum",,,5-9 years,,,2026-09-29T01:00:00+00:00,2026-12-24T01:00:00+00:00
+syn-42-00551,Infrastructure Engineer,Marigold Labs,"Marigold Labs is a edtech company building products for customers across India and beyond. We are hiring a Infrastructure Engineer to join a small, product-focused team.
+
+What you will do:
+- Own monitoring, alerting and incident response tooling
+- Build CI/CD pipelines that ship safely many times a day
+- Run and scale Kubernetes clusters in production
+- Automate infrastructure provisioning with infrastructure as code
+
+What we are looking for:
+- Strong hands-on experience with Kubernetes
+- Strong hands-on experience with Docker
+- Strong hands-on experience with AWS
+- Strong hands-on experience with Terraform
+
+Nice to have:
+- Exposure to CI/CD
+- Exposure to Jenkins
+- Exposure to Nginx
+- Exposure to Observability
+
+Benefits:
+- Home-office setup allowance
+- Flexible working hours
+- Annual learning budget","Kochi, Kerala",full_time,,,,"₹1,700,000 - ₹2,600,000 per annum",,,2-5 years,Kubernetes; Docker; AWS; Terraform,CI/CD; Jenkins; Nginx; Observability,2026-09-15T05:00:00+00:00,2026-11-05T05:00:00+00:00
+syn-42-01536,Junior Data Engineer,Lumen Labs,"Lumen Labs is a edtech company building products for customers across India and beyond. We are hiring a Junior Data Engineer to join a small, product-focused team.
+
+What you will do:
+- Partner with analysts and scientists to productionise datasets
+- Model the warehouse for analytics and machine learning use cases
+- Own data quality checks and SLAs for critical datasets
+- Build and maintain batch and streaming data pipelines
+
+What we are looking for:
+- Strong hands-on experience with ETL
+- Strong hands-on experience with SQL
+- Strong hands-on experience with Python
+- Strong hands-on experience with Apache Spark
+
+Nice to have:
+- Exposure to AWS
+- Exposure to Snowflake
+- Exposure to Pandas
+
+Benefits:
+- Quarterly team offsites
+- ESOPs
+- Annual learning budget",Hybrid - Pune,full_time,700000,1000000,INR,,,,,ETL; SQL; Python; Apache Spark,AWS; Snowflake; Pandas,2026-11-12T20:00:00+00:00,2026-12-20T20:00:00+00:00
+syn-42-00208,Senior Applied Scientist,Cobalt Systems,"Cobalt Systems is a edtech company building products for customers across India and beyond. We are hiring a Senior Applied Scientist to join a small, product-focused team.
+
+What you will do:
+- Build retrieval and ranking systems over large catalogues
+- Design offline and online evaluation for model quality
+- Own feature pipelines and model serving infrastructure
+- Ship LLM-based features with guardrails and monitoring
+- Train, evaluate and deploy models that power product features
+
+What we are looking for:
+- Strong hands-on experience with Machine Learning
+- Strong hands-on experience with Python
+
+Nice to have:
+- Exposure to Large Language Models
+- Exposure to Kubernetes
+- Exposure to TensorFlow
+
+Benefits:
+- Annual learning budget
+- Health insurance for you and your family
+- Home-office setup allowance",Hybrid - Bangalore,full_time,3800000,5700000,INR,,,,5-9 years,Machine Learning; Python,Large Language Models; Kubernetes; TensorFlow,2026-07-18T00:00:00+00:00,2026-11-09T00:00:00+00:00
+syn-42-01043,Junior DevOps Engineer,Coral Pvt Ltd,"Coral Pvt Ltd is a media streaming company building products for customers across India and beyond. We are hiring a Junior DevOps Engineer to join a small, product-focused team.
+
+What you will do:
+- Run and scale Kubernetes clusters in production
+- Automate infrastructure provisioning with infrastructure as code
+- Build CI/CD pipelines that ship safely many times a day
+
+What we are looking for:
+- Strong hands-on experience with Terraform
+- Strong hands-on experience with AWS
+
+Nice to have:
+- Exposure to Ansible
+- Exposure to Grafana
+- Exposure to Helm
+- Exposure to Jenkins
+
+Benefits:
+- Flexible working hours
+- Annual learning budget
+- ESOPs",Hybrid - Bangalore,internship,,,,"₹600,000 - ₹900,000 per annum",0,2,,Terraform; AWS,Ansible; Grafana; Helm; Jenkins,2026-11-08T03:00:00+00:00,2027-01-23T03:00:00+00:00
+syn-42-00251,Senior Data Engineer,Bluefin Digital,"Bluefin Digital is a media streaming company building products for customers across India and beyond. We are hiring a Senior Data Engineer to join a small, product-focused team.
+
+What you will do:
+- Model the warehouse for analytics and machine learning use cases
+- Partner with analysts and scientists to productionise datasets
+- Own data quality checks and SLAs for critical datasets
+- Build and maintain batch and streaming data pipelines
+
+What we are looking for:
+- Strong hands-on experience with Python
+- Strong hands-on experience with ETL
+- Strong hands-on experience with Apache Spark
+
+Nice to have:
+- Exposure to Hadoop
+- Exposure to AWS
+
+Benefits:
+- Home-office setup allowance
+- Quarterly team offsites
+- Generous parental leave","Kochi, Kerala",full_time,2700000,3200000,INR,,,,5-9 years,Python; ETL; Apache Spark,Hadoop; AWS,2026-10-24T17:00:00+00:00,2027-01-07T17:00:00+00:00
+syn-42-01068,QA Engineer,Kestrel Systems,"<p>Kestrel Systems is a logistics company building products for customers across India and beyond. We are hiring a QA Engineer to join a small, product-focused team.</p><h3>What you will do</h3><ul><li>build performance and load testing harnesses</li><li>own release quality gates in CI</li><li>design automated test suites for web and API layers</li></ul><h3>What we are looking for</h3><ul><li>Strong hands-on experience with Java</li><li>Strong hands-on experience with Python</li><li>Strong hands-on experience with Selenium</li></ul><h3>Nice to have</h3><ul><li>Exposure to Playwright</li><li>Exposure to Performance Testing</li><li>Exposure to REST APIs</li><li>Exposure to Jira</li></ul><h3>Benefits</h3><ul><li>Flexible working hours</li><li>Generous parental leave</li><li>Home-office setup allowance</li></ul>","Noida, Uttar Pradesh",full_time,1000000,1300000,INR,,,,2-5 years,Java; Python; Selenium,Playwright; Performance Testing; REST APIs; Jira,2026-10-19T09:00:00+00:00,2026-12-27T09:00:00+00:00
+syn-42-00527,Senior React Native Developer,Kestrel Systems,"Kestrel Systems is a logistics company building products for customers across India and beyond. We are hiring a Senior React Native Developer to join a small, product-focused team.
+
+What you will do:
+- Work with backend teams on API contracts
+- Build smooth, offline-friendly mobile experiences
+- Own app performance, crash rates and release quality
+
+What we are looking for:
+- Strong hands-on experience with Kotlin
+- Strong hands-on experience with Android
+- Strong hands-on experience with Swift
+
+Nice to have:
+- Exposure to REST APIs
+- Exposure to React Native
+- Exposure to Flutter
+
+Benefits:
+- Flexible working hours
+- Annual learning budget
+- Generous parental leave",Gurgaon,full_time,2400000,3000000,INR,,5,9,,Kotlin; Android; Swift,REST APIs; React Native; Flutter,2026-10-03T06:00:00+00:00,2026-11-04T06:00:00+00:00
+syn-42-01697,Backend Developer,Arcadia Technologies,"Arcadia Technologies is a media streaming company building products for customers across India and beyond. We are hiring a Backend Developer to join a small, product-focused team.
+
+What you will do:
+- Break a monolith into well-defined services
+- Improve reliability, latency and observability of core APIs
+- Design and build scalable REST and gRPC services
+- Own services end to end, from design review to production on-call
+
+What we are looking for:
+- Strong hands-on experience with Java
+- Strong hands-on experience with Microservices
+- Strong hands-on experience with PostgreSQL
+
+Nice to have:
+- Exposure to MongoDB
+- Exposure to Spring Boot
+
+Benefits:
+- ESOPs
+- Flexible working hours
+- Health insurance for you and your family",Hybrid - Pune,full_time,1500000,2100000,INR,,,,2-5 years,,,2026-10-29T20:00:00+00:00,2027-01-22T20:00:00+00:00
+syn-42-00428,Android Developer,Lumen Digital,"Lumen Digital is a media streaming company building products for customers across India and beyond. We are hiring a Android Developer to join a small, product-focused team.
+
+What you will do:
+- Work with backend teams on API contracts
+- Build smooth, offline-friendly mobile experiences
+- Own app performance, crash rates and release quality
+
+What we are looking for:
+- Strong hands-on experience with Kotlin
+- Strong hands-on experience with Android
+
+Nice to have:
+- Exposure to SwiftUI
+- Exposure to Git
+- Exposure to REST APIs
+
+Benefits:
+- Quarterly team offsites
+- Flexible working hours
+- Annual learning budget",Hybrid - Pune,full_time,1200000,1500000,INR,,2,5,,Kotlin; Android,SwiftUI; Git; REST APIs,2026-10-02T19:00:00+00:00,2026-12-31T19:00:00+00:00
+syn-42-01507,Senior Frontend Developer,Juniper Analytics,"Juniper Analytics is a fintech company building products for customers across India and beyond. We are hiring a Senior Frontend Developer to join a small, product-focused team.
+
+What you will do:
+- Optimise Core Web Vitals and bundle size
+- Collaborate closely with designers on interaction details
+- Own the component library and design-system integration
+- Write well-tested UI code with strong typing
+- Build responsive, accessible interfaces used by millions of customers
+
+What we are looking for:
+- Strong hands-on experience with JavaScript
+- Strong hands-on experience with TypeScript
+
+Nice to have:
+- Exposure to Angular
+- Exposure to Cypress
+
+Benefits:
+- Generous parental leave
+- ESOPs
+- Home-office setup allowance",Bengaluru,full_time,2200000,3200000,INR,,5,9,,,,2026-10-06T08:00:00+00:00,2026-11-25T08:00:00+00:00
+syn-42-01833,Senior Quality Engineer,Arcadia Systems,"Arcadia Systems is a media streaming company building products for customers across India and beyond. We are hiring a Senior Quality Engineer to join a small, product-focused team.
+
+What you will do:
+- Build performance and load testing harnesses
+- Design automated test suites for web and API layers
+- Own release quality gates in CI
+
+What we are looking for:
+- Strong hands-on experience with Test Automation
+- Strong hands-on experience with Python
+
+Nice to have:
+- Exposure to Jira
+- Exposure to Cypress
+
+Benefits:
+- Home-office setup allowance
+- Health insurance for you and your family
+- Annual learning budget",Pune,full_time,,,,18-25 LPA,5,9,,Test Automation; Python,Jira; Cypress,2026-10-25T11:00:00+00:00,2026-12-21T11:00:00+00:00
+syn-42-00515,Java Backend Engineer,Juniper Analytics,"Juniper Analytics is a media streaming company building products for customers across India and beyond. We are hiring a Java Backend Engineer to join a small, product-focused team.
+
+What you will do:
+- Design and build scalable REST and gRPC services
+- Build event-driven pipelines with message queues
+- Improve reliability, latency and observability of core APIs
+- Model data and write efficient SQL for high-traffic workloads
+
+What we are looking for:
+- Strong hands-on experience with Java
+- Strong hands-on experience with Node.js
+- Strong hands-on experience with PostgreSQL
+
+Nice to have:
+- Exposure to gRPC
+- Exposure to Redis
+- Exposure to MongoDB
+
+Benefits:
+- Flexible working hours
+- Home-office setup allowance
+- Annual learning budget","Mumbai, Maharashtra",full_time,1500000,2300000,INR,,,,2-5 years,,,2026-11-07T02:00:00+00:00,2027-01-12T02:00:00+00:00
+syn-42-01837,Junior DevOps Engineer,Juniper Inc,"Juniper Inc is a travel company building products for customers across India and beyond. We are hiring a Junior DevOps Engineer to join a small, product-focused team.
+
+What you will do:
+- Build CI/CD pipelines that ship safely many times a day
+- Run and scale Kubernetes clusters in production
+- Own monitoring, alerting and incident response tooling
+- Automate infrastructure provisioning with infrastructure as code
+
+What we are looking for:
+- Strong hands-on experience with Linux
+- Strong hands-on experience with Terraform
+- Strong hands-on experience with AWS
+
+Nice to have:
+- Exposure to Grafana
+- Exposure to CI/CD
+
+Benefits:
+- ESOPs
+- Home-office setup allowance
+- Generous parental leave",Chennai,full_time,,,,6-10 LPA,0,2,,,,2026-10-14T17:00:00+00:00,2026-11-30T17:00:00+00:00
+syn-42-00850,Lead Infrastructure Engineer,Tamarind Labs,"<p>Tamarind Labs is a insurance company building products for customers across India and beyond. We are hiring a Lead Infrastructure Engineer to join a small, product-focused team.</p><h3>What you will do</h3><ul><li>run and scale Kubernetes clusters in production</li><li>own monitoring, alerting and incident response tooling</li><li>automate infrastructure provisioning with infrastructure as code</li><li>build CI/CD pipelines that ship safely many times a day</li></ul><h3>What we are looking for</h3><ul><li>Strong hands-on experience with Terraform</li><li>Strong hands-on experience with Docker</li></ul><h3>Nice to have</h3><ul><li>Exposure to Observability</li><li>Exposure to Python</li><li>Exposure to Nginx</li></ul><h3>Benefits</h3><ul><li>Home-office setup allowance</li><li>Generous parental leave</li><li>ESOPs</li></ul>",Hybrid - Pune,full_time,,,,35-52 LPA,8,14,,,,2026-09-27T21:00:00+00:00,2026-12-15T21:00:00+00:00
+syn-42-00879-repost,iOS Developer,Juniper Technologies Pvt Ltd,"<p>Juniper Technologies Pvt Ltd is a fintech company building products for customers across India and beyond. We are urgently hiring a iOS Developer to join a small, product-focused team.</p><h3>What you will do</h3><ul><li>build smooth, offline-friendly mobile experiences</li><li>own app performance, crash rates and release quality</li><li>work with backend teams on API contracts</li></ul><h3>What we are looking for</h3><ul><li>Strong hands-on experience with iOS</li><li>Strong hands-on experience with Swift</li><li>Strong hands-on experience with Android</li><li>Strong hands-on experience with Kotlin</li></ul><h3>Nice to have</h3><ul><li>Exposure to Flutter</li><li>Exposure to Dart</li></ul><h3>Benefits</h3><ul><li>ESOPs</li><li>Flexible working hours</li><li>Annual learning budget</li></ul><p>Apply today.</p>",Remote (US),full_time,163000.0,215000.0,USD,,,,2+ years,iOS; Swift; Android; Kotlin,Flutter; Dart,2026-10-03T02:00:00+00:00,2026-12-25T02:00:00+00:00
+syn-42-01855,Senior React Developer,Saffron Technologies Pvt Ltd,"Saffron Technologies Pvt Ltd is a media streaming company building products for customers across India and beyond. We are hiring a Senior React Developer to join a small, product-focused team.
+
+What you will do:
+- Collaborate closely with designers on interaction details
+- Optimise Core Web Vitals and bundle size
+- Own the component library and design-system integration
+- Write well-tested UI code with strong typing
+
+What we are looking for:
+- Strong hands-on experience with React
+- Strong hands-on experience with CSS
+- Strong hands-on experience with HTML
+
+Nice to have:
+- Exposure to Vite
+- Exposure to Webpack
+- Exposure to Jest
+- Exposure to Redux
+
+Benefits:
+- Flexible working hours
+- Home-office setup allowance
+- Generous parental leave","Hyderabad, India",full_time,2500000,3600000,INR,,5,9,,,,2026-10-26T00:00:00+00:00,2027-01-11T00:00:00+00:00
+syn-42-00497,AI Engineer,Vantara Systems,"Vantara Systems is a gaming company building products for customers across India and beyond. We are hiring a AI Engineer to join a small, product-focused team.
+
+What you will do:
+- Ship LLM-based features with guardrails and monitoring
+- Design offline and online evaluation for model quality
+- Train, evaluate and deploy models that power product features
+
+What we are looking for:
+- Strong hands-on experience with scikit-learn
+- Strong hands-on experience with Machine Learning
+
+Nice to have:
+- Exposure to Large Language Models
+- Exposure to Deep Learning
+- Exposure to Vector Databases
+
+Benefits:
+- Health insurance for you and your family
+- Quarterly team offsites
+- Flexible working hours",Pune,full_time,,,,20-32 LPA,,,2-5 years,scikit-learn; Machine Learning,Large Language Models; Deep Learning; Vector Databases,2026-07-18T00:00:00+00:00,2026-10-17T00:00:00+00:00
+syn-42-00857,Junior Platform Engineer,Quillon Digital,"Quillon Digital is a travel company building products for customers across India and beyond. We are hiring a Junior Platform Engineer to join a small, product-focused team.
+
+What you will do:
+- Improve reliability, latency and observability of core APIs
+- Design and build scalable REST and gRPC services
+- Own services end to end, from design review to production on-call
+- Build event-driven pipelines with message queues
+
+What we are looking for:
+- Strong hands-on experience with Go
+- Strong hands-on experience with PostgreSQL
+
+Nice to have:
+- Exposure to GraphQL
+- Exposure to Spring Boot
+- Exposure to gRPC
+- Exposure to FastAPI
+
+Benefits:
+- ESOPs
+- Flexible working hours
+- Generous parental leave","Mumbai, Maharashtra",contract,600000,800000,INR,,,,0-2 years,,,2026-09-16T16:00:00+00:00,2026-10-17T16:00:00+00:00
+syn-42-01045,Java Backend Engineer,Indigo Works,"Indigo Works is a gaming company building products for customers across India and beyond. We are hiring a Java Backend Engineer to join a small, product-focused team.
+
+What you will do:
+- Own services end to end, from design review to production on-call
+- Improve reliability, latency and observability of core APIs
+- Design and build scalable REST and gRPC services
+
+What we are looking for:
+- Strong hands-on experience with Node.js
+- Strong hands-on experience with Go
+- Strong hands-on experience with Java
+
+Nice to have:
+- Exposure to MongoDB
+- Exposure to System Design
+- Exposure to AWS
+
+Benefits:
+- Health insurance for you and your family
+- Home-office setup allowance
+- Quarterly team offsites",Hybrid - Bangalore,full_time,,,,15-18 LPA,2,5,,,,2026-10-21T01:00:00+00:00,2027-01-15T01:00:00+00:00
+,QA Engineer,Nowhere Labs,A valid-length description but the external id is missing.,,,,,,,,,,,,,
+syn-42-00307,Junior Big Data Engineer,Coral Networks,"<p>Coral Networks is a edtech company building products for customers across India and beyond. We are hiring a Junior Big Data Engineer to join a small, product-focused team.</p><h3>What you will do</h3><ul><li>own data quality checks and SLAs for critical datasets</li><li>model the warehouse for analytics and machine learning use cases</li><li>build and maintain batch and streaming data pipelines</li></ul><h3>What we are looking for</h3><ul><li>Strong hands-on experience with Apache Spark</li><li>Strong hands-on experience with Airflow</li></ul><h3>Nice to have</h3><ul><li>Exposure to Pandas</li><li>Exposure to BigQuery</li><li>Exposure to Snowflake</li><li>Exposure to dbt</li></ul><h3>Benefits</h3><ul><li>ESOPs</li><li>Quarterly team offsites</li><li>Annual learning budget</li></ul>",Hybrid - Bangalore,full_time,,,,"₹700,000 - ₹900,000 per annum",0,2,,Apache Spark; Airflow,Pandas; BigQuery; Snowflake; dbt,2026-10-23T08:00:00+00:00,2026-11-27T08:00:00+00:00
+syn-42-01082,Junior Test Automation Engineer,Monsoon Labs,"Monsoon Labs is a media streaming company building products for customers across India and beyond. We are hiring a Junior Test Automation Engineer to join a small, product-focused team.
+
+What you will do:
+- Design automated test suites for web and API layers
+- Own release quality gates in CI
+- Build performance and load testing harnesses
+
+What we are looking for:
+- Strong hands-on experience with Java
+- Strong hands-on experience with Test Automation
+
+Nice to have:
+- Exposure to Playwright
+- Exposure to Jira
+- Exposure to CI/CD
+
+Benefits:
+- Generous parental leave
+- Home-office setup allowance
+- Annual learning budget",Hybrid - Bangalore,full_time,400000,500000,INR,,0,2,,Java; Test Automation,Playwright; Jira; CI/CD,2026-10-09T14:00:00+00:00,2027-01-05T14:00:00+00:00
+syn-42-01392,Senior SDET,Granite Inc,"Granite Inc is a travel company building products for customers across India and beyond. We are hiring a Senior SDET to join a small, product-focused team.
+
+What you will do:
+- Design automated test suites for web and API layers
+- Build performance and load testing harnesses
+- Own release quality gates in CI
+
+What we are looking for:
+- Strong hands-on experience with Test Automation
+- Strong hands-on experience with Python
+- Strong hands-on experience with Selenium
+
+Nice to have:
+- Exposure to Agile
+- Exposure to Performance Testing
+- Exposure to Jira
+
+Benefits:
+- Home-office setup allowance
+- Health insurance for you and your family
+- Quarterly team offsites","Noida, Uttar Pradesh",full_time,1900000,3000000,INR,,5,9,,Test Automation; Python; Selenium,Agile; Performance Testing; Jira,2026-10-28T23:00:00+00:00,2026-12-15T23:00:00+00:00
+syn-42-01556,Senior Machine Learning Engineer,Peregrine Works,"Peregrine Works is a healthtech company building products for customers across India and beyond. We are hiring a Senior Machine Learning Engineer to join a small, product-focused team.
+
+What you will do:
+- Build retrieval and ranking systems over large catalogues
+- Own feature pipelines and model serving infrastructure
+- Ship LLM-based features with guardrails and monitoring
+
+What we are looking for:
+- Strong hands-on experience with PyTorch
+- Strong hands-on experience with scikit-learn
+- Strong hands-on experience with Python
+
+Nice to have:
+- Exposure to Hugging Face
+- Exposure to MLOps
+- Exposure to Kubernetes
+- Exposure to Statistics
+
+Benefits:
+- Flexible working hours
+- Health insurance for you and your family
+- Annual learning budget","Noida, Uttar Pradesh",full_time,4000000,5600000,INR,,,,5-9 years,,,2026-09-25T01:00:00+00:00,2026-10-28T01:00:00+00:00
+syn-42-01434,Lead SDET,Quillon Labs,"Quillon Labs is a logistics company building products for customers across India and beyond. We are hiring a Lead SDET to join a small, product-focused team.
+
+What you will do:
+- Own release quality gates in CI
+- Design automated test suites for web and API layers
+- Build performance and load testing harnesses
+
+What we are looking for:
+- Strong hands-on experience with Python
+- Strong hands-on experience with Java
+- Strong hands-on experience with Test Automation
+
+Nice to have:
+- Exposure to Performance Testing
+- Exposure to REST APIs
+
+Benefits:
+- Quarterly team offsites
+- Home-office setup allowance
+- Flexible working hours",Bengaluru,full_time,2500000,3100000,INR,,8,14,,Python; Java; Test Automation,Performance Testing; REST APIs,2026-10-14T10:00:00+00:00,2026-12-02T10:00:00+00:00
+syn-42-01191,Junior iOS Developer,Peregrine Networks,"Peregrine Networks is a media streaming company building products for customers across India and beyond. We are hiring a Junior iOS Developer to join a small, product-focused team.
+
+What you will do:
+- Work with backend teams on API contracts
+- Build smooth, offline-friendly mobile experiences
+- Own app performance, crash rates and release quality
+
+What we are looking for:
+- Strong hands-on experience with iOS
+- Strong hands-on experience with Kotlin
+- Strong hands-on experience with Android
+
+Nice to have:
+- Exposure to SwiftUI
+- Exposure to Flutter
+
+Benefits:
+- Flexible working hours
+- Quarterly team offsites
+- Annual learning budget",Gurgaon,full_time,500000,800000,INR,,0,2,,iOS; Kotlin; Android,SwiftUI; Flutter,2026-10-16T03:00:00+00:00,2027-01-03T03:00:00+00:00
+syn-42-00450,Senior Data Engineer,Juniper Software,"<p>Juniper Software is a B2B SaaS company building products for customers across India and beyond. We are hiring a Senior Data Engineer to join a small, product-focused team.</p><h3>What you will do</h3><ul><li>partner with analysts and scientists to productionise datasets</li><li>model the warehouse for analytics and machine learning use cases</li><li>own data quality checks and SLAs for critical datasets</li></ul><h3>What we are looking for</h3><ul><li>Strong hands-on experience with Python</li><li>Strong hands-on experience with Airflow</li><li>Strong hands-on experience with SQL</li><li>Strong hands-on experience with ETL</li></ul><h3>Nice to have</h3><ul><li>Exposure to Hadoop</li><li>Exposure to Pandas</li></ul><h3>Benefits</h3><ul><li>ESOPs</li><li>Home-office setup allowance</li><li>Quarterly team offsites</li></ul>",Gurgaon,full_time,2800000,4000000,INR,,5,9,,Python; Airflow; SQL; ETL,Hadoop; Pandas,2026-10-31T12:00:00+00:00,2026-12-24T12:00:00+00:00
+syn-42-01362,Mobile Engineer,Northwind Technologies Pvt Ltd,"Northwind Technologies Pvt Ltd is a gaming company building products for customers across India and beyond. We are hiring a Mobile Engineer to join a small, product-focused team.
+
+What you will do:
+- Own app performance, crash rates and release quality
+- Work with backend teams on API contracts
+- Build smooth, offline-friendly mobile experiences
+
+What we are looking for:
+- Strong hands-on experience with Kotlin
+- Strong hands-on experience with Android
+- Strong hands-on experience with iOS
+
+Nice to have:
+- Exposure to Flutter
+- Exposure to Dart
+- Exposure to Jetpack Compose
+- Exposure to SwiftUI
+
+Benefits:
+- ESOPs
+- Quarterly team offsites
+- Flexible working hours",Delhi NCR - New Delhi,full_time,1400000,2100000,INR,,,,2-5 years,Kotlin; Android; iOS,Flutter; Dart; Jetpack Compose; SwiftUI,2026-10-31T04:00:00+00:00,2026-12-16T04:00:00+00:00

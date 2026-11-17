@@ -2,8 +2,8 @@
 
 Intelligent job discovery through retrieval, ranking and agentic AI.
 
-> **Status:** Milestone 1 (backend foundation) is complete. Retrieval, ranking, the agent and the
-> frontend are not built yet. See [ROADMAP.md](ROADMAP.md) and [PROJECT_STATUS.md](PROJECT_STATUS.md).
+> **Status:** Milestones 1 and 2A (backend foundation, job ingestion) are complete. Resume parsing,
+> retrieval, ranking, the agent and the frontend are not built yet. See [ROADMAP.md](ROADMAP.md) and [PROJECT_STATUS.md](PROJECT_STATUS.md).
 
 ## What works today
 - PostgreSQL 17 + pgvector and Redis via Docker Compose
@@ -12,7 +12,11 @@ Intelligent job discovery through retrieval, ranking and agentic AI.
 - Auth: register, login (Argon2id), short-lived JWT access tokens, rotating refresh tokens with reuse detection, logout
 - Candidate profile: `GET`/`PUT /api/v1/candidates/me`, with skill normalization against a shared vocabulary
 - Health: `/health/live`, `/health/ready` (checks DB + Redis)
-- 52 tests against a real Postgres database; ruff, mypy (strict) and a migration drift check in CI
+- Job ingestion from CSV/JSON/JSONL: normalization, skill extraction, idempotent upserts,
+  near-duplicate detection, expiry, retry of failed records ([docs/ingestion.md](docs/ingestion.md))
+- `GET /api/v1/jobs` (cursor pagination, filters) and `GET /api/v1/jobs/{id}`
+- A labelled **synthetic** job dataset ([data/README.md](data/README.md))
+- 133 tests (unit, integration, API) against a real Postgres database; ruff, mypy (strict) and a migration drift check in CI
 
 ## Prerequisites
 - Docker (Docker Desktop or OrbStack)
@@ -28,6 +32,12 @@ uv run alembic upgrade head          # apply migrations
 uv run uvicorn app.main:app --reload --port 8080
 ```
 Open the interactive API docs at http://localhost:8080/docs.
+
+Load the skill taxonomy and the synthetic jobs (from `backend/`):
+```bash
+uv run python -m app.cli seed-skills
+uv run python -m app.cli ingest-jobs ../data/synthetic/jobs_v1.jsonl --source synthetic_v1
+```
 
 ## Test and check
 ```bash

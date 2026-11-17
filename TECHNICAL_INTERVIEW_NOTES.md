@@ -34,3 +34,16 @@ is the actual exercise.
 25. Why are ownership checks structural (no profile ID in any URL) rather than "check owner_id == user.id" on each request?
 26. Liveness vs readiness: what does an orchestrator do differently on each failing?
 27. Why sync endpoints with a threadpool instead of `async def` everywhere? *(ADR-004)*
+
+## Milestone 2A: Job ingestion
+28. What makes the import idempotent? What exactly is in the content hash, and why hash *normalized* rather than raw fields?
+29. Why does each record run in a SAVEPOINT, and why commit every 500 records instead of once at the end, or after every record?
+30. Walk through near-duplicate detection: blocking key, shingles, Jaccard, threshold. Why not MinHash/LSH here? At what scale would you switch?
+31. The first dedup version had recall 0.775 on injected duplicates. What was the cause, and what is the lifetime rule? (docs/ingestion.md)
+32. Why keep duplicates as linked rows instead of deleting them?
+33. Snapshot vs incremental feeds: what does the safety valve protect against?
+34. Why does unparseable salary become NULL rather than a best guess? How will the ranker treat NULL?
+35. Why are "Go", "R" and "rest" excluded from text skill matching? What precision/recall trade-off does that make?
+36. Keyset vs OFFSET pagination: two concrete problems OFFSET has. Why fetch `limit + 1` rows?
+37. Why is `listed_at` a separate column from `posted_at`?
+38. Your dedup scores 1.0/1.0. Why shouldn't you claim that in an interview without qualification?

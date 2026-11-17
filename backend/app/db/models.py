@@ -3,12 +3,18 @@
 from app.db.base import Base
 from app.domains.auth.models import RefreshToken, User
 from app.domains.candidates.models import CandidateProfile, CandidateSkill
+from app.domains.ingestion.models import IngestionError, IngestionRun
+from app.domains.jobs.models import Job, JobSkill
 from app.domains.skills.models import Skill, SkillAlias
 
 __all__ = [
     "Base",
     "CandidateProfile",
     "CandidateSkill",
+    "IngestionError",
+    "IngestionRun",
+    "Job",
+    "JobSkill",
     "RefreshToken",
     "Skill",
     "SkillAlias",

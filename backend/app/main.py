@@ -15,6 +15,7 @@ from app.core.errors import register_exception_handlers
 from app.core.logging import configure_logging
 from app.domains.auth.router import router as auth_router
 from app.domains.candidates.router import router as candidates_router
+from app.domains.jobs.router import router as jobs_router
 
 _REQUEST_ID_RE = re.compile(r"^[A-Za-z0-9-]{1,64}$")
 
@@ -61,6 +62,7 @@ def create_app() -> FastAPI:
     v1 = APIRouter(prefix="/api/v1")
     v1.include_router(auth_router)
     v1.include_router(candidates_router)
+    v1.include_router(jobs_router)
     app.include_router(health.router)
     app.include_router(v1)
     return app

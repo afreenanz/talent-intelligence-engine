@@ -1,0 +1,441 @@
+{
+ "dataset": "synthetic_jobs_v1",
+ "synthetic": true,
+ "notice": "All records are fictional and generated from templates.",
+ "seed": 42,
+ "reference_date": "2026-11-15T00:00:00+00:00",
+ "total_records": 2084,
+ "base_jobs": 2000,
+ "injected": {
+  "near_duplicates": [
+   {
+    "duplicate": "syn-42-01069-repost",
+    "original": "syn-42-01069"
+   },
+   {
+    "duplicate": "syn-42-00542-repost",
+    "original": "syn-42-00542"
+   },
+   {
+    "duplicate": "syn-42-00051-repost",
+    "original": "syn-42-00051"
+   },
+   {
+    "duplicate": "syn-42-01275-repost",
+    "original": "syn-42-01275"
+   },
+   {
+    "duplicate": "syn-42-01183-repost",
+    "original": "syn-42-01183"
+   },
+   {
+    "duplicate": "syn-42-01457-repost",
+    "original": "syn-42-01457"
+   },
+   {
+    "duplicate": "syn-42-00242-repost",
+    "original": "syn-42-00242"
+   },
+   {
+    "duplicate": "syn-42-00383-repost",
+    "original": "syn-42-00383"
+   },
+   {
+    "duplicate": "syn-42-01585-repost",
+    "original": "syn-42-01585"
+   },
+   {
+    "duplicate": "syn-42-00809-repost",
+    "original": "syn-42-00809"
+   },
+   {
+    "duplicate": "syn-42-01822-repost",
+    "original": "syn-42-01822"
+   },
+   {
+    "duplicate": "syn-42-01226-repost",
+    "original": "syn-42-01226"
+   },
+   {
+    "duplicate": "syn-42-00159-repost",
+    "original": "syn-42-00159"
+   },
+   {
+    "duplicate": "syn-42-00932-repost",
+    "original": "syn-42-00932"
+   },
+   {
+    "duplicate": "syn-42-00829-repost",
+    "original": "syn-42-00829"
+   },
+   {
+    "duplicate": "syn-42-01569-repost",
+    "original": "syn-42-01569"
+   },
+   {
+    "duplicate": "syn-42-00521-repost",
+    "original": "syn-42-00521"
+   },
+   {
+    "duplicate": "syn-42-01179-repost",
+    "original": "syn-42-01179"
+   },
+   {
+    "duplicate": "syn-42-01142-repost",
+    "original": "syn-42-01142"
+   },
+   {
+    "duplicate": "syn-42-00748-repost",
+    "original": "syn-42-00748"
+   },
+   {
+    "duplicate": "syn-42-00917-repost",
+    "original": "syn-42-00917"
+   },
+   {
+    "duplicate": "syn-42-00910-repost",
+    "original": "syn-42-00910"
+   },
+   {
+    "duplicate": "syn-42-01997-repost",
+    "original": "syn-42-01997"
+   },
+   {
+    "duplicate": "syn-42-01805-repost",
+    "original": "syn-42-01805"
+   },
+   {
+    "duplicate": "syn-42-00607-repost",
+    "original": "syn-42-00607"
+   },
+   {
+    "duplicate": "syn-42-00343-repost",
+    "original": "syn-42-00343"
+   },
+   {
+    "duplicate": "syn-42-00909-repost",
+    "original": "syn-42-00909"
+   },
+   {
+    "duplicate": "syn-42-00429-repost",
+    "original": "syn-42-00429"
+   },
+   {
+    "duplicate": "syn-42-01716-repost",
+    "original": "syn-42-01716"
+   },
+   {
+    "duplicate": "syn-42-00645-repost",
+    "original": "syn-42-00645"
+   },
+   {
+    "duplicate": "syn-42-01163-repost",
+    "original": "syn-42-01163"
+   },
+   {
+    "duplicate": "syn-42-01132-repost",
+    "original": "syn-42-01132"
+   },
+   {
+    "duplicate": "syn-42-01955-repost",
+    "original": "syn-42-01955"
+   },
+   {
+    "duplicate": "syn-42-00536-repost",
+    "original": "syn-42-00536"
+   },
+   {
+    "duplicate": "syn-42-01948-repost",
+    "original": "syn-42-01948"
+   },
+   {
+    "duplicate": "syn-42-00113-repost",
+    "original": "syn-42-00113"
+   },
+   {
+    "duplicate": "syn-42-01390-repost",
+    "original": "syn-42-01390"
+   },
+   {
+    "duplicate": "syn-42-01396-repost",
+    "original": "syn-42-01396"
+   },
+   {
+    "duplicate": "syn-42-01393-repost",
+    "original": "syn-42-01393"
+   },
+   {
+    "duplicate": "syn-42-01821-repost",
+    "original": "syn-42-01821"
+   },
+   {
+    "duplicate": "syn-42-01799-repost",
+    "original": "syn-42-01799"
+   },
+   {
+    "duplicate": "syn-42-00935-repost",
+    "original": "syn-42-00935"
+   },
+   {
+    "duplicate": "syn-42-00052-repost",
+    "original": "syn-42-00052"
+   },
+   {
+    "duplicate": "syn-42-01479-repost",
+    "original": "syn-42-01479"
+   },
+   {
+    "duplicate": "syn-42-01664-repost",
+    "original": "syn-42-01664"
+   },
+   {
+    "duplicate": "syn-42-01901-repost",
+    "original": "syn-42-01901"
+   },
+   {
+    "duplicate": "syn-42-00659-repost",
+    "original": "syn-42-00659"
+   },
+   {
+    "duplicate": "syn-42-00614-repost",
+    "original": "syn-42-00614"
+   },
+   {
+    "duplicate": "syn-42-00959-repost",
+    "original": "syn-42-00959"
+   },
+   {
+    "duplicate": "syn-42-00316-repost",
+    "original": "syn-42-00316"
+   },
+   {
+    "duplicate": "syn-42-00098-repost",
+    "original": "syn-42-00098"
+   },
+   {
+    "duplicate": "syn-42-01541-repost",
+    "original": "syn-42-01541"
+   },
+   {
+    "duplicate": "syn-42-01270-repost",
+    "original": "syn-42-01270"
+   },
+   {
+    "duplicate": "syn-42-00273-repost",
+    "original": "syn-42-00273"
+   },
+   {
+    "duplicate": "syn-42-00887-repost",
+    "original": "syn-42-00887"
+   },
+   {
+    "duplicate": "syn-42-00548-repost",
+    "original": "syn-42-00548"
+   },
+   {
+    "duplicate": "syn-42-01736-repost",
+    "original": "syn-42-01736"
+   },
+   {
+    "duplicate": "syn-42-01790-repost",
+    "original": "syn-42-01790"
+   },
+   {
+    "duplicate": "syn-42-00795-repost",
+    "original": "syn-42-00795"
+   },
+   {
+    "duplicate": "syn-42-01408-repost",
+    "original": "syn-42-01408"
+   },
+   {
+    "duplicate": "syn-42-00670-repost",
+    "original": "syn-42-00670"
+   },
+   {
+    "duplicate": "syn-42-01651-repost",
+    "original": "syn-42-01651"
+   },
+   {
+    "duplicate": "syn-42-00290-repost",
+    "original": "syn-42-00290"
+   },
+   {
+    "duplicate": "syn-42-01202-repost",
+    "original": "syn-42-01202"
+   },
+   {
+    "duplicate": "syn-42-01946-repost",
+    "original": "syn-42-01946"
+   },
+   {
+    "duplicate": "syn-42-00845-repost",
+    "original": "syn-42-00845"
+   },
+   {
+    "duplicate": "syn-42-00940-repost",
+    "original": "syn-42-00940"
+   },
+   {
+    "duplicate": "syn-42-01468-repost",
+    "original": "syn-42-01468"
+   },
+   {
+    "duplicate": "syn-42-01216-repost",
+    "original": "syn-42-01216"
+   },
+   {
+    "duplicate": "syn-42-01684-repost",
+    "original": "syn-42-01684"
+   },
+   {
+    "duplicate": "syn-42-00514-repost",
+    "original": "syn-42-00514"
+   },
+   {
+    "duplicate": "syn-42-01847-repost",
+    "original": "syn-42-01847"
+   },
+   {
+    "duplicate": "syn-42-00965-repost",
+    "original": "syn-42-00965"
+   },
+   {
+    "duplicate": "syn-42-00226-repost",
+    "original": "syn-42-00226"
+   },
+   {
+    "duplicate": "syn-42-01026-repost",
+    "original": "syn-42-01026"
+   },
+   {
+    "duplicate": "syn-42-01237-repost",
+    "original": "syn-42-01237"
+   },
+   {
+    "duplicate": "syn-42-01722-repost",
+    "original": "syn-42-01722"
+   },
+   {
+    "duplicate": "syn-42-01918-repost",
+    "original": "syn-42-01918"
+   },
+   {
+    "duplicate": "syn-42-01436-repost",
+    "original": "syn-42-01436"
+   },
+   {
+    "duplicate": "syn-42-00879-repost",
+    "original": "syn-42-00879"
+   }
+  ],
+  "expired_external_ids": [
+   "syn-42-00020",
+   "syn-42-00043",
+   "syn-42-00054",
+   "syn-42-00078",
+   "syn-42-00082",
+   "syn-42-00114",
+   "syn-42-00124",
+   "syn-42-00125",
+   "syn-42-00126",
+   "syn-42-00150",
+   "syn-42-00201",
+   "syn-42-00208",
+   "syn-42-00210",
+   "syn-42-00212",
+   "syn-42-00219",
+   "syn-42-00238",
+   "syn-42-00270",
+   "syn-42-00300",
+   "syn-42-00322",
+   "syn-42-00374",
+   "syn-42-00399",
+   "syn-42-00403",
+   "syn-42-00404",
+   "syn-42-00414",
+   "syn-42-00469",
+   "syn-42-00470",
+   "syn-42-00497",
+   "syn-42-00534",
+   "syn-42-00545",
+   "syn-42-00605",
+   "syn-42-00612",
+   "syn-42-00633",
+   "syn-42-00641",
+   "syn-42-00665",
+   "syn-42-00711",
+   "syn-42-00773",
+   "syn-42-00783",
+   "syn-42-00814",
+   "syn-42-00858",
+   "syn-42-00876",
+   "syn-42-00894",
+   "syn-42-00898",
+   "syn-42-00964",
+   "syn-42-00981",
+   "syn-42-00994",
+   "syn-42-01005",
+   "syn-42-01025",
+   "syn-42-01030",
+   "syn-42-01044",
+   "syn-42-01052",
+   "syn-42-01063",
+   "syn-42-01084",
+   "syn-42-01087",
+   "syn-42-01094",
+   "syn-42-01120",
+   "syn-42-01122",
+   "syn-42-01130",
+   "syn-42-01145",
+   "syn-42-01148",
+   "syn-42-01162",
+   "syn-42-01173",
+   "syn-42-01205",
+   "syn-42-01225",
+   "syn-42-01230",
+   "syn-42-01232",
+   "syn-42-01242",
+   "syn-42-01274",
+   "syn-42-01277",
+   "syn-42-01279",
+   "syn-42-01309",
+   "syn-42-01312",
+   "syn-42-01316",
+   "syn-42-01324",
+   "syn-42-01370",
+   "syn-42-01399",
+   "syn-42-01403",
+   "syn-42-01404",
+   "syn-42-01414",
+   "syn-42-01429",
+   "syn-42-01441",
+   "syn-42-01476",
+   "syn-42-01513",
+   "syn-42-01516",
+   "syn-42-01547",
+   "syn-42-01553",
+   "syn-42-01580",
+   "syn-42-01677",
+   "syn-42-01678",
+   "syn-42-01695",
+   "syn-42-01707",
+   "syn-42-01723",
+   "syn-42-01729",
+   "syn-42-01732",
+   "syn-42-01796",
+   "syn-42-01806",
+   "syn-42-01824",
+   "syn-42-01869",
+   "syn-42-01916",
+   "syn-42-01978",
+   "syn-42-01979"
+  ],
+  "invalid_external_ids": [
+   "syn-42-bad-1",
+   "syn-42-bad-2",
+   "syn-42-bad-3",
+   ""
+  ]
+ }
+}
