@@ -1,0 +1,40 @@
+# Local development infrastructure.
+# Milestone 1: database + cache only. The API, worker and frontend services are added in Milestone 9.
+# Host ports are offset (5433, 6380) so they don't collide with natively installed Postgres/Redis.
+
+name: talent-engine
+
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.7-pg17-trixie
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-tie}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tie_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-tie}
+    ports:
+      - "${POSTGRES_HOST_PORT:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:8.2-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_HOST_PORT:-6380}:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
+  redisdata:

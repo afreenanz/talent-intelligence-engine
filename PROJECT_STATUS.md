@@ -2,19 +2,26 @@
 
 _Last updated: 2026-11-17_
 
-**Current milestone:** 0: Research & architecture, **awaiting approval**
+**Current milestone:** 1: Backend foundation, **implemented and verified, awaiting your review**
 
-## Completed
-- [x] Environment inspection (see "Environment" below)
-- [x] Library version and compatibility check against PyPI/npm (2026-11-17)
-- [x] Docs checked: pgvector README, LangGraph persistence/interrupts/memory, PostgreSQL text-search ranking, Sentence-Transformers cross-encoders
-- [x] Project-level Git repository initialised (previously the folder was inside a repo rooted at the home directory)
-- [x] Draft docs: architecture, database design, ADRs, retrieval, ranking/personalization, agent, memory, evaluation
+## Milestone 1: Backend foundation (verified 2026-11-17)
+- [x] Docker Compose: Postgres 17.12 + pgvector 0.8.7, Redis 8.2, both healthy
+- [x] FastAPI app: config, structured logging, request IDs, error envelope, CORS
+- [x] SQLAlchemy 2.1 models + Alembic migration; upgrade → downgrade → upgrade verified; `alembic check` clean
+- [x] Auth: register / login / refresh (rotation + reuse detection) / logout
+- [x] Candidate profile `GET`/`PUT /me` with skill normalization and alias resolution
+- [x] Health: live + ready (DB + Redis)
+- [x] 52 tests passing, 95% line coverage; ruff + mypy --strict clean
+- [x] GitHub Actions CI workflow written. **Not yet run on GitHub**: no remote is configured.
+- [ ] Commit (after your approval)
 
-## Pending (Milestone 0)
-- [ ] Your review of the architecture, schema and ADRs
-- [ ] Decisions needed from you (see below)
-- [ ] First commit (after approval)
+Deferred deliberately (in the roadmap):
+- Rate limiting on auth endpoints → Milestone 9 (needs the Redis limiter; noted as an enumeration mitigation)
+- Curated skill taxonomy + aliases seed → Milestone 2
+- Known warning: Starlette deprecates `httpx` for its TestClient in favour of `httpx2`. Harmless; revisit when upgrading deps.
+
+## Milestone 0: Research & architecture (approved 2026-11-17)
+- [x] Environment inspection, version checks, docs research, architecture/schema/ADRs
 
 ## Blocked / needs you
 | Item | Why | Action |

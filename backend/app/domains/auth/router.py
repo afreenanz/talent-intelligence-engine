@@ -1,0 +1,33 @@
+from fastapi import APIRouter, status
+
+from app.api.deps import DbSession, SettingsDep
+from app.domains.auth import service
+from app.domains.auth.schemas import (
+    LoginRequest,
+    RefreshRequest,
+    RegisterRequest,
+    TokenPair,
+    UserOut,
+)
+
+router = APIRouter(prefix="/auth", tags=["auth"])
+
+
+@router.post("/register", response_model=UserOut, status_code=status.HTTP_201_CREATED)
+def register(body: RegisterRequest, session: DbSession) -> UserOut:
+    return UserOut.model_validate(service.register(session, body))
+
+
+@router.post("/login", response_model=TokenPair)
+def login(body: LoginRequest, session: DbSession, settings: SettingsDep) -> TokenPair:
+    return service.login(session, body.email, body.password, settings)
+
+
+@router.post("/refresh", response_model=TokenPair)
+def refresh(body: RefreshRequest, session: DbSession, settings: SettingsDep) -> TokenPair:
+    return service.refresh(session, body.refresh_token, settings)
+
+
+@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
+def logout(body: RefreshRequest, session: DbSession) -> None:
+    service.logout(session, body.refresh_token)
