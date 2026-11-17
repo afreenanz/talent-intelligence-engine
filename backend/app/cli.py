@@ -80,6 +80,22 @@ def cmd_retry(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_embed_jobs(args: argparse.Namespace) -> int:
+    from app.domains.search.indexing import embed_jobs
+    from app.integrations.embeddings.sentence_transformer import get_embedder
+
+    embedder = get_embedder()
+    with get_sessionmaker()() as session:
+        r = embed_jobs(
+            session, embedder, batch_size=args.batch_size, include_inactive=args.include_inactive
+        )
+    print(
+        f"model={embedder.spec.name} considered={r.considered} embedded={r.embedded} "
+        f"unchanged={r.skipped_unchanged} seconds={r.seconds}"
+    )
+    return 0
+
+
 def cmd_runs(args: argparse.Namespace) -> int:
     with get_sessionmaker()() as session:
         runs = session.scalars(
@@ -114,6 +130,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("run_id")
     p.add_argument("--all", action="store_true", help="also retry non-retryable failures")
     p.set_defaults(func=cmd_retry)
+
+    p = sub.add_parser("embed-jobs", help="embed jobs whose text changed (incremental)")
+    p.add_argument("--batch-size", type=int, default=64)
+    p.add_argument("--include-inactive", action="store_true")
+    p.set_defaults(func=cmd_embed_jobs)
 
     p = sub.add_parser("runs", help="list recent ingestion runs")
     p.add_argument("--limit", type=int, default=10)

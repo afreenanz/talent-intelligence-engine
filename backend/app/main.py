@@ -17,6 +17,7 @@ from app.domains.auth.router import router as auth_router
 from app.domains.candidates.router import router as candidates_router
 from app.domains.jobs.router import router as jobs_router
 from app.domains.resumes.router import router as resumes_router
+from app.domains.search.router import router as search_router
 
 _REQUEST_ID_RE = re.compile(r"^[A-Za-z0-9-]{1,64}$")
 
@@ -63,6 +64,7 @@ def create_app() -> FastAPI:
     v1 = APIRouter(prefix="/api/v1")
     v1.include_router(auth_router)
     v1.include_router(candidates_router)
+    v1.include_router(search_router)
     v1.include_router(jobs_router)
     v1.include_router(resumes_router)
     app.include_router(health.router)

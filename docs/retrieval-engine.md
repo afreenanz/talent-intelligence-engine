@@ -1,6 +1,24 @@
 # Retrieval Engine
 
-> Status: **Design (Milestone 0)**. Implementation is in Milestone 3.
+> Status: **Implemented (Milestone 3A)**: lexical, dense and hybrid retrieval, incremental
+> embeddings, `POST /api/v1/jobs/search`. Evaluation (metrics, labelled queries, comparison) is
+> Milestone 3B. Code: `backend/app/domains/search/`, `backend/app/integrations/embeddings/`.
+
+## Implementation notes (3A)
+
+| Decision | Detail |
+|---|---|
+| Lexical query semantics | `plainto_tsquery` terms **OR-ed** (`&` → `\|`, cast straight back to `tsquery`). The default AND semantics made natural queries return nothing. |
+| Lexical document | Generated column `search_vector` = title (A) + `skills_text` (B) + company (C) + description (D); GIN index. `skills_text` is maintained by ingestion. |
+| Dense model | `BAAI/bge-small-en-v1.5`, 384-d, normalised. **Query instruction prefix set explicitly**: the model's ST config ships with an empty prompt. |
+| Index | Exact scan (1,593 active jobs). HNSW deferred until a benchmark justifies it; `hnsw.iterative_scan` is already set for filtered queries. |
+| Embedding freshness | `content_hash = sha256(template_version \| text)`. Second `embed-jobs` run: 0 re-embedded in 0.11 s. |
+| Profile mode | No query → candidate embedding (cached by hash) + top-12 skills as the lexical query. An empty profile returns a clear 400 (cold start). |
+| Filters | Applied in SQL in every mode before ranking. Unknown salary/experience is **kept**; only jobs known to fail a filter are removed. Salaries are only compared in the same currency. |
+
+Measured on this laptop (warm process, 1,593 jobs): query embedding ≈ 8 ms, lexical ≈ 5–14 ms,
+dense exact scan ≈ 3–6 ms, hybrid total ≈ 20 ms. The first query after start-up takes ≈ 250 ms
+(model warm-up). Embedding all 1,593 jobs takes ≈ 30 s on CPU.
 
 ## Interface
 

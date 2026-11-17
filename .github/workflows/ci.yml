@@ -52,6 +52,12 @@ jobs:
       - name: Install dependencies (from lockfile, exactly)
         run: uv sync --locked --python 3.13
 
+      - name: Cache Hugging Face models
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-${{ runner.os }}-bge-small-en-v1.5
+
       - name: Lint
         run: uv run ruff check . && uv run ruff format --check .
 

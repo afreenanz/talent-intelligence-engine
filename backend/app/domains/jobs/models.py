@@ -6,6 +6,7 @@ from sqlalchemy import (
     CHAR,
     BigInteger,
     CheckConstraint,
+    Computed,
     DateTime,
     Enum,
     ForeignKey,
@@ -16,6 +17,7 @@ from sqlalchemy import (
     func,
     text,
 )
+from sqlalchemy.dialects.postgresql import TSVECTOR
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin, pg_enum_values
@@ -49,6 +51,7 @@ class Job(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         Index("ix_jobs_status_listed_at", "status", text("listed_at DESC"), "id"),
         # Soft identity lookup for near-duplicate detection.
         Index("ix_jobs_dedup_key", "normalized_company", "normalized_title"),
+        Index("ix_jobs_search_vector", "search_vector", postgresql_using="gin"),
         Index(
             "ix_jobs_active_expires_at",
             "expires_at",
@@ -108,6 +111,23 @@ class Job(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
     last_seen_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    # Denormalised skill names, maintained by ingestion in the same transaction as job_skills.
+    # Needed because a generated column can only read columns of its own row.
+    skills_text: Mapped[str] = mapped_column(Text, nullable=False, server_default=text("''"))
+    # Weighted full-text document, kept in sync by Postgres itself (GENERATED ... STORED).
+    # Weights: A title, B skills, C company, D description.
+    search_vector: Mapped[str] = mapped_column(
+        TSVECTOR,
+        Computed(
+            "setweight(to_tsvector('english'::regconfig, coalesce(title, '')), 'A') || "
+            "setweight(to_tsvector('english'::regconfig, coalesce(skills_text, '')), 'B') || "
+            "setweight(to_tsvector('english'::regconfig, coalesce(company, '')), 'C') || "
+            "setweight(to_tsvector('english'::regconfig, coalesce(description, '')), 'D')",
+            persisted=True,
+        ),
+        nullable=False,
     )
 
     skills: Mapped[list["JobSkill"]] = relationship(

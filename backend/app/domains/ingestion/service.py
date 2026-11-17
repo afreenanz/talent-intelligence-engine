@@ -58,6 +58,7 @@ class NormalizedJob:
     fields: dict[str, Any]
     skills: dict[int, SkillImportance]
     content_hash: str
+    skills_text: str = ""  # denormalised names for full-text search; not part of the hash
     warnings: list[str] = field(default_factory=list)
 
 
@@ -137,6 +138,8 @@ class JobIngestor:
             skills[explicit[normalize_skill_name(name)].id] = SkillImportance.REQUIRED
         for skill_id in self.matcher.find(f"{rec.title}\n{description}"):
             skills.setdefault(skill_id, SkillImportance.MENTIONED)
+        names = {s.id: s.name for s in explicit.values()} | self.matcher.names
+        skills_text = " ".join(sorted(names[sid] for sid in skills if sid in names))
 
         fields: dict[str, Any] = {
             "title": rec.title,
@@ -162,7 +165,9 @@ class JobIngestor:
             "required": sorted(normalize_skill_name(s) for s in rec.required_skills),
             "preferred": sorted(normalize_skill_name(s) for s in rec.preferred_skills),
         }
-        return NormalizedJob(rec, fields, skills, norm.content_hash(hash_input), warnings)
+        return NormalizedJob(
+            rec, fields, skills, norm.content_hash(hash_input), skills_text, warnings
+        )
 
     def _status_for(self, nj: NormalizedJob, duplicate_of: Any) -> JobStatus:
         expires_at = nj.fields["expires_at"]
@@ -186,6 +191,7 @@ class JobIngestor:
             for key, value in nj.fields.items():
                 setattr(existing, key, value)
             existing.content_hash = nj.content_hash
+            existing.skills_text = nj.skills_text
             existing.listed_at = nj.fields["posted_at"] or existing.first_seen_at
             existing.status = self._status_for(nj, existing.duplicate_of_job_id)
             self._replace_skills(existing, nj.skills)
@@ -196,6 +202,7 @@ class JobIngestor:
             source=self.source,
             external_id=nj.record.external_id,
             content_hash=nj.content_hash,
+            skills_text=nj.skills_text,
             listed_at=nj.fields["posted_at"] or self.now,
             first_seen_at=self.now,
             last_seen_at=self.now,
