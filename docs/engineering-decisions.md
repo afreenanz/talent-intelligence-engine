@@ -41,6 +41,8 @@ See database-design.md §3.5.
 **Decision.** MiniLM-L6. Its published scores are 74.30 NDCG@10 on TREC DL19 at about 1800 docs/s, against 74.31 for L12 at about half the speed (sbert.net pretrained models page).
 **Caveat.** It is trained on MS MARCO web passages, not job matching. Whether it helps here is an empirical question, and **it may hurt**. The evaluation will say which.
 
+**Update (Milestone 4A):** implemented for the top 50. Blending uses the model's sigmoid, not per-list min-max (see ranking-engine.md for the live failure that ruled min-max out). Usefulness is measured in 4B.
+
 ## ADR-008 LLM provider abstraction with three adapters
 **Decision.** A `LLMProvider` protocol with `generate_structured(schema, messages)` and `chat_with_tools(messages, tools)`. Adapters: Gemini, OpenAI, and an **OpenAI-compatible local endpoint** (Ollama/LM Studio) as the clearly labelled local-development alternative. A deterministic scripted fake exists **only in the test suite** and is never selectable at runtime.
 **Provider choice (2026-11-17):** Gemini free tier is the default. OpenRouter (free models) is the secondary option through the OpenAI-compatible adapter. Free-tier rate limits are checked when the integration is built (Milestone 2), and the model name is recorded in every evaluation run.

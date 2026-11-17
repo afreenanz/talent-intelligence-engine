@@ -40,7 +40,11 @@ def fake_embedder(db_session: Session) -> Iterator[HashingEmbedder]:
 
 def test_search_returns_ranks_scores_and_timings(client: TestClient) -> None:
     h = auth_header(register_and_login(client))
-    r = client.post("/api/v1/jobs/search", json={"query": "python backend", "top_k": 5}, headers=h)
+    r = client.post(
+        "/api/v1/jobs/search",
+        json={"query": "python backend", "top_k": 5, "ranking": "none"},
+        headers=h,
+    )
     assert r.status_code == 200, r.text
     body = r.json()
     hit = body["results"][0]
@@ -69,4 +73,43 @@ def test_search_validation_and_auth(client: TestClient) -> None:
 def test_profile_mode_with_empty_profile_is_a_clear_error(client: TestClient) -> None:
     h = auth_header(register_and_login(client))
     r = client.post("/api/v1/jobs/search", json={"use_profile": True}, headers=h)
+    assert r.status_code == 400 and "profile is empty" in r.json()["error"]["message"]
+
+
+def test_default_search_is_ranked_with_explanations(client: TestClient) -> None:
+    h = auth_header(register_and_login(client))
+    body = client.post("/api/v1/jobs/search", json={"query": "python backend"}, headers=h).json()
+    assert body["ranking"] == "features" and body["weights_version"] == "weighted_v1"
+    hit = body["results"][0]
+    assert hit["score"] is not None and hit["explanation"]
+    assert set(hit["features"]) >= {"required_skill_coverage", "semantic_similarity"}
+
+
+def test_recommendations_use_profile_and_cross_encoder_option(client: TestClient) -> None:
+    from app.domains.ranking.deps import reranker_provider_dependency
+    from tests.fakes import KeywordReranker
+
+    reranker = KeywordReranker()
+    app.dependency_overrides[reranker_provider_dependency] = lambda: lambda: reranker
+    try:
+        h = auth_header(register_and_login(client))
+        client.put(
+            "/api/v1/candidates/me",
+            json={"skills": [{"name": "Python"}], "profile_summary": "Backend developer"},
+            headers=h,
+        )
+        r = client.get(
+            "/api/v1/recommendations", params={"ranking": "features+cross_encoder"}, headers=h
+        )
+        assert r.status_code == 200, r.text
+        body = r.json()
+        assert body["used_profile"] is True and body["results"]
+        assert body["results"][0]["cross_encoder_score"] is not None and reranker.calls
+    finally:
+        app.dependency_overrides.pop(reranker_provider_dependency, None)
+
+
+def test_recommendations_with_empty_profile_is_clear_error(client: TestClient) -> None:
+    h = auth_header(register_and_login(client))
+    r = client.get("/api/v1/recommendations", headers=h)
     assert r.status_code == 400 and "profile is empty" in r.json()["error"]["message"]

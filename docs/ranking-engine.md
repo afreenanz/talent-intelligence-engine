@@ -1,6 +1,22 @@
 # Ranking & Personalization Engine
 
-> Status: **Design (Milestone 0)**. Implementation is in Milestones 4 (ranking) and 5 (personalization).
+> Status: **Ranking implemented (Milestone 4A)**: `backend/app/domains/ranking/` (features, weighted
+> ranker, cross-encoder stage, explanations), `POST /api/v1/jobs/search` (`ranking` option) and
+> `GET /api/v1/recommendations`. Evaluation on TalentCLEF is Milestone 4B; personalization is Milestone 5.
+
+## Implementation notes (4A)
+
+| Decision | Detail |
+|---|---|
+| Missing data | Feature = 0.5 (neutral) and listed in `missing_features`; the explanation says "not enough information". |
+| "Required" skills | Explicit required list if the posting has one; otherwise skills mentioned in the text stand in (about 30% of postings have no list). |
+| Experience | Inside range → 1; under the minimum decays to 0 over 3 years; over-qualified decays over 10 years (gentler). |
+| Salary | Only compared in the same currency; job max ≥ candidate minimum → 1, otherwise the ratio. |
+| Location | Remote job → 1 (0.8 if the candidate prefers onsite); remote-seeker vs onsite job → 0.2; same city → 1; different city → 0. |
+| Weights | `weights_v1.json`, hand-set, sum to 1. Version string returned with every response. |
+| Cross-encoder | Top 50 only; `final = 0.5·stage1 + 0.5·sigmoid(logit)`. **Min-max normalisation was tried first and rejected** after a live run: logits for near-identical postings (6.37–6.62) were stretched to [0, 1], and all top-5 results ended up in the wrong city. |
+| Latency (laptop CPU, live) | stage 1 ≈ 20–35 ms for 100 jobs; cross-encoder ≈ 0.4–0.6 s for 50 pairs (first call also loads the model, ≈ 8 s). |
+| Explanations | Built only from computed features ("Matches 2 of 3 required skills (PostgreSQL, Python)", "Missing: REST APIs", "Biggest factor: …"). No LLM. |
 
 ## Pipeline
 

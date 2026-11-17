@@ -68,3 +68,16 @@ class HashingEmbedder:
 
     def encode_documents(self, texts, batch_size=64):  # type: ignore[no-untyped-def]
         return self.encode_queries(texts)
+
+
+class KeywordReranker:
+    """Test-only cross-encoder stand-in: score = number of query words present in the document."""
+
+    name = "test/keyword-reranker"
+
+    def __init__(self) -> None:
+        self.calls: list[int] = []
+
+    def score(self, pairs: list[tuple[str, str]]) -> list[float]:
+        self.calls.append(len(pairs))
+        return [float(sum(w in d.lower() for w in q.lower().split())) for q, d in pairs]
