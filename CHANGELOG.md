@@ -4,6 +4,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 8B: Jobs UI
+- Search, job detail with match breakdown, For you (beam on the top match), saved jobs, applications, preferences
+- Click and dismiss feedback from the UI; application status moves mirror the backend's allowed transitions
+- Backend: `SearchHit.job` (display fields) attached in one query
+- Lazy-loaded app routes
+
 ### Milestone 8A: Frontend foundation
 - `frontend/`: Vite + React + TypeScript app with design tokens, landing page (WebGL terrain hero), sign in/up, app shell
 - Typed API client with single-flight token refresh; auth context and route guards

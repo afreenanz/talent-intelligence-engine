@@ -3,10 +3,13 @@ import uuid
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Query
+from sqlalchemy import select
 
 from app.api.deps import CurrentUser, DbSession
 from app.domains.candidates import service as candidates
 from app.domains.interactions.service import record_search
+from app.domains.jobs.models import Job
+from app.domains.jobs.schemas import JobSummary
 from app.domains.personalization.adjust import PersonalizationContext
 from app.domains.preferences.service import effective_preferences
 from app.domains.ranking.deps import RankerDep, RerankerProviderDep
@@ -65,7 +68,22 @@ def _search(
         latency_ms=int((time.perf_counter() - started) * 1000),
     )
     response.search_log_id = log.id
+    _attach_summaries(session, response)
     return response
+
+
+def _attach_summaries(session: DbSession, response: SearchResponse) -> None:
+    """One batched query for the display fields of every hit (no N+1 from the client)."""
+    ids = [h.job_id for h in response.results]
+    if not ids:
+        return
+    jobs = {j.id: j for j in session.scalars(select(Job).where(Job.id.in_(ids)))}
+    for hit in response.results:
+        job = jobs.get(hit.job_id)
+        if job is not None:
+            hit.job = JobSummary.model_validate(
+                {k: getattr(job, k) for k in JobSummary.model_fields}
+            )
 
 
 def _run_search(
