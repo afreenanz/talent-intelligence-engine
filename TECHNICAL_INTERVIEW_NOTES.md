@@ -170,3 +170,12 @@ is the actual exercise.
 137. Why not server-side rendering here? When would you add it?
 138. How does the landing page avoid fake numbers? Why is `/stats` public, and what does it deliberately not expose?
 
+## Milestone 8B: Jobs UI
+139. Search hits had only title and company. Why add the summary on the server instead of fetching each job from the client?
+140. Why keep search state in the URL rather than component state?
+141. How does the job page show a match breakdown without a "explain this job" endpoint? What's the limitation?
+142. The status dropdown first offered every status and the server returned 409. Where should transition rules live, and how do you keep the client copy in sync?
+143. What does "fit score 73" mean, and why is it not a percentage chance of getting the job?
+144. Why are impressions logged by the server but clicks and dismissals sent by the client?
+145. What did lazy-loading routes change in bundle size, and what new problem did it introduce (hydrate fallback)?
+

@@ -20,7 +20,7 @@ function useReadout() {
   const onPoints = useCallback((n: number) => setPoints(n), [])
   const value = (n: number | undefined) => (n === undefined ? (isError ? 'n/a' : '…') : nf.format(n))
   return { onPoints, panel: (
-    <BorderBeam radius={20} className="live-card w-[17rem] max-w-full">
+    <BorderBeam radius={20} className="live-card hero-panel w-[17rem] max-w-full">
       <section aria-labelledby="live-index" className="p-4 text-small">
         <div className="mb-3 flex items-center justify-between">
           <h2 id="live-index" className="text-micro text-muted-foreground">Live index</h2>

@@ -32,7 +32,7 @@ export default function Overview() {
           <p className="mt-2 max-w-[60ch] text-muted-foreground">
             {missing.length
               ? `Still missing: ${missing.join(', ')}. The fastest way is to upload your résumé. You review what we extract before anything is saved.`
-              : `${profile!.skills.length} skills on file. Matches and the assistant arrive in the next build steps.`}
+              : `${profile!.skills.length} skills on file. Your ranked matches are ready.`}
           </p>
           <Link to="/app/resume" className="mt-5 inline-flex rounded-md bg-primary px-4 py-2 text-small font-semibold text-primary-foreground">
             Upload your résumé

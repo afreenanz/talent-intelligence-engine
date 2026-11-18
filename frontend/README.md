@@ -27,6 +27,8 @@ CI runs the same four commands.
 | `src/lib/api.ts` | Typed fetch client: error envelope → `ApiError`, token handling, single-flight refresh |
 | `src/lib/terrain.ts` | Terrain constants + height function shared by the shader and pointer picking |
 | `src/lib/theme.ts` | Dark/light theme store |
+| `src/lib/types.ts`, `src/lib/format.ts` | API types; salary (LPA), experience, dates, status transitions |
+| `src/features/jobs/` | Job data hooks (queries, mutations, feedback) and shared job components |
 | `src/features/auth/` | Auth context, provider, route guards |
 | `src/components/brand/` | Mark, WebGL terrain, border beam |
 | `src/components/ui/` | shadcn components (generated, then restyled through tokens in `index.css`) |

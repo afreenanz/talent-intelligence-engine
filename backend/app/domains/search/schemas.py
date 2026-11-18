@@ -5,6 +5,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.db.enums import EmploymentType, LocationType
+from app.domains.jobs.schemas import JobSummary
 
 RetrievalMode = Literal["lexical", "dense", "hybrid"]
 
@@ -109,6 +110,10 @@ class SearchHit(BaseModel):
     features: dict[str, float] | None = None
     contributions: dict[str, float] | None = None
     missing_features: list[str] | None = None
+    job: JobSummary | None = Field(
+        default=None,
+        description="Display fields (location, salary, work mode) for the card",
+    )
 
 
 class SearchResponse(BaseModel):

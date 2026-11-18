@@ -2,8 +2,19 @@
 
 _Last updated: 2026-11-18_
 
-**Current milestone:** 8A: Frontend foundation, **awaiting review**
-**Next:** Milestone 8B: search, job detail, recommendations, saved, applications, preferences
+**Current milestone:** 8B: Jobs UI, **awaiting review** (8A merged, PR #8)
+**Next:** Milestone 8C: assistant, résumé onboarding, dashboard, evaluation page
+
+## Milestone 8B: Jobs UI (verified 2026-11-18)
+- [x] Search: query + city/work mode/job type/min salary filters, optional profile blend; state in the URL (back/forward, shareable)
+- [x] Ranked results: fit score meter, matched/missing skills, exploration label; click feedback with search log + position
+- [x] Job detail: skills split required/nice-to-have/mentioned with the ones you have; "Why it ranks here" contribution breakdown
+- [x] For you: top match in the border-beam card; "not interested" sends dismiss feedback; empty-profile guidance
+- [x] Saved (paginated), Applications (pipeline counts, status moves limited to what the backend allows, inline notes), Preferences (all 7 keys, explicit vs learned)
+- [x] Backend: search hits carry a `job` summary (one batched query, no per-card requests)
+- [x] App pages lazy-loaded: entry bundle 250 kB (80 kB gzip)
+- [x] 22 frontend tests, 319 backend tests; browser-checked desktop, mobile, dark and light
+- [x] Found in the browser check and fixed: invalid status moves (409), misaligned filter labels, missing hydrate fallback
 
 ## Milestone 8A: Frontend foundation (verified 2026-11-18)
 - [x] Vite + React 19 + TS 7 + Tailwind 4 + shadcn (radix-vega), exact-pinned; dev server on :5180 proxying /api to :8080

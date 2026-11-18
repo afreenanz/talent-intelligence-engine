@@ -83,6 +83,9 @@ def test_default_search_is_ranked_with_explanations(client: TestClient) -> None:
     hit = body["results"][0]
     assert hit["score"] is not None and hit["explanation"]
     assert set(hit["features"]) >= {"required_skill_coverage", "semantic_similarity"}
+    # Display fields ride along, so the UI needs no request per card.
+    assert all(r["job"]["id"] == r["job_id"] for r in body["results"])
+    assert {"city", "salary_min", "location_type", "listed_at"} <= set(hit["job"])
 
 
 def test_recommendations_use_profile_and_cross_encoder_option(client: TestClient) -> None:
