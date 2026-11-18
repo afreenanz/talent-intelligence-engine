@@ -13,7 +13,7 @@ _Last updated: 2026-11-18_
 - [x] `SIGNUP_ENABLED` switch for public sharing
 - [x] CI `stack` job: builds both images, starts the stack on an empty database, smoke-tests through nginx
 - [x] Verified from outside through a real public link: API, demo sign-in in a browser, per-visitor rate-limit key; link closed afterwards
-- [x] Found and fixed: the first link was checked too early and the OS cached "not found"; the script printed links it hadn't verified
+- [x] Found and fixed: the first link was checked too early and the OS cached "not found"; the script printed links it hadn't verified; on an empty database, bootstrap aborted because the synthetic set's 4 deliberately invalid records made ingest exit non-zero (caught by the new CI stack job)
 
 ## Milestone 9A: One-command stack (verified 2026-11-18)
 - [x] `docker compose --profile app up -d --build` → http://localhost:8090: postgres, redis, init, api, worker, beat, web
