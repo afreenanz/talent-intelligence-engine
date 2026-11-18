@@ -44,9 +44,11 @@ def test_education_years_must_be_ordered() -> None:
         EducationItem(institution="X", start_year=2024, end_year=2020)
 
 
-def test_production_refuses_default_jwt_secret() -> None:
+def test_production_refuses_default_jwt_secret(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Isolate from the developer's .env and environment, which may hold a real secret.
+    monkeypatch.delenv("JWT_SECRET", raising=False)
     with pytest.raises(ValidationError, match="JWT_SECRET"):
-        Settings(environment=Environment.PRODUCTION)
+        Settings(environment=Environment.PRODUCTION, _env_file=None)  # type: ignore[call-arg]
 
 
 def test_short_jwt_secret_rejected_in_any_environment() -> None:

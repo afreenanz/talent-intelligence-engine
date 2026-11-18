@@ -2,10 +2,11 @@ import time
 import uuid
 from typing import Annotated, Literal
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy import select
 
 from app.api.deps import CurrentUser, DbSession
+from app.core.rate_limit import SEARCH, by_user
 from app.domains.candidates import service as candidates
 from app.domains.interactions.service import record_search
 from app.domains.jobs.models import Job
@@ -198,7 +199,7 @@ def _personalization(session: DbSession, candidate_id: uuid.UUID) -> Personaliza
     return PersonalizationContext.from_preferences(effective, ids)
 
 
-@router.post("/jobs/search", response_model=SearchResponse)
+@router.post("/jobs/search", response_model=SearchResponse, dependencies=[Depends(by_user(SEARCH))])
 def search_jobs(
     body: SearchRequest,
     user: CurrentUser,
@@ -226,7 +227,12 @@ def search_jobs(
     )
 
 
-@router.get("/recommendations", response_model=SearchResponse, tags=["recommendations"])
+@router.get(
+    "/recommendations",
+    response_model=SearchResponse,
+    tags=["recommendations"],
+    dependencies=[Depends(by_user(SEARCH))],
+)
 def recommendations(
     user: CurrentUser,
     session: DbSession,

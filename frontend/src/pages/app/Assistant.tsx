@@ -22,6 +22,7 @@ const EXAMPLES = [
 ]
 
 function errorText(e: unknown): string {
+  if (e instanceof ApiError && e.code === 'rate_limited') return e.message // this app's own limit
   if (e instanceof ApiError && (e.status === 429 || e.status === 503)) {
     return 'The assistant is busy (free-tier rate limit). Wait a minute, then send again.'
   }

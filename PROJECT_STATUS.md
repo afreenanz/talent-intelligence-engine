@@ -2,8 +2,19 @@
 
 _Last updated: 2026-11-18_
 
-**Current milestone:** 8C: Assistant, résumé, dashboard, evaluation, **awaiting review** (8B merged, PR #9)
-**Next:** Milestone 9: Redis/Celery, Docker, deployment
+**Current milestone:** 9A: One-command stack, **awaiting review** (8C merged, PR #10)
+**Next:** Milestone 9B: share link (tunnel), CI image build, final hardening
+**Decision (2026-11-18):** runs on the laptop only; no cloud hosting (free tiers have too little RAM for the models)
+
+## Milestone 9A: One-command stack (verified 2026-11-18)
+- [x] `docker compose --profile app up -d --build` → http://localhost:8090: postgres, redis, init, api, worker, beat, web
+- [x] Celery worker for résumé parsing and evaluation runs; beat: hourly job expiry, 5-min requeue of stuck résumés
+- [x] Rate limits (Redis fixed window): sign-up, sign-in (per address); assistant, résumé, search (per user); fail open
+- [x] Demo account (`seed-demo`, fictional profile) and idempotent `bootstrap`
+- [x] nginx: one origin, CSP with script hash, asset caching, DNS re-resolution, real client address for limits
+- [x] Images: backend 2.56 GB (PyTorch + baked models, offline, non-root), web 94 MB
+- [x] 325 backend tests, 28 frontend tests; browser-checked against the Docker stack (demo sign-in, résumé via worker in 6.3 s, assistant through nginx, no CSP violations)
+- [x] Found and fixed: spoofable X-Forwarded-For bypassed per-address limits; compose `:?` broke the dev-only `up`; models checked the HF Hub at runtime; a settings test read the developer's .env; shared Redis queue between dev and Docker
 
 ## Milestone 8C: Assistant, résumé, dashboard, evaluation (verified 2026-11-18)
 - [x] Assistant: conversations (history, delete), safe reply rendering (no HTML; job ids become job links/titles), step trace, grounding warning

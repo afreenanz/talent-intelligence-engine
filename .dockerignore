@@ -1,0 +1,16 @@
+# Build context is the repo root (the backend image needs data/ and eval/ too).
+.git
+**/.env
+**/.env.*
+!.env.example
+**/node_modules
+**/dist
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+**/coverage
+data/private
+data/external
+.DS_Store

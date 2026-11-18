@@ -91,3 +91,30 @@ Vite + React 19 + TypeScript, Tailwind 4 with shadcn/ui (components copied into 
 - **Single-flight refresh.** Parallel requests that hit 401 share one refresh call. Otherwise they would send the same refresh token twice, and reuse detection would revoke the whole session.
 - **Hero terrain in raw WebGL**, not three.js: one points draw call and a ~100-line shader don't justify a 600 kB library. The height function exists in GLSL (rendering) and TypeScript (pointer picking), so both are generated from one constants file and a test checks they match.
 - **Theme without next-themes.** Its inline `<script>` is for server rendering and triggers a React 19 warning in a client-only app. A 40-line store plus a 1-line script in `index.html` (applies the saved theme before first paint) does the same job.
+
+## ADR-014 Running the whole system: Celery worker, rate limits, one Docker command
+**Context.** The app runs on one laptop (cloud free tiers in 2026 offer ~512 MB RAM; the backend needs
+1–2 GB for PyTorch and two models). It must start with one command and survive being shared via a link.
+
+- **Background work in Celery, broker = Redis, no result backend.** Résumé parsing (an LLM call, ~5–15 s)
+  and evaluation runs used FastAPI `BackgroundTasks`, which run inside the API process: lost on restart,
+  and they compete with requests. Outcomes already live in Postgres, so nothing needs Celery results.
+  `acks_late` + prefetch 1 + `reject_on_worker_lost` put a task back on the queue if a worker dies;
+  tasks are idempotent (résumé processing claims the row atomically).
+- **Lost-work safety net.** If Redis is down at upload time, the upload still succeeds and stays
+  `pending`; `beat` re-queues anything pending or processing for >10 min. Beat also expires old jobs hourly.
+- **Rate limits (fixed window in Redis)** on sign-up and sign-in (per address), and on the assistant,
+  résumé uploads and search (per user). Fixed window allows up to 2× the limit across a boundary; fine for
+  abuse protection and needs no Lua. **Fails open** if Redis is down: locking everyone out is worse here.
+  nginx overwrites `X-Forwarded-For` with the real peer address, so clients can't choose their own "IP".
+- **One image for api, worker and beat**; the models are baked in and `HF_HUB_OFFLINE=1` keeps
+  containers off the network for models. Runs as a non-root user. Image ≈ 2.5 GB (PyTorch); acceptable
+  locally, the first thing to slim (ONNX runtime) if it ever has to fit a small cloud instance.
+- **`init` service** runs migrations, then `bootstrap` (idempotent), once per `up`; the API waits for it.
+  Only one process migrates, so there are no races.
+- **nginx in front, one origin.** No CORS, strict CSP (the one inline script is allowed by hash),
+  long-cache hashed assets, no-cache `index.html`. nginx resolves the API through Docker DNS at request
+  time, so a recreated API container doesn't break the site.
+- **Profiles.** `docker compose up` still starts only Postgres + Redis for development;
+  `--profile app` starts everything. The Docker stack uses Redis database 1, so a natively run dev API
+  never hands the Docker worker a file it can't see.

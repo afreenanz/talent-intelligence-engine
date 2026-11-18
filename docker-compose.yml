@@ -1,5 +1,6 @@
-# Local development infrastructure.
-# Milestone 1: database + cache only. The API, worker and frontend services are added in Milestone 9.
+# Two ways to run:
+#   docker compose up -d                      -> Postgres + Redis only (for local development)
+#   docker compose --profile app up -d --build -> the whole app at http://localhost:8090
 # Host ports are offset (5433, 6380) so they don't collide with natively installed Postgres/Redis.
 
 name: talent-engine
@@ -35,6 +36,73 @@ services:
       timeout: 3s
       retries: 10
 
+  # ------------------------------------------------------------------ the app (profile "app")
+  # Runs once per `up`: migrations, then bootstrap (idempotent: skills, jobs, embeddings, demo).
+  init:
+    profiles: [app]
+    <<: &backend
+      build: { context: ., dockerfile: backend/Dockerfile }
+      image: talent-engine-backend
+      env_file: [.env]
+      environment: &backend-env
+        ENVIRONMENT: production
+        DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-tie}:${POSTGRES_PASSWORD:-tie_dev_password}@postgres:5432/${POSTGRES_DB:-tie}
+        # Its own Redis database (1): a natively-run dev API (db 0) never feeds this worker files it
+        # can't see, and rate-limit counters stay separate.
+        REDIS_URL: redis://redis:6379/1
+        UPLOAD_DIR: /app/data/private/uploads
+        JWT_SECRET: ${JWT_SECRET:-}   # required: production mode refuses to start without a strong one
+        LOG_JSON: "true"
+      volumes:
+        - uploads:/app/data/private/uploads
+    command: ["sh", "-c", "alembic upgrade head && python -m app.cli bootstrap"]
+    depends_on:
+      postgres: { condition: service_healthy }
+    restart: "no"
+
+  api:
+    profiles: [app]
+    <<: *backend
+    depends_on:
+      init: { condition: service_completed_successfully }
+      redis: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/ready', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s   # loads the embedding model on start
+    restart: unless-stopped
+
+  worker:
+    profiles: [app]
+    <<: *backend
+    command: ["celery", "-A", "app.worker.celery_app", "worker", "--loglevel=INFO", "--concurrency=2"]
+    depends_on:
+      init: { condition: service_completed_successfully }
+      redis: { condition: service_healthy }
+    restart: unless-stopped
+
+  beat:
+    profiles: [app]
+    <<: *backend
+    command: ["celery", "-A", "app.worker.celery_app", "beat", "--loglevel=INFO", "--schedule", "/tmp/celerybeat-schedule"]
+    volumes: []
+    depends_on:
+      redis: { condition: service_healthy }
+    restart: unless-stopped
+
+  web:
+    profiles: [app]
+    build: { context: ., dockerfile: frontend/Dockerfile }
+    image: talent-engine-web
+    ports:
+      - "${WEB_HOST_PORT:-8090}:80"
+    depends_on:
+      api: { condition: service_healthy }
+    restart: unless-stopped
+
 volumes:
   pgdata:
   redisdata:
+  uploads:

@@ -25,6 +25,7 @@ dependencies = [
     "langgraph>=1.0",
     "langgraph-checkpoint-postgres>=3.0",
     "psycopg-pool>=3.2",
+    "celery[redis]>=5.5",
 ]
 
 [dependency-groups]
@@ -66,6 +67,15 @@ exclude = ["migrations/"]
 [[tool.mypy.overrides]]
 module = ["pgvector.*"]
 ignore_missing_imports = true
+
+# Celery ships no type information. Scope the exception to Celery and the task module only.
+[[tool.mypy.overrides]]
+module = ["celery", "celery.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["app.worker.tasks"]
+disallow_untyped_decorators = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
