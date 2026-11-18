@@ -240,5 +240,5 @@
 @keyframes sharpen { from { filter: blur(8px); opacity: 0; transform: translateY(8px) } to { filter: blur(0); opacity: 1; transform: none } }
 .hero-word { animation: word-rise 900ms var(--spring) both; }
 .hero-nav { animation: sharpen 900ms var(--spring) 80ms both; }
-.hero-copy > p, .hero-copy > a { animation: sharpen 900ms var(--spring) 520ms both; }
+.hero-copy > a { animation: sharpen 900ms var(--spring) 520ms both; }
 .hero-panel { animation: sharpen 900ms var(--spring) 700ms both; }

@@ -42,9 +42,12 @@ export default function Landing() {
   return (
     <div className="dark bg-background text-foreground">
       <section className="relative h-[100svh] min-h-[620px] overflow-hidden bg-[radial-gradient(120%_80%_at_70%_20%,#10131c_0%,#07080c_60%)]">
-        <TerrainField onPointsInView={onPoints} />
+        {/* Dimmed so the field reads as atmosphere, not as the subject. */}
+        <div className="absolute inset-0 opacity-55">
+          <TerrainField onPointsInView={onPoints} />
+        </div>
         {/* Veil: opaque at the bottom-left corner, clear by three quarters out, so no dot fights the copy. */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_100%_at_0%_100%,#07080c_0%,rgb(7_8_12/0.88)_30%,transparent_75%)]" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_110%_at_0%_100%,#07080c_0%,rgb(7_8_12/0.94)_38%,rgb(7_8_12/0.5)_62%,transparent_85%)]" />
         {/* On narrow screens the copy spans the full width, so the veil rises from the bottom edge instead. */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-[78%] bg-[linear-gradient(to_top,#07080c_0%,rgb(7_8_12/0.9)_55%,transparent_100%)] sm:hidden" />
         <div aria-hidden="true" className="grain pointer-events-none absolute inset-0" />
@@ -64,19 +67,15 @@ export default function Landing() {
         </header>
 
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-col gap-8 px-5 pb-8 sm:px-8 lg:flex-row lg:items-end lg:justify-between">
-          <div className="hero-copy pointer-events-auto max-w-[44rem]">
-            <h1 className="hero-title font-[640] leading-[0.93] tracking-[-0.05em] [font-size:clamp(38px,5.6vw,92px)]">
+          <div className="hero-copy pointer-events-auto max-w-[58rem]">
+            <h1 className="hero-title font-[700] leading-[0.9] tracking-[-0.055em] [font-size:clamp(48px,8vw,132px)] [text-shadow:0_2px_32px_rgb(7_8_12/0.85)]">
               {'See where you stand in the job market.'.split(' ').map((w, i) => (
                 <span key={i} className="inline-block overflow-hidden pb-[0.06em] align-bottom">
                   <span className="hero-word inline-block" style={{ animationDelay: `${120 + i * 60}ms` }}>{w}&nbsp;</span>
                 </span>
               ))}
             </h1>
-            <p className="mt-6 max-w-[34rem] text-lede leading-relaxed text-muted-foreground">
-              Upload your résumé and we rank every open role by how well it fits you, explain each
-              match, and let an assistant search and save jobs for you. Move across the field. Click to ping.
-            </p>
-            <Link to="/register" className="mt-7 inline-flex rounded-full bg-primary px-5 py-2.5 font-semibold text-primary-foreground hover:bg-white">
+            <Link to="/register" className="mt-9 inline-flex rounded-full bg-primary px-5 py-2.5 font-semibold text-primary-foreground hover:bg-white">
               Create your profile
             </Link>
           </div>
