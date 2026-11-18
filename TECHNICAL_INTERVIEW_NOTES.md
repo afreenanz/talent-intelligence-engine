@@ -161,3 +161,12 @@ is the actual exercise.
 130. Your first plan comparison was wrong. What confounded it, and how did you rule out stale statistics?
 131. Why is the cross-encoder opt-in? Quote its latency.
 132. Why can only the retrieval benchmark be started over HTTP?
+
+## Milestone 8A: Frontend foundation
+133. Where do the access and refresh tokens live, and why different places? What would an httpOnly cookie change?
+134. Three requests get 401 at once. What goes wrong if each refreshes, and how does the client prevent it?
+135. Why raw WebGL instead of three.js for the hero? How do the shader and the pointer picking stay in sync?
+136. The terrain worked in tests but was blank in the browser. Why did `loseContext()` in cleanup break it under StrictMode?
+137. Why not server-side rendering here? When would you add it?
+138. How does the landing page avoid fake numbers? Why is `/stats` public, and what does it deliberately not expose?
+

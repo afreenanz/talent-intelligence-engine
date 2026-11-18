@@ -1,9 +1,20 @@
 # Project Status
 
-_Last updated: 2026-11-17_
+_Last updated: 2026-11-18_
 
-**Current milestone:** 7: Evaluation, **merged** (PR #7)
-**Next:** Milestone 8: Frontend
+**Current milestone:** 8A: Frontend foundation, **awaiting review**
+**Next:** Milestone 8B: search, job detail, recommendations, saved, applications, preferences
+
+## Milestone 8A: Frontend foundation (verified 2026-11-18)
+- [x] Vite + React 19 + TS 7 + Tailwind 4 + shadcn (radix-vega), exact-pinned; dev server on :5180 proxying /api to :8080
+- [x] Design tokens: dark default (ink #07080c, paper #eee8dc, amber signal #ff8a3d), cool-paper light theme, type scale, tabular numerals, reduced motion
+- [x] Landing: raw WebGL dot-grid terrain (shared height function, parity test), live index from `GET /api/v1/stats`
+- [x] Border beam component (SVG pathLength); used in 8B on the top match
+- [x] Typed API client: error envelope, in-memory access token, single-flight refresh with retry
+- [x] Auth: sign in/up, session restore on reload, route guards, app shell with theme toggle and sign out
+- [x] Backend: `GET /auth/me` (with `is_admin`), public `GET /stats`; 319 backend tests
+- [x] 14 frontend tests (API client, auth flows, terrain math, theme); typecheck, oxlint, build; CI job added
+- [x] Checked in a real browser at 1440 and 390 px: found and fixed a WebGL context bug on remount and a mobile nav wrap
 
 ## Milestone 7B: Performance + evaluation API (verified 2026-11-18)
 - [x] `bench-performance`: per-stage latency, HTTP end to end (p50 54 ms), throughput, EXPLAIN ANALYZE plans, exact vs HNSW (rolled back)

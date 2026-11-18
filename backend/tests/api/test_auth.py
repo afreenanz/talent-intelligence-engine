@@ -111,3 +111,10 @@ def test_refresh_token_cannot_be_used_as_access_token(client: TestClient) -> Non
     r = client.get(ME, headers={"Authorization": f"Bearer {tokens['refresh_token']}"})
     assert r.status_code == 401
     assert r.headers["www-authenticate"] == "Bearer"
+
+
+def test_me_returns_account_with_admin_flag(client: TestClient) -> None:
+    tokens = register_and_login(client, "me@example.com")
+    body = client.get("/api/v1/auth/me", headers=auth_header(tokens)).json()
+    assert body["email"] == "me@example.com" and body["is_admin"] is False
+    assert client.get("/api/v1/auth/me").status_code == 401

@@ -4,6 +4,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 8A: Frontend foundation
+- `frontend/`: Vite + React + TypeScript app with design tokens, landing page (WebGL terrain hero), sign in/up, app shell
+- Typed API client with single-flight token refresh; auth context and route guards
+- Backend: `GET /api/v1/auth/me`, public `GET /api/v1/stats`
+- CI: frontend job (typecheck, lint, test, build)
+
 ### Milestone 7B: Performance and evaluation API
 - `bench-performance` (latency, throughput, query plans, exact vs HNSW); `make-admin` CLI
 - Admin evaluation API: `GET /api/v1/evaluations`, `GET /{id}`, `POST /run` (retrieval only)

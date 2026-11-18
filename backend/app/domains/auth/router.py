@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status
 
-from app.api.deps import DbSession, SettingsDep
+from app.api.deps import CurrentUser, DbSession, SettingsDep
 from app.domains.auth import service
 from app.domains.auth.schemas import (
     LoginRequest,
@@ -31,3 +31,9 @@ def refresh(body: RefreshRequest, session: DbSession, settings: SettingsDep) -> 
 @router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
 def logout(body: RefreshRequest, session: DbSession) -> None:
     service.logout(session, body.refresh_token)
+
+
+@router.get("/me", response_model=UserOut)
+def me(user: CurrentUser) -> UserOut:
+    """The signed-in account (email, admin flag). The profile lives at /candidates/me."""
+    return UserOut.model_validate(user)
