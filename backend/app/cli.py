@@ -22,6 +22,7 @@ from app.domains.skills.seed import load_taxonomy, seed_skills
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_TAXONOMY = REPO_ROOT / "data" / "taxonomy" / "skills_v1.json"
+DEFAULT_JOBS = REPO_ROOT / "data" / "synthetic" / "jobs_v1.jsonl"
 _COUNTS = (
     "received",
     "inserted",
@@ -314,6 +315,41 @@ def cmd_make_admin(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_seed_demo(args: argparse.Namespace) -> int:
+    from app.demo import DEMO_EMAIL, new_password, seed_demo
+
+    password = args.password or get_settings().demo_password or new_password()
+    with get_sessionmaker()() as session:
+        _, created = seed_demo(session, password)
+    print(f"demo account {'created' if created else 'updated'}: {DEMO_EMAIL}")
+    if not (args.password or get_settings().demo_password):
+        print(f"generated password (shown once): {password}")
+    return 0
+
+
+def cmd_bootstrap(args: argparse.Namespace) -> int:
+    """Make a fresh database usable. Idempotent: every step skips work that is already done."""
+    from sqlalchemy import func
+
+    from app.domains.jobs.models import Job
+
+    steps = [["seed-skills"]]
+    with get_sessionmaker()() as session:
+        has_jobs = (session.scalar(select(func.count()).select_from(Job)) or 0) > 0
+    if not has_jobs:
+        steps.append(["ingest-jobs", str(DEFAULT_JOBS), "--source", "synthetic_v1"])
+    steps.append(["embed-jobs"])
+    if get_settings().demo_password:
+        steps.append(["seed-demo"])
+    for step in steps:
+        print(f"bootstrap: {' '.join(step)}", flush=True)
+        if main(step) != 0:
+            print(f"bootstrap: step failed: {step[0]}", file=sys.stderr)
+            return 1
+    print("bootstrap: done")
+    return 0
+
+
 def cmd_runs(args: argparse.Namespace) -> int:
     with get_sessionmaker()() as session:
         runs = session.scalars(
@@ -381,6 +417,13 @@ def main(argv: list[str] | None = None) -> int:
 
     p = sub.add_parser("bench-performance", help="latency, query plans, exact vs HNSW")
     p.set_defaults(func=cmd_bench_performance)
+
+    p = sub.add_parser("seed-demo", help="create/reset the demo account (fictional profile)")
+    p.add_argument("--password", help="defaults to DEMO_PASSWORD, else a random one is printed")
+    p.set_defaults(func=cmd_seed_demo)
+
+    p = sub.add_parser("bootstrap", help="prepare a fresh database: skills, jobs, embeddings, demo")
+    p.set_defaults(func=cmd_bootstrap)
 
     p = sub.add_parser("make-admin", help="grant admin rights (evaluation dashboard)")
     p.add_argument("email")

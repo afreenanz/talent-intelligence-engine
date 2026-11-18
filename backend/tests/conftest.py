@@ -17,6 +17,9 @@ os.environ.setdefault("ENVIRONMENT", "test")
 # Tests must never call a real LLM or touch real uploads: env vars override the .env file,
 # so a developer's GEMINI_API_KEY is ignored and uploads go to a throwaway directory.
 os.environ["GEMINI_API_KEY"] = ""
+# Rate limits are tested on their own (tests/core/test_rate_limit.py); elsewhere they would make
+# tests depend on how many users earlier tests registered from the same "IP".
+os.environ["RATE_LIMITS_ENABLED"] = "false"
 os.environ["UPLOAD_DIR"] = tempfile.mkdtemp(prefix="tie-test-uploads-")
 os.environ.setdefault(
     "DATABASE_URL",

@@ -54,6 +54,15 @@ class PermissionDeniedError(AppError):
     code = "forbidden"
 
 
+class RateLimitedError(AppError):
+    status_code = status.HTTP_429_TOO_MANY_REQUESTS
+    code = "rate_limited"
+
+    def __init__(self, message: str, *, retry_after: int) -> None:
+        super().__init__(message, details={"retry_after_seconds": retry_after})
+        self.retry_after = retry_after
+
+
 class UpstreamUnavailableError(AppError):
     status_code = status.HTTP_503_SERVICE_UNAVAILABLE
     code = "upstream_unavailable"
@@ -73,7 +82,11 @@ def _envelope(request: Request, code: str, message: str, details: Any = None) ->
 def register_exception_handlers(app: FastAPI) -> None:
     @app.exception_handler(AppError)
     async def _app_error(request: Request, exc: AppError) -> JSONResponse:
-        headers = {"WWW-Authenticate": "Bearer"} if isinstance(exc, AuthenticationError) else None
+        headers: dict[str, str] | None = None
+        if isinstance(exc, AuthenticationError):
+            headers = {"WWW-Authenticate": "Bearer"}
+        elif isinstance(exc, RateLimitedError):
+            headers = {"Retry-After": str(exc.retry_after)}
         return JSONResponse(
             status_code=exc.status_code,
             content=_envelope(request, exc.code, exc.message, exc.details),

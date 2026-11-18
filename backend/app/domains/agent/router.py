@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, status
 
 from app.api.deps import CurrentUser, DbSession
 from app.core.errors import UpstreamUnavailableError
+from app.core.rate_limit import ASSISTANT, by_user
 from app.domains.agent import service
 from app.domains.agent.schemas import (
     ChatRequest,
@@ -48,7 +49,7 @@ def _ctx(
 ToolCtxDep = Annotated[ToolContext, Depends(_ctx)]
 
 
-@router.post("/chat", response_model=ChatResponse)
+@router.post("/chat", response_model=ChatResponse, dependencies=[Depends(by_user(ASSISTANT))])
 def chat(
     body: ChatRequest, user: CurrentUser, session: DbSession, llm: LLMDep, ctx: ToolCtxDep
 ) -> ChatResponse:
@@ -57,7 +58,11 @@ def chat(
     return service.chat(session, user.id, body.message, body.conversation_id, llm, ctx)
 
 
-@router.post("/conversations/{conversation_id}/confirm", response_model=ChatResponse)
+@router.post(
+    "/conversations/{conversation_id}/confirm",
+    response_model=ChatResponse,
+    dependencies=[Depends(by_user(ASSISTANT))],
+)
 def confirm(
     conversation_id: uuid.UUID,
     body: ConfirmRequest,

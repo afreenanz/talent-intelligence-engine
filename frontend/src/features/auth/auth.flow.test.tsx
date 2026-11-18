@@ -58,3 +58,14 @@ it('blocks short passwords on sign-up and explains a duplicate email', async () 
   await userEvent.click(screen.getByRole('button', { name: 'Create your profile' }))
   expect(await screen.findByRole('alert')).toHaveTextContent('already exists')
 })
+
+it('tells the user to wait when sign-in is rate limited', async () => {
+  server.use(http.post('/api/v1/auth/login', () => HttpResponse.json(
+    { error: { code: 'rate_limited', message: 'Too many sign-in attempts. Wait a few minutes and try again.' } },
+    { status: 429, headers: { 'Retry-After': '300' } })))
+  renderApp('/login')
+  await userEvent.type(screen.getByLabelText('Email'), 'asha@example.com')
+  await userEvent.type(screen.getByLabelText('Password'), 'whatever-password')
+  await userEvent.click(screen.getByRole('button', { name: 'Sign in' }))
+  expect(await screen.findByRole('alert')).toHaveTextContent('Too many sign-in attempts')
+})

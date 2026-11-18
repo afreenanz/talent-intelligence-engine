@@ -188,3 +188,13 @@ is the actual exercise.
 151. The evaluation page groups runs into "latest batch". Why not just show the latest run per experiment?
 152. What do you tell users about sending text to a free-tier LLM, and where?
 
+## Milestone 9A: One-command stack
+153. Why move résumé parsing from FastAPI BackgroundTasks to Celery? What do acks_late and prefetch=1 buy you, and what do they demand of the task?
+154. Redis is down when a user uploads a résumé. Walk through what happens and how the résumé eventually gets processed.
+155. Fixed window vs sliding window vs token bucket: what did you choose and what's the known weakness?
+156. Why does the rate limiter fail open? When would you fail closed instead?
+157. How could someone bypass per-IP limits through your proxy, and how did you close it?
+158. Why does nginx resolve the API at request time instead of once at startup?
+159. The backend image is 2.5 GB. Where does that come from, and how would you shrink it?
+160. Why a separate init service for migrations instead of running them in the API's entrypoint?
+

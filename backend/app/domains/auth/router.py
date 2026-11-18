@@ -1,6 +1,7 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, Depends, status
 
 from app.api.deps import CurrentUser, DbSession, SettingsDep
+from app.core.rate_limit import LOGIN, REGISTER, by_ip
 from app.domains.auth import service
 from app.domains.auth.schemas import (
     LoginRequest,
@@ -13,12 +14,17 @@ from app.domains.auth.schemas import (
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.post("/register", response_model=UserOut, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/register",
+    response_model=UserOut,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(by_ip(REGISTER))],
+)
 def register(body: RegisterRequest, session: DbSession) -> UserOut:
     return UserOut.model_validate(service.register(session, body))
 
 
-@router.post("/login", response_model=TokenPair)
+@router.post("/login", response_model=TokenPair, dependencies=[Depends(by_ip(LOGIN))])
 def login(body: LoginRequest, session: DbSession, settings: SettingsDep) -> TokenPair:
     return service.login(session, body.email, body.password, settings)
 

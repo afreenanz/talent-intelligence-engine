@@ -56,6 +56,11 @@ class Settings(BaseSettings):
     upload_dir: str = "../data/private/uploads"
     max_resume_bytes: int = Field(default=5 * 1024 * 1024, ge=1024)
 
+    # Abuse protection for a publicly reachable demo (see app/core/rate_limit.py).
+    rate_limits_enabled: bool = True
+    # Password for the demo account created by `bootstrap` / `seed-demo`. Unset: no demo account.
+    demo_password: str | None = Field(default=None, min_length=10)
+
     cors_origins: list[str] = ["http://localhost:5173"]
     log_level: str = "INFO"
     log_json: bool = False

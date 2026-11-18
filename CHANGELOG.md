@@ -4,6 +4,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 9A: One-command stack
+- Docker images for backend (api/worker/beat) and web (nginx); `--profile app` runs everything at :8090
+- Celery worker + beat replace in-process background tasks; stale résumé requeue; hourly job expiry
+- Rate limits with 429 + Retry-After; demo account; `bootstrap` and `seed-demo` CLI commands
+
 ### Milestone 8C: Assistant, résumé, dashboard, evaluation
 - Assistant page with confirmations, step trace and safe reply rendering
 - Résumé upload, review and apply; dashboard; admin evaluation page

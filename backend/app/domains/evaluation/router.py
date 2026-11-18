@@ -8,7 +8,7 @@ import uuid
 from collections.abc import Callable
 from typing import Annotated, Any, Literal
 
-from fastapi import APIRouter, BackgroundTasks, Depends, Query, status
+from fastapi import APIRouter, Depends, Query, status
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy import select
 
@@ -53,9 +53,10 @@ def _summary(run: EvaluationRun, full: bool) -> EvaluationSummary:
 
 
 def _run_retrieval(split: str) -> None:
-    from app.cli import main as cli
+    """Enqueue on the Celery worker: the run loads the embedding model and takes ~1 min."""
+    from app.worker.tasks import run_retrieval_eval
 
-    cli(["eval-retrieval", "--split", split])
+    run_retrieval_eval.delay(split)
 
 
 def runner_dependency() -> Callable[[str], None]:
@@ -87,8 +88,7 @@ def get_run(run_id: uuid.UUID, _: CurrentAdmin, session: DbSession) -> Evaluatio
 def start_run(
     body: RunRequest,
     _: CurrentAdmin,
-    background: BackgroundTasks,
     runner: Annotated[Callable[[str], None], Depends(runner_dependency)],
 ) -> dict[str, str]:
-    background.add_task(runner, body.split)
+    runner(body.split)
     return {"status": "started", "experiment": body.experiment, "split": body.split}
