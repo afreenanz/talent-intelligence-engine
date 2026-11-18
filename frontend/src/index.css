@@ -1,0 +1,244 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/schibsted-grotesk";
+
+/*
+  Talent Intelligence Engine design tokens.
+  Concept: the job market as surveyed terrain. Matte instrument panels, hairline rules,
+  tabular numerals and ONE signal colour (amber), used only for what deserves attention:
+  the beam on your best match, focus rings and live values.
+  Dark is the default theme (<html class="dark">); the light theme is a cool paper.
+*/
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Schibsted Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-sans);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* project tokens */
+  --color-signal: var(--signal);
+  --color-signal-soft: var(--signal-soft);
+  --color-signal-deep: var(--signal-deep);
+  --color-sage: var(--sage);
+  --color-rose: var(--rose);
+  --color-line: var(--line);
+  --color-raised: var(--raised);
+
+  /* Radii carry hierarchy: controls 8px, panels 14px, the hero dock 20px. Not one radius for all. */
+  --radius: 0.5rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.25rem;
+
+  /* Type scale: 1.25 ratio from 15px body (Bringhurst-style modular scale). */
+  --text-micro: 0.75rem;
+  --text-small: 0.8125rem;
+  --text-body: 0.9375rem;
+  --text-lede: 1.125rem;
+  --text-h3: 1.375rem;
+  --text-h2: 1.75rem;
+  --text-h1: 2.25rem;
+}
+
+/* Light theme: cool paper, not cream. */
+:root {
+  --background: #eef0f3;
+  --foreground: #10131a;
+  --card: #f7f8fa;
+  --card-foreground: #10131a;
+  --popover: #ffffff;
+  --popover-foreground: #10131a;
+  --primary: #10131a;
+  --primary-foreground: #f7f8fa;
+  --secondary: #e3e6eb;
+  --secondary-foreground: #10131a;
+  --muted: #e3e6eb;
+  --muted-foreground: rgb(16 19 26 / 0.62);
+  --accent: #e3e6eb;
+  --accent-foreground: #10131a;
+  --destructive: #b8463b;
+  --border: rgb(16 19 26 / 0.1);
+  --input: rgb(16 19 26 / 0.14);
+  --ring: #c9561a;
+  --signal: #c9561a;
+  --signal-soft: #e58a4f;
+  --signal-deep: #a94412;
+  --sage: #3f7a54;
+  --rose: #b8463b;
+  --line: rgb(16 19 26 / 0.08);
+  --raised: #ffffff;
+  --chart-1: #c9561a;
+  --chart-2: #10131a;
+  --chart-3: rgb(16 19 26 / 0.55);
+  --chart-4: rgb(16 19 26 / 0.3);
+  --chart-5: #3f7a54;
+  --sidebar: #e7eaee;
+  --sidebar-foreground: #10131a;
+  --sidebar-primary: #10131a;
+  --sidebar-primary-foreground: #f7f8fa;
+  --sidebar-accent: #dde1e7;
+  --sidebar-accent-foreground: #10131a;
+  --sidebar-border: rgb(16 19 26 / 0.08);
+  --sidebar-ring: #c9561a;
+}
+
+/* Dark theme (default): blue-black ink, warm paper text, amber signal. */
+.dark {
+  --background: #07080c;
+  --foreground: #eee8dc;
+  --card: #0f1117;
+  --card-foreground: #eee8dc;
+  --popover: #151821;
+  --popover-foreground: #eee8dc;
+  --primary: #eee8dc;
+  --primary-foreground: #07080c;
+  --secondary: #171a22;
+  --secondary-foreground: #eee8dc;
+  --muted: #13161d;
+  --muted-foreground: rgb(238 232 220 / 0.64);
+  --accent: #191c25;
+  --accent-foreground: #eee8dc;
+  --destructive: #e07a6f;
+  --border: rgb(238 232 220 / 0.08);
+  --input: rgb(238 232 220 / 0.12);
+  --ring: #ff8a3d;
+  --signal: #ff8a3d;
+  --signal-soft: #ffd6a0;
+  --signal-deep: #e8661c;
+  --sage: #8fb59a;
+  --rose: #e07a6f;
+  --line: rgb(238 232 220 / 0.07);
+  --raised: #151821;
+  --chart-1: #ff8a3d;
+  --chart-2: #eee8dc;
+  --chart-3: rgb(238 232 220 / 0.55);
+  --chart-4: rgb(238 232 220 / 0.28);
+  --chart-5: #8fb59a;
+  --sidebar: #0a0c11;
+  --sidebar-foreground: #eee8dc;
+  --sidebar-primary: #eee8dc;
+  --sidebar-primary-foreground: #07080c;
+  --sidebar-accent: #151821;
+  --sidebar-accent-foreground: #eee8dc;
+  --sidebar-border: rgb(238 232 220 / 0.07);
+  --sidebar-ring: #ff8a3d;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    color-scheme: dark;
+  }
+  html:not(.dark) {
+    color-scheme: light;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-size: var(--text-body);
+    line-height: 1.55;
+    font-feature-settings: "liga" 1;
+  }
+  /* Every number in the product lines up in columns. */
+  .tnum,
+  table,
+  [data-numeric] {
+    font-variant-numeric: tabular-nums;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* A damped spring sampled into linear(), shared by entrance and panel motion. */
+:root {
+  --spring: linear(
+    0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%, 1.017 19.4%, 1.067, 1.099 24.3%,
+    1.104 26.1%, 1.1 27.9%, 1.06 32.9%, 1.016 37.8%, 0.998 41.3%, 0.991 45.3%, 1.001 59.6%, 1
+  );
+}
+
+/* Border beam: all layers share one 6 s linear loop, so the head always leads. */
+@keyframes beam-tail { from { stroke-dashoffset: 0 } to { stroke-dashoffset: -100 } }
+@keyframes beam-near { from { stroke-dashoffset: -10 } to { stroke-dashoffset: -110 } }
+@keyframes beam-bloom { from { stroke-dashoffset: -12 } to { stroke-dashoffset: -112 } }
+@keyframes beam-head { from { stroke-dashoffset: -18 } to { stroke-dashoffset: -118 } }
+.beam .beam-tail { animation: beam-tail 6s linear infinite; }
+.beam .beam-near { animation: beam-near 6s linear infinite; }
+.beam .beam-bloom { animation: beam-bloom 6s linear infinite; }
+.beam .beam-head { animation: beam-head 6s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  /* Frozen just past the top-right corner. */
+  .beam .beam-tail { animation: none; stroke-dashoffset: -8; }
+  .beam .beam-near { animation: none; stroke-dashoffset: -18; }
+  .beam .beam-bloom { animation: none; stroke-dashoffset: -20; }
+  .beam .beam-head { animation: none; stroke-dashoffset: -26; }
+}
+
+/* ---------------------------------------------------------------- landing */
+.glass {
+  background: rgb(15 17 23 / 0.62);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+}
+/* Film grain at 9%: an inline SVG turbulence tile (CSS only; the terrain never uses noise). */
+.grain {
+  opacity: 0.09;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+/* One orchestrated load: words rise from clipping boxes; nav, copy and panel sharpen from a blur. */
+@keyframes word-rise { from { transform: translateY(105%) } to { transform: translateY(0) } }
+@keyframes sharpen { from { filter: blur(8px); opacity: 0; transform: translateY(8px) } to { filter: blur(0); opacity: 1; transform: none } }
+.hero-word { animation: word-rise 900ms var(--spring) both; }
+.hero-nav { animation: sharpen 900ms var(--spring) 80ms both; }
+.hero-copy > p, .hero-copy > a { animation: sharpen 900ms var(--spring) 520ms both; }
+.hero-panel { animation: sharpen 900ms var(--spring) 700ms both; }

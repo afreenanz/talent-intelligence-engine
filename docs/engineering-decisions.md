@@ -83,3 +83,11 @@ LambdaMART (LightGBM `lambdarank`) is trained **only if** we have at least a few
 
 ## ADR-012 Local infrastructure via Docker Compose
 Postgres (`pgvector/pgvector:pg17`), Redis, API, worker, beat and frontend run in Docker Compose. A native fallback (Homebrew `postgresql@17` + `brew install pgvector`, which supports pg17/pg18) is documented for running tests without Docker.
+
+## ADR-013 Frontend: client-only SPA, tokens split between memory and storage
+Vite + React 19 + TypeScript, Tailwind 4 with shadcn/ui (components copied into the repo, so they can be restyled), TanStack Query for server state, React Router. No SSR: every page sits behind login except the landing page, so server rendering would add a Node server for little gain.
+
+- **Tokens.** The access token (15 min) lives in memory only. The refresh token is in `localStorage`, so a reload keeps you signed in. Trade-off: an XSS bug could read it; an `httpOnly` cookie could not. Moving to a cookie needs the backend to set it (plus CSRF protection), so it is deferred to Milestone 9. Rotation and reuse detection on the server limit the damage of a stolen token.
+- **Single-flight refresh.** Parallel requests that hit 401 share one refresh call. Otherwise they would send the same refresh token twice, and reuse detection would revoke the whole session.
+- **Hero terrain in raw WebGL**, not three.js: one points draw call and a ~100-line shader don't justify a 600 kB library. The height function exists in GLSL (rendering) and TypeScript (pointer picking), so both are generated from one constants file and a test checks they match.
+- **Theme without next-themes.** Its inline `<script>` is for server rendering and triggers a React 19 warning in a client-only app. A 40-line store plus a 1-line script in `index.html` (applies the saved theme before first paint) does the same job.

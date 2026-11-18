@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Talent Intelligence Engine</title>
+    <meta name="description" content="Find where your skills stand in the job market: ranked, explained matches and an assistant that asks before it acts." />
+    <meta name="theme-color" content="#07080c" />
+    <script>
+      // Apply a stored light-theme choice before first paint. Dark is the default.
+      try { if (localStorage.getItem('tie.theme') === 'light') document.documentElement.classList.remove('dark') } catch {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
