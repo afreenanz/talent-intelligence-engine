@@ -99,7 +99,7 @@ export default function Search() {
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="min">Min salary (LPA)</Label>
-            <Input id="min" type="number" inputMode="decimal" min={0} step={0.5} placeholder="Any" className="tnum"
+            <Input id="min" type="number" inputMode="decimal" min={0} step="any" placeholder="Any" className="tnum"
               value={draft.minLpa} onChange={(e) => setDraft({ ...draft, minLpa: e.target.value })} />
           </div>
           <div className="flex h-9 items-center gap-2 sm:mt-[1.375rem]">

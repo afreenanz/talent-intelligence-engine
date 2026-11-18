@@ -8,34 +8,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { usePreferences, useSetPreference } from '@/features/jobs/api'
 import { ListSkeleton } from '@/features/jobs/components'
 import { JOB_TYPE, WORK_MODE } from '@/lib/format'
+import { ROLES, describePreference as describe, list } from '@/lib/preferences'
 import type { Preference, PreferenceKey } from '@/lib/types'
-import { cn } from '@/lib/utils'
-
-const ROLES: Record<string, string> = {
-  backend: 'Backend', frontend: 'Frontend', fullstack: 'Full-stack', data: 'Data', ml: 'Machine learning',
-  devops: 'DevOps', mobile: 'Mobile', qa: 'QA and testing', security: 'Security', design: 'Design', product: 'Product',
-}
 
 type Value = Record<string, unknown>
-const list = (v: unknown) => (Array.isArray(v) ? (v as string[]) : [])
 const csv = (s: string) => [...new Set(s.split(',').map((x) => x.trim()).filter(Boolean))]
 
-/** How each stored value reads in plain words. */
-function describe(key: PreferenceKey, v: Value): string {
-  switch (key) {
-    case 'role_categories': {
-      const p = list(v.prefer).map((r) => ROLES[r] ?? r)
-      const a = list(v.avoid).map((r) => ROLES[r] ?? r)
-      return [p.length && `Prefer ${p.join(', ')}`, a.length && `avoid ${a.join(', ')}`].filter(Boolean).join('; ')
-    }
-    case 'locations': return list(v.cities).join(', ')
-    case 'location_type': return WORK_MODE[v.value as keyof typeof WORK_MODE] ?? String(v.value)
-    case 'employment_type': return JOB_TYPE[v.value as keyof typeof JOB_TYPE] ?? String(v.value)
-    case 'min_salary': return v.currency === 'INR' || !v.currency ? `${Number(v.amount) / 100_000} LPA` : `${v.amount} ${v.currency}`
-    case 'company_avoid': return list(v.companies).join(', ')
-    case 'skills_to_use': return list(v.skills).join(', ')
-  }
-}
+import { cn } from '@/lib/utils'
 
 export default function Preferences() {
   const prefs = usePreferences()
@@ -166,7 +145,7 @@ function salaryEditor(v: Value | undefined): EditorSpec {
     toValue: (s) => (Number(s) > 0 ? { amount: Math.round(Number(s) * 100_000), currency: 'INR' } : null),
     render: (s, set) => (
       <div className="flex items-center gap-2">
-        <Input aria-label="Minimum salary in LPA" type="number" inputMode="decimal" min={0} step={0.5}
+        <Input aria-label="Minimum salary in LPA" type="number" inputMode="decimal" min={0} step="any"
           className="tnum w-32" value={s} onChange={(e) => set(e.target.value)} />
         <span className="text-small text-muted-foreground">LPA</span>
       </div>
