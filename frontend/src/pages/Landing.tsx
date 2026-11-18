@@ -68,7 +68,7 @@ export default function Landing() {
 
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-col gap-8 px-5 pb-8 sm:px-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="hero-copy pointer-events-auto max-w-[58rem]">
-            <h1 className="hero-title font-[700] leading-[0.9] tracking-[-0.055em] [font-size:clamp(48px,8vw,132px)] [text-shadow:0_2px_32px_rgb(7_8_12/0.85)]">
+            <h1 className="hero-title font-[700] leading-[0.9] tracking-[-0.055em] [font-size:clamp(48px,8vw,132px)] [filter:drop-shadow(0_0_16px_rgb(238_232_220/0.32))_drop-shadow(0_0_48px_rgb(255_138_61/0.22))]">
               {'See where you stand in the job market.'.split(' ').map((w, i) => (
                 <span key={i} className="inline-block overflow-hidden pb-[0.06em] align-bottom">
                   <span className="hero-word inline-block" style={{ animationDelay: `${120 + i * 60}ms` }}>{w}&nbsp;</span>
