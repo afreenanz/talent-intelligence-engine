@@ -2,9 +2,8 @@
 
 Intelligent job discovery through retrieval, ranking and agentic AI.
 
-> **Status:** Milestones 0–8 (backend, evaluation, full web app) are done; Milestone 9 (one-command
-> Docker stack, background worker, rate limits, share link) is in review. See [PROJECT_STATUS.md](PROJECT_STATUS.md)
-> and [ROADMAP.md](ROADMAP.md).
+> **Status:** complete (Milestones 0–10). See [PROJECT_STATUS.md](PROJECT_STATUS.md) and [ROADMAP.md](ROADMAP.md)
+> (including where the build differs from the plan, and why). To present it: [docs/demo-script.md](docs/demo-script.md).
 
 ## What it does
 - **Search and ranking:** hybrid retrieval (Postgres full-text + pgvector) and an explainable ranker;
@@ -20,6 +19,8 @@ Intelligent job discovery through retrieval, ranking and agentic AI.
 - **Web app:** React + TypeScript; dashboard, search, matches, assistant, résumé, saved jobs, applications,
   preferences, evaluation ([frontend/README.md](frontend/README.md))
 - The job listings are **synthetic** and labelled as such ([data/README.md](data/README.md))
+- **Security:** threat model, controls, audit results and known gaps in [docs/security.md](docs/security.md)
+- **Architecture** as built: [docs/architecture.md](docs/architecture.md); decisions: [docs/engineering-decisions.md](docs/engineering-decisions.md)
 
 ## Run it (one command)
 Needs Docker (Docker Desktop or OrbStack).

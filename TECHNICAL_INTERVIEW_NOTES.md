@@ -205,3 +205,58 @@ is the actual exercise.
 164. Why did the first public link fail to resolve, and how does the script avoid poisoning the DNS cache?
 165. What does the CI stack job prove that unit and API tests can't?
 
+## Milestone 10: Final review
+166. What did the security audit find, and why did you fix one dependency finding and accept the other?
+167. The roadmap promised a Redis cache. Why isn't there one, and what would make you add it?
+168. Search got 8 ms slower in Milestone 8B. Why was that the right trade?
+169. Name three known gaps a real deployment would need closed first.
+
+---
+
+# How to talk about this project
+
+## The 30-second version
+"I built a job-matching platform that ranks every open role for a candidate and explains why. It uses
+hybrid search (Postgres full-text plus pgvector), a feature-based ranker with an optional
+cross-encoder, personalization that learns from clicks, and a LangGraph assistant that asks before it
+changes anything. I measured each part: on the TalentCLEF benchmark with human labels, my ranking
+stages lifted MAP@100 from 0.74 to 0.81, and I can tell you which of my results are weaker than they look."
+
+## The 2-minute version (architecture in order)
+1. **Data:** synthetic job listings (labelled as synthetic) imported idempotently, with deduplication and
+   expiry; a skill taxonomy with aliases normalizes skills on both sides.
+2. **Retrieval:** keyword search and vector search run in parallel and are fused with Reciprocal Rank
+   Fusion. Hybrid beats keywords alone (NDCG@10 0.82 vs 0.77 on my test split).
+3. **Ranking:** ten explainable features (skill coverage, experience, salary, location…) in a weighted
+   model; missing data is neutral, not a penalty. A cross-encoder adds accuracy but costs ~420 ms, so it's opt-in.
+4. **Personalization:** stated preferences beat learned ones; learning comes only from real clicks, never
+   from impressions. My first version had a feedback loop, so I added an exploration slot and a preference channel.
+5. **Assistant:** LangGraph with ten typed tools; identity comes from auth, never the model; saves and
+   preference changes pause for confirmation; replies are checked against tool output.
+6. **Résumés:** Gemini extracts, then code verifies: skills not in the PDF are dropped, and the user reviews everything.
+7. **Ops:** one Docker command starts seven services; Celery for slow work; rate limits; CI builds and
+   smoke-tests the whole stack.
+
+## Trade-offs I'd defend
+| Decision | Why | What I gave up |
+|---|---|---|
+| Modular monolith, one Postgres | One deployable, one consistency model; pgvector is enough at this size | Independent scaling of search |
+| Exact vector search, no HNSW | Measured <1 ms gain at 1.6k vectors, with recall loss | Revisit at ~50k vectors |
+| Weighted ranker over LambdaMART | 10 labelled queries can't train LTR honestly | Possible accuracy at scale |
+| No search cache | ~8 ms cacheable out of ~60 ms | Nothing measurable yet |
+| Laptop + tunnel, not cloud | Free tiers can't hold the models | Always-on availability |
+| Refresh token in localStorage | Survives reloads; backend issues tokens in the body | XSS exposure (mitigated by CSP and rotation) |
+
+## Weaknesses, said before they're found
+- The job data is synthetic; only ranking was tested on human labels, and on just 10 queries.
+- Personalization numbers come from simulated users.
+- The extraction fixes were designed after seeing the first run, so that score is optimistic.
+- The assistant sometimes adds an unrequested filter, and retries a failing tool three times.
+- No account deletion, email verification or password reset.
+
+## What I'd do next
+1. Real job data (an API feed) and a larger labelled set, then retry learning-to-rank.
+2. Move the refresh token to an httpOnly cookie with CSRF protection.
+3. Slim the backend image (ONNX runtime instead of PyTorch) so it fits a small cloud instance.
+4. Account deletion and data export.
+

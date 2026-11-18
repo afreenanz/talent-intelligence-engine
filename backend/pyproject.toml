@@ -40,7 +40,7 @@ dev = [
 [tool.uv]
 # Reproducibility + supply-chain hygiene: ignore any release newer than this date
 # (roughly two weeks before the lockfile was created). Bump deliberately.
-exclude-newer = "2026-11-03T00:00:00Z"
+exclude-newer = "2026-11-05T00:00:00Z"  # moved 2 days in M10 to take dnspython 2.9.2 (CVE fix)
 package = false
 
 [tool.ruff]

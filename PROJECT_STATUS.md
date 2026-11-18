@@ -2,9 +2,16 @@
 
 _Last updated: 2026-11-18_
 
-**Current milestone:** 9B: Share link and hardening, **awaiting review** (9A merged, PR #11)
-**Next:** Milestone 10: final review (docs, interview prep, optional presentation)
+**Current milestone:** 10: Final review, **awaiting review** (9B merged, PR #12)
+**Next:** nothing planned; optional presentation deck
 **Decision (2026-11-18):** runs on the laptop only; no cloud hosting (free tiers have too little RAM for the models)
+
+## Milestone 10: Final review (verified 2026-11-19)
+- [x] Security audit ([docs/security.md](docs/security.md)): git history clean; pip-audit 1 finding (dnspython CVE, unreachable here) fixed by upgrading only that package; npm 4 moderate (dev-only shadcn CLI) accepted with reasons; ownership, JWT, upload and SQL checks
+- [x] Performance re-measured: search 63 ms p50 (+8 ms for job summaries); caching dropped by measurement
+- [x] Architecture doc rewritten as built, with every deviation from the design and its reason
+- [x] ROADMAP outcome table; demo script with quotable numbers and their caveats; interview prep (pitch, trade-offs, weaknesses, next steps)
+- [x] 326 backend tests, 28 frontend tests, CI stack job
 
 ## Milestone 9B: Share link and hardening (verified 2026-11-18)
 - [x] `scripts/share.sh` (start / url / stop): Cloudflare quick tunnel, link verified before it's printed
