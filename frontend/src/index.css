@@ -241,4 +241,12 @@
 .hero-word { animation: word-rise 900ms var(--spring) both; }
 .hero-nav { animation: sharpen 900ms var(--spring) 80ms both; }
 .hero-copy > a { animation: sharpen 900ms var(--spring) 520ms both; }
-.hero-panel { animation: sharpen 900ms var(--spring) 700ms both; }
+/* Live index card: matte graphite instrument panel, hairline border, lit only by the beam. */
+.live-card {
+  background: linear-gradient(180deg, #14161c 0%, #0f1116 100%);
+  border: 1px solid rgb(238 232 220 / 0.08);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05), 0 30px 80px -20px rgb(0 0 0 / 0.6);
+  transition: border-color 200ms ease;
+  animation: sharpen 900ms var(--spring) 700ms both;
+}
+.live-card:hover { border-color: rgb(238 232 220 / 0.14); }

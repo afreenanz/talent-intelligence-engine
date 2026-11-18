@@ -45,7 +45,8 @@ export function BorderBeam({ children, className, radius = 14 }: {
   useLayoutEffect(() => {
     const el = ref.current
     if (!el) return
-    const update = () => setD(roundedRectPath(el.offsetWidth + 2, el.offsetHeight + 2, radius - 0.5))
+    // offsetWidth/Height are the border box, which is exactly what the svg covers (-1px inset).
+    const update = () => setD(roundedRectPath(el.offsetWidth, el.offsetHeight, radius - 0.5))
     update()
     const ro = new ResizeObserver(update)
     ro.observe(el)
@@ -54,7 +55,7 @@ export function BorderBeam({ children, className, radius = 14 }: {
 
   return (
     <div ref={ref} className={cn('group/beam relative', className)} style={{ borderRadius: radius }}>
-      <svg aria-hidden="true" className="beam pointer-events-none absolute -inset-px overflow-visible opacity-85 transition-opacity duration-200 group-hover/beam:opacity-100">
+      <svg aria-hidden="true" className="beam pointer-events-none absolute -left-px -top-px h-[calc(100%+2px)] w-[calc(100%+2px)] overflow-visible opacity-85 transition-opacity duration-200 group-hover/beam:opacity-100">
         <defs>
           <filter id={id} x="-20%" y="-20%" width="140%" height="140%">
             <feGaussianBlur stdDeviation="4" />

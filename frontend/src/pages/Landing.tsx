@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react'
 import { Link } from 'react-router'
 
 import { Mark } from '@/components/brand/Mark'
+import { BorderBeam } from '@/components/brand/BorderBeam'
 import { TerrainField } from '@/components/brand/TerrainField'
 import { type PublicStats, api } from '@/lib/api'
 
@@ -19,15 +20,35 @@ function useReadout() {
   const onPoints = useCallback((n: number) => setPoints(n), [])
   const value = (n: number | undefined) => (n === undefined ? (isError ? 'n/a' : '…') : nf.format(n))
   return { onPoints, panel: (
-    <section aria-label="Live index" className="hero-panel glass w-[17rem] rounded-xl p-4 text-small">
-      <h2 className="mb-3 text-micro text-muted-foreground">Live index</h2>
-      <dl className="grid grid-cols-[1fr_auto] gap-x-6 gap-y-2 tnum">
-        <dt className="text-muted-foreground">Open roles</dt><dd>{value(data?.active_jobs)}</dd>
-        <dt className="text-muted-foreground">Companies hiring</dt><dd>{value(data?.companies_hiring)}</dd>
-        <dt className="text-muted-foreground">Skills tracked</dt><dd>{value(data?.skills_tracked)}</dd>
-        <dt className="text-muted-foreground">Points in view</dt><dd>{points === null ? '…' : nf.format(points)}</dd>
-      </dl>
-    </section>
+    <BorderBeam radius={20} className="live-card w-[380px] max-w-full">
+      <section aria-labelledby="live-index" className="p-7">
+        <div className="flex items-center justify-between">
+          <h2 id="live-index" className="text-[15px] font-semibold text-foreground">Live index</h2>
+          <span className="rounded-full border border-signal/25 bg-signal/10 px-[9px] py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-signal">
+            Live
+          </span>
+        </div>
+        <p className="mt-1.5 text-sm text-muted-foreground">Counted from the job database right now.</p>
+
+        <p className="mt-7 flex items-baseline gap-1.5">
+          <span className="sr-only">{value(data?.active_jobs)} open roles</span>
+          <span aria-hidden="true" className="[font-variant-numeric:proportional-nums] text-[56px] font-semibold leading-none tracking-[-0.04em] text-foreground">
+            {value(data?.active_jobs)}
+          </span>
+          <span aria-hidden="true" className="text-[15px] text-muted-foreground">open roles</span>
+        </p>
+
+        <hr className="my-6 border-0 border-t border-[rgb(238_232_220/0.07)]" />
+
+        <dl className="grid grid-cols-[1fr_auto] gap-y-3.5 text-sm [font-variant-numeric:proportional-nums]">
+          <dt className="text-[#d9d6d0]">Companies hiring</dt><dd className="text-right text-foreground">{value(data?.companies_hiring)}</dd>
+          <dt className="text-[#d9d6d0]">Skills tracked</dt><dd className="text-right text-foreground">{value(data?.skills_tracked)}</dd>
+          <dt className="text-[#d9d6d0]">Points in view</dt><dd className="text-right text-foreground">{points === null ? '…' : nf.format(points)}</dd>
+        </dl>
+
+        <p className="mt-6 text-xs text-[rgb(238_232_220/0.42)]">Job listings in this demo are synthetic.</p>
+      </section>
+    </BorderBeam>
   ) }
 }
 
