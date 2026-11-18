@@ -4,6 +4,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 8C: Assistant, résumé, dashboard, evaluation
+- Assistant page with confirmations, step trace and safe reply rendering
+- Résumé upload, review and apply; dashboard; admin evaluation page
+- Fixes: fractional number inputs no longer block forms; phone users can sign out
+
 ### Milestone 8B: Jobs UI
 - Search, job detail with match breakdown, For you (beam on the top match), saved jobs, applications, preferences
 - Click and dismiss feedback from the UI; application status moves mirror the backend's allowed transitions

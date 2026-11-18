@@ -30,6 +30,18 @@ export function AppShell() {
       <aside className="flex flex-col border-b border-sidebar-border bg-sidebar md:sticky md:top-0 md:h-[100svh] md:border-b-0 md:border-r">
         <div className="flex items-center gap-2.5 px-5 py-5 font-semibold tracking-tight">
           <Mark /> <span className="truncate">Talent Engine</span>
+          {/* Phones: the account controls live in the top bar (the sidebar footer is hidden). */}
+          <div className="ml-auto flex gap-1 md:hidden">
+            <button type="button" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="rounded-md p-2 text-muted-foreground hover:bg-sidebar-accent hover:text-foreground"
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}>
+              {theme === 'dark' ? <Sun className="size-4" aria-hidden="true" /> : <Moon className="size-4" aria-hidden="true" />}
+            </button>
+            <button type="button" onClick={() => void logout()} aria-label="Sign out"
+              className="rounded-md p-2 text-muted-foreground hover:bg-sidebar-accent hover:text-foreground">
+              <LogOut className="size-4" aria-hidden="true" />
+            </button>
+          </div>
         </div>
         <nav aria-label="App" className="flex gap-1 overflow-x-auto px-3 pb-3 md:flex-col md:overflow-visible">
           {items.map(({ to, label, icon: Icon, end }) => (

@@ -2,8 +2,18 @@
 
 _Last updated: 2026-11-18_
 
-**Current milestone:** 8B: Jobs UI, **awaiting review** (8A merged, PR #8)
-**Next:** Milestone 8C: assistant, résumé onboarding, dashboard, evaluation page
+**Current milestone:** 8C: Assistant, résumé, dashboard, evaluation, **awaiting review** (8B merged, PR #9)
+**Next:** Milestone 9: Redis/Celery, Docker, deployment
+
+## Milestone 8C: Assistant, résumé, dashboard, evaluation (verified 2026-11-18)
+- [x] Assistant: conversations (history, delete), safe reply rendering (no HTML; job ids become job links/titles), step trace, grounding warning
+- [x] Confirmation card in plain words (job titles, preference values), approve/decline, input locked while pending; survives reload
+- [x] Résumé: PDF upload (type/size checked), background parsing with polling, review form (keyword-only skills unticked, ungrounded jobs flagged, empty fields never overwrite), merge into profile
+- [x] Dashboard: profile status, top 3 matches, saved/application counts, recent searches
+- [x] Evaluation (admin): latest batch per experiment with dataset/split/commit; ranking, retrieval (dev/test, run button), personalisation, assistant, extraction, speed
+- [x] Privacy notes where text goes to Gemini (assistant, résumé)
+- [x] 27 frontend tests; live browser run with Gemini: résumé → profile → matches; assistant search → confirm → saved
+- [x] Found in the browser and fixed: number fields with step 0.5 silently blocked the résumé form (5.4 years), raw job ids in assistant text, no sign-out on phones (from 8A), table formatting
 
 ## Milestone 8B: Jobs UI (verified 2026-11-18)
 - [x] Search: query + city/work mode/job type/min salary filters, optional profile blend; state in the URL (back/forward, shareable)

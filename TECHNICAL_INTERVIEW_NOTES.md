@@ -179,3 +179,12 @@ is the actual exercise.
 144. Why are impressions logged by the server but clicks and dismissals sent by the client?
 145. What did lazy-loading routes change in bundle size, and what new problem did it introduce (hydrate fallback)?
 
+## Milestone 8C: Assistant, résumé, dashboard, evaluation
+146. How do you render an LLM's reply with formatting but without an XSS risk? Why not a Markdown-to-HTML library with dangerouslySetInnerHTML?
+147. The confirmation summary from the server contained a raw job id and a Python dict. Where should human wording be produced, and why did you do it in the client?
+148. A form wouldn't submit and showed no error. What caused it (step="0.5" with 5.4), and how does the regression test prove the fix?
+149. Résumé parsing runs in the background. How does the page know when it's done, and why does polling stop by itself?
+150. Why are dictionary-only skills unticked by default on the review form?
+151. The evaluation page groups runs into "latest batch". Why not just show the latest run per experiment?
+152. What do you tell users about sending text to a free-tier LLM, and where?
+
