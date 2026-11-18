@@ -58,6 +58,8 @@ class Settings(BaseSettings):
 
     # Abuse protection for a publicly reachable demo (see app/core/rate_limit.py).
     rate_limits_enabled: bool = True
+    # Close sign-ups while the app is shared publicly, so visitors use the demo account only.
+    signup_enabled: bool = True
     # Password for the demo account created by `bootstrap` / `seed-demo`. Unset: no demo account.
     demo_password: str | None = Field(default=None, min_length=10)
 

@@ -87,3 +87,47 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+
+  # Builds both images and starts the real stack (fresh database: migrations + bootstrap), then
+  # checks it end to end through nginx: health, data, demo sign-in, ranked matches, security headers.
+  stack:
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create .env for the smoke test
+        run: |
+          cp .env.example .env
+          echo "JWT_SECRET=$(python3 -c 'import secrets; print(secrets.token_urlsafe(48))')" >> .env
+          echo "DEMO_PASSWORD=ci-demo-password-1" >> .env
+
+      - name: Build images
+        run: docker compose --profile app build
+
+      - name: Start the stack
+        run: |
+          docker compose --profile app up -d
+          for i in $(seq 1 90); do
+            if curl -fsS http://localhost:8090/health/ready >/dev/null 2>&1; then echo "ready after $((i*5)) s"; exit 0; fi
+            sleep 5
+          done
+          echo "stack did not become ready"; exit 1
+
+      - name: Smoke test through nginx
+        run: |
+          B=http://localhost:8090
+          curl -fsS $B/api/v1/stats | python3 -c "import sys,json; d=json.load(sys.stdin); print(d); assert d['active_jobs'] > 1000"
+          TOKEN=$(curl -fsS -X POST $B/api/v1/auth/login -H 'content-type: application/json' \
+            -d '{"email":"demo@example.com","password":"ci-demo-password-1"}' \
+            | python3 -c "import sys,json; print(json.load(sys.stdin)['access_token'])")
+          curl -fsS "$B/api/v1/recommendations?top_k=3" -H "authorization: Bearer $TOKEN" \
+            | python3 -c "import sys,json; r=json.load(sys.stdin)['results']; print([h['title'] for h in r]); assert len(r) == 3 and r[0]['explanation']"
+          curl -fsS -o /dev/null -w "spa route: %{http_code}\n" $B/app/search
+          curl -fsSI $B/ | grep -i "content-security-policy"
+          docker compose --profile app exec -T worker celery -A app.worker.celery_app inspect ping
+
+      - name: Logs on failure
+        if: failure()
+        run: docker compose --profile app logs --no-color | tail -300

@@ -198,3 +198,10 @@ is the actual exercise.
 159. The backend image is 2.5 GB. Where does that come from, and how would you shrink it?
 160. Why a separate init service for migrations instead of running them in the API's entrypoint?
 
+## Milestone 9B: Share link and hardening
+161. How does a Cloudflare quick tunnel reach a laptop without opening a port? What are its limits?
+162. Behind the tunnel, all requests come from one container. How did you keep per-visitor rate limits, and why is CF-Connecting-IP safe to trust here but not in general?
+163. Postgres was published on 0.0.0.0 with a dev password. What was the risk and the fix?
+164. Why did the first public link fail to resolve, and how does the script avoid poisoning the DNS cache?
+165. What does the CI stack job prove that unit and API tests can't?
+

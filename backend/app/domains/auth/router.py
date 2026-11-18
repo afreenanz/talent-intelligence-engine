@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, status
 
 from app.api.deps import CurrentUser, DbSession, SettingsDep
+from app.core.errors import PermissionDeniedError
 from app.core.rate_limit import LOGIN, REGISTER, by_ip
 from app.domains.auth import service
 from app.domains.auth.schemas import (
@@ -20,7 +21,11 @@ router = APIRouter(prefix="/auth", tags=["auth"])
     status_code=status.HTTP_201_CREATED,
     dependencies=[Depends(by_ip(REGISTER))],
 )
-def register(body: RegisterRequest, session: DbSession) -> UserOut:
+def register(body: RegisterRequest, session: DbSession, settings: SettingsDep) -> UserOut:
+    if not settings.signup_enabled:
+        raise PermissionDeniedError(
+            "New sign-ups are closed on this demo. Sign in with the demo account."
+        )
     return UserOut.model_validate(service.register(session, body))
 
 

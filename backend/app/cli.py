@@ -333,12 +333,34 @@ def cmd_bootstrap(args: argparse.Namespace) -> int:
 
     from app.domains.jobs.models import Job
 
-    steps = [["seed-skills"]]
+    if main(["seed-skills"]) != 0:
+        print("bootstrap: step failed: seed-skills", file=sys.stderr)
+        return 1
     with get_sessionmaker()() as session:
         has_jobs = (session.scalar(select(func.count()).select_from(Job)) or 0) > 0
-    if not has_jobs:
-        steps.append(["ingest-jobs", str(DEFAULT_JOBS), "--source", "synthetic_v1"])
-    steps.append(["embed-jobs"])
+        if not has_jobs:
+            # Called directly, not via `ingest-jobs`: its exit code is non-zero whenever any
+            # record is rejected. The synthetic set contains deliberately invalid records
+            # (data/synthetic/jobs_v1.manifest.json), so rejections are expected; only an empty
+            # load is a failure.
+            print(f"bootstrap: ingest {DEFAULT_JOBS.name}", flush=True)
+            run = ingestion.ingest(
+                session,
+                read_records(DEFAULT_JOBS),
+                source="synthetic_v1",
+                mode=IngestionMode.INCREMENTAL,
+                file_name=DEFAULT_JOBS.name,
+                batch_size=500,
+            )
+            _print_run(run)
+            if run.inserted == 0:
+                print("bootstrap: no jobs were loaded", file=sys.stderr)
+                return 1
+            if run.failed:
+                print(
+                    f"bootstrap: {run.failed} records rejected (expected: the set has invalid ones)"
+                )
+    steps = [["embed-jobs"]]
     if get_settings().demo_password:
         steps.append(["seed-demo"])
     for step in steps:
