@@ -16,6 +16,7 @@ function messageFor(err: unknown, mode: 'login' | 'register'): string {
     if (err.status === 409) return 'An account with this email already exists. Sign in instead.'
     if (err.status === 422) return 'Check the highlighted fields and try again.'
     if (err.status === 429) return err.message // the server says how long to wait
+    if (err.status === 403 && mode === 'register') return err.message // sign-ups closed on a shared demo
     if (err.status >= 500) return 'The server had a problem. Try again in a moment.'
   }
   return mode === 'login' ? 'Couldn’t sign in. Check your connection and try again.'

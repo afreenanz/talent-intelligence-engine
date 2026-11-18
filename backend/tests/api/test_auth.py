@@ -118,3 +118,16 @@ def test_me_returns_account_with_admin_flag(client: TestClient) -> None:
     body = client.get("/api/v1/auth/me", headers=auth_header(tokens)).json()
     assert body["email"] == "me@example.com" and body["is_admin"] is False
     assert client.get("/api/v1/auth/me").status_code == 401
+
+
+def test_signup_can_be_closed_for_a_public_demo(client: TestClient) -> None:
+    from app.core.config import get_settings
+    from app.main import app
+
+    closed = get_settings().model_copy(update={"signup_enabled": False})
+    app.dependency_overrides[get_settings] = lambda: closed
+    r = client.post(
+        "/api/v1/auth/register", json={"email": "new@example.com", "password": "long-enough-pw"}
+    )
+    assert r.status_code == 403
+    assert "demo account" in r.json()["error"]["message"]

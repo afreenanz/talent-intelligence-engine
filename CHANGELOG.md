@@ -4,6 +4,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 9B: Share link and hardening
+- `scripts/share.sh`: temporary public link via Cloudflare quick tunnel
+- Ports bound to localhost; real visitor address behind the tunnel; log rotation; `SIGNUP_ENABLED`
+- CI builds the images and smoke-tests the full stack
+
 ### Milestone 9A: One-command stack
 - Docker images for backend (api/worker/beat) and web (nginx); `--profile app` runs everything at :8090
 - Celery worker + beat replace in-process background tasks; stale résumé requeue; hourly job expiry

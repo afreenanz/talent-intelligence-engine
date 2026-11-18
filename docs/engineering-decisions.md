@@ -118,3 +118,19 @@ Vite + React 19 + TypeScript, Tailwind 4 with shadcn/ui (components copied into 
 - **Profiles.** `docker compose up` still starts only Postgres + Redis for development;
   `--profile app` starts everything. The Docker stack uses Redis database 1, so a natively run dev API
   never hands the Docker worker a file it can't see.
+
+**Update (Milestone 9B): sharing.**
+- A Cloudflare quick tunnel (`scripts/share.sh`, compose profile `share`) gives a temporary public
+  link without accounts or open ports. Chosen over cloud hosting (RAM limits) and over port-forwarding
+  (exposes the machine; needs router access).
+- Every published port is bound to 127.0.0.1. Before this, Postgres (dev password) and Redis were
+  reachable from the local network.
+- Through the tunnel every request comes from the cloudflared container, which would put all
+  visitors in one rate-limit bucket. nginx takes the visitor address from `CF-Connecting-IP`, trusted
+  only from private addresses; with the host port on 127.0.0.1, no one on the network can forge it.
+- `SIGNUP_ENABLED=false` closes registration while sharing, so visitors use only the demo account
+  (and can't spend the Gemini quota through new accounts).
+- The share script checks the link through Cloudflare's resolver (1.1.1.1): asking the system
+  resolver for a brand-new name too early makes the OS cache "does not exist" for minutes.
+- CI builds both images and smoke-tests the whole stack from an empty database.
+

@@ -2,9 +2,18 @@
 
 _Last updated: 2026-11-18_
 
-**Current milestone:** 9A: One-command stack, **awaiting review** (8C merged, PR #10)
-**Next:** Milestone 9B: share link (tunnel), CI image build, final hardening
+**Current milestone:** 9B: Share link and hardening, **awaiting review** (9A merged, PR #11)
+**Next:** Milestone 10: final review (docs, interview prep, optional presentation)
 **Decision (2026-11-18):** runs on the laptop only; no cloud hosting (free tiers have too little RAM for the models)
+
+## Milestone 9B: Share link and hardening (verified 2026-11-18)
+- [x] `scripts/share.sh` (start / url / stop): Cloudflare quick tunnel, link verified before it's printed
+- [x] Real visitor address through the tunnel (`CF-Connecting-IP`, trusted from private addresses only)
+- [x] All ports bound to 127.0.0.1 (Postgres and Redis were reachable from the LAN); log rotation; web healthcheck
+- [x] `SIGNUP_ENABLED` switch for public sharing
+- [x] CI `stack` job: builds both images, starts the stack on an empty database, smoke-tests through nginx
+- [x] Verified from outside through a real public link: API, demo sign-in in a browser, per-visitor rate-limit key; link closed afterwards
+- [x] Found and fixed: the first link was checked too early and the OS cached "not found"; the script printed links it hadn't verified
 
 ## Milestone 9A: One-command stack (verified 2026-11-18)
 - [x] `docker compose --profile app up -d --build` → http://localhost:8090: postgres, redis, init, api, worker, beat, web

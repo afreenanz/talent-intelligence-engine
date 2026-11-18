@@ -5,15 +5,22 @@
 
 name: talent-engine
 
+# Every service keeps at most 3 x 10 MB of logs (Docker's default is unbounded).
+x-logging: &logging
+  driver: json-file
+  options: { max-size: 10m, max-file: "3" }
+
 services:
   postgres:
+    logging: *logging
     image: pgvector/pgvector:0.8.7-pg17-trixie
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-tie}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tie_dev_password}
       POSTGRES_DB: ${POSTGRES_DB:-tie}
     ports:
-      - "${POSTGRES_HOST_PORT:-5433}:5432"
+      # 127.0.0.1 only: the database (with its dev password) must not be reachable from the network.
+      - "127.0.0.1:${POSTGRES_HOST_PORT:-5433}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
@@ -24,10 +31,11 @@ services:
       retries: 10
 
   redis:
+    logging: *logging
     image: redis:8.2-alpine
     command: ["redis-server", "--appendonly", "yes"]
     ports:
-      - "${REDIS_HOST_PORT:-6380}:6379"
+      - "127.0.0.1:${REDIS_HOST_PORT:-6380}:6379"
     volumes:
       - redisdata:/data
     healthcheck:
@@ -39,6 +47,7 @@ services:
   # ------------------------------------------------------------------ the app (profile "app")
   # Runs once per `up`: migrations, then bootstrap (idempotent: skills, jobs, embeddings, demo).
   init:
+    logging: *logging
     profiles: [app]
     <<: &backend
       build: { context: ., dockerfile: backend/Dockerfile }
@@ -61,6 +70,7 @@ services:
     restart: "no"
 
   api:
+    logging: *logging
     profiles: [app]
     <<: *backend
     depends_on:
@@ -75,6 +85,7 @@ services:
     restart: unless-stopped
 
   worker:
+    logging: *logging
     profiles: [app]
     <<: *backend
     command: ["celery", "-A", "app.worker.celery_app", "worker", "--loglevel=INFO", "--concurrency=2"]
@@ -84,6 +95,7 @@ services:
     restart: unless-stopped
 
   beat:
+    logging: *logging
     profiles: [app]
     <<: *backend
     command: ["celery", "-A", "app.worker.celery_app", "beat", "--loglevel=INFO", "--schedule", "/tmp/celerybeat-schedule"]
@@ -93,13 +105,33 @@ services:
     restart: unless-stopped
 
   web:
+    logging: *logging
     profiles: [app]
     build: { context: ., dockerfile: frontend/Dockerfile }
     image: talent-engine-web
     ports:
-      - "${WEB_HOST_PORT:-8090}:80"
+      # Only this machine (and the tunnel container) can reach the site. Sharing goes through
+      # scripts/share.sh, never by opening a port to the network.
+      - "127.0.0.1:${WEB_HOST_PORT:-8090}:80"
     depends_on:
       api: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    restart: unless-stopped
+
+  # ------------------------------------------------------------------ public link (profile "share")
+  # A Cloudflare quick tunnel: a random https://*.trycloudflare.com address that reaches `web` while
+  # this machine is on. No account needed. Start/stop it with scripts/share.sh.
+  tunnel:
+    logging: *logging
+    profiles: [share]
+    image: cloudflare/cloudflared:2026.10.7
+    command: ["tunnel", "--no-autoupdate", "--url", "http://web:80"]
+    depends_on:
+      web: { condition: service_healthy }
     restart: unless-stopped
 
 volumes:

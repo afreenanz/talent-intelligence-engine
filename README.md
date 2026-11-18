@@ -2,8 +2,8 @@
 
 Intelligent job discovery through retrieval, ranking and agentic AI.
 
-> **Status:** Milestones 0–8 (backend, evaluation, full web app) are done; Milestone 9A (one-command
-> Docker stack, background worker, rate limits) is in review. See [PROJECT_STATUS.md](PROJECT_STATUS.md)
+> **Status:** Milestones 0–8 (backend, evaluation, full web app) are done; Milestone 9 (one-command
+> Docker stack, background worker, rate limits, share link) is in review. See [PROJECT_STATUS.md](PROJECT_STATUS.md)
 > and [ROADMAP.md](ROADMAP.md).
 
 ## What it does
@@ -49,6 +49,17 @@ The first build takes a few minutes (the backend image includes PyTorch and the 
 
 Stop with `docker compose --profile app down` (data is kept in Docker volumes).
 Without an API key the app still works; résumé parsing and the assistant say they're unavailable.
+
+## Share a link (while your laptop is on)
+```bash
+scripts/share.sh          # starts the app if needed, prints a https://….trycloudflare.com link
+scripts/share.sh url      # show the link again
+scripts/share.sh stop     # close it; the app keeps running locally
+```
+A free Cloudflare quick tunnel (no account). The link works only while this machine and Docker
+are running, and changes each time the tunnel restarts. Rate limits stay on; set
+`SIGNUP_ENABLED=false` in `.env` to let visitors use only the demo account. The site is otherwise
+reachable only from this machine (ports are bound to 127.0.0.1).
 
 ## Develop
 For working on the code, run only the database and Redis in Docker and the rest natively:
