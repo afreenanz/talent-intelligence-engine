@@ -3,7 +3,8 @@
 Intelligent job discovery through retrieval, ranking and agentic AI.
 
 > **Status:** complete (Milestones 0–10). See [PROJECT_STATUS.md](PROJECT_STATUS.md) and [ROADMAP.md](ROADMAP.md)
-> (including where the build differs from the plan, and why). To present it: [docs/demo-script.md](docs/demo-script.md).
+> (including where the build differs from the plan, and why). To present it: [docs/demo-script.md](docs/demo-script.md)
+> and the slide deck in [presentation/](presentation/index.html) (open `presentation/index.html` in a browser).
 
 ## What it does
 - **Search and ranking:** hybrid retrieval (Postgres full-text + pgvector) and an explainable ranker;
