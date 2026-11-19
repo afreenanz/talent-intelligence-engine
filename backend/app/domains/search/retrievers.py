@@ -51,6 +51,8 @@ def apply_filters(stmt: Select[Any], f: JobFilters) -> Select[Any]:
         )
     if f.company:
         stmt = stmt.where(Job.company.icontains(f.company, autoescape=True))
+    if f.sources:
+        stmt = stmt.where(Job.source.in_(f.sources))
     return stmt
 
 

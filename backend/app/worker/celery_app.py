@@ -31,6 +31,11 @@ celery_app.conf.update(
     timezone="UTC",
     beat_schedule={
         "expire-due-jobs": {"task": "app.worker.tasks.expire_jobs", "schedule": crontab(minute=5)},
+        # Once a day, early morning UTC: well inside Adzuna's free limits (12 requests/run).
+        "refresh-job-feed": {
+            "task": "app.worker.tasks.refresh_job_feed",
+            "schedule": crontab(hour=1, minute=30),
+        },
         "requeue-stale-resumes": {
             "task": "app.worker.tasks.requeue_stale_resumes",
             "schedule": 300.0,

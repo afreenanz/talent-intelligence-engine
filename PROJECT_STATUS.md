@@ -2,9 +2,18 @@
 
 _Last updated: 2026-11-18_
 
-**Current milestone:** 10: Final review, **awaiting review** (9B merged, PR #12)
-**Next:** nothing planned; optional presentation deck
+**Current milestone:** 11A: Real job feed (Adzuna), **in progress**: built and tested; live fetch pending the Adzuna key
+**Next:** 11B larger labelled set (Gemini drafts, human-checked sample), 11C learning-to-rank retry
 **Decision (2026-11-18):** runs on the laptop only; no cloud hosting (free tiers have too little RAM for the models)
+
+## Milestone 11A: Real job feed (in progress, 2026-11-19)
+- [x] Adzuna client + mapping (HTML stripped, predicted salaries dropped, remote/hybrid detected, 30-day expiry, link to original ad)
+- [x] Same ingestion pipeline as file imports; `fetch-jobs` CLI (`--dry-run`); daily beat task; skipped without a key
+- [x] Migration `5ca3c6ec2fff`: `jobs.apply_url` (content hash unchanged for existing jobs)
+- [x] `JobFilters.sources`; retrieval and personalization evaluations pinned to the synthetic corpus
+- [x] UI: "Jobs by Adzuna" label on every feed listing (terms), "Synthetic demo listing" on the rest, "View original ad", "Real listings only" search switch, honest landing copy
+- [x] Remotive rejected: its terms forbid showing its jobs to collect sign-ups
+- [ ] Live fetch with a real key; measure what the snippets cost (skills found per job vs synthetic)
 
 ## Milestone 10: Final review (verified 2026-11-19)
 - [x] Security audit ([docs/security.md](docs/security.md)): git history clean; pip-audit 1 finding (dnspython CVE, unreachable here) fixed by upgrading only that package; npm 4 moderate (dev-only shadcn CLI) accepted with reasons; ownership, JWT, upload and SQL checks

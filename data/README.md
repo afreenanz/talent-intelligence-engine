@@ -16,3 +16,11 @@ Rules:
 - No real resumes or personal data are committed. `data/private/` is git-ignored for local use.
 - A public dataset may be added only after its licence is checked and recorded in this table.
 - Regenerating with the same arguments produces a byte-identical file (verified with md5).
+
+## Live feed: Adzuna (Milestone 11)
+Real job listings fetched through the [Adzuna API](https://developer.adzuna.com) when `ADZUNA_APP_ID`
+and `ADZUNA_APP_KEY` are set (source `adzuna_in`). Used under Adzuna's terms for personal job search
+and personal/academic research; every listing shown in the app is labelled "Jobs by Adzuna" and linked
+to adzuna.in, and links to the original ad. Stored in the database only (not in this repository).
+Descriptions are snippets; estimated (`salary_is_predicted`) salaries are not stored.
+

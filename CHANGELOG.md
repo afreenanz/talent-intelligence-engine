@@ -4,6 +4,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 11A: Real job feed
+- Adzuna connector (`fetch-jobs`, daily task), `jobs.apply_url`, `JobFilters.sources`
+- Evaluations scoped to their labelled corpus; provider attribution and source labels in the UI
+
 ### Milestone 10: Final review
 - Security audit and docs/security.md; dnspython 2.9.1 → 2.9.2 (CVE fix)
 - Performance re-measured; caching decision documented

@@ -16,6 +16,7 @@ class PublicStats(BaseModel):
     active_jobs: int
     companies_hiring: int
     skills_tracked: int
+    real_jobs: int = 0  # active listings from live feeds (not synthetic)
 
 
 @router.get("/stats", response_model=PublicStats)
@@ -24,6 +25,10 @@ def stats(session: DbSession) -> PublicStats:
     return PublicStats(
         active_jobs=session.scalar(select(func.count()).select_from(active)) or 0,
         companies_hiring=session.scalar(select(func.count(func.distinct(active.c.company)))) or 0,
+        real_jobs=session.scalar(
+            select(func.count()).select_from(active).where(~active.c.source.like("synthetic%"))
+        )
+        or 0,
         skills_tracked=session.scalar(
             select(func.count()).select_from(Skill).where(Skill.category.is_not(None))
         )

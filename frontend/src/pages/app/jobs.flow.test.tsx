@@ -8,7 +8,7 @@ import { renderApp } from '@/test/renderApp'
 const job = (id: string, title: string) => ({
   id, title, company: 'Acme', location: null, city: 'Pune', location_type: 'hybrid', employment_type: 'full_time',
   salary_min: 1_200_000, salary_max: 1_800_000, salary_currency: 'INR', experience_min: 2, experience_max: 5,
-  status: 'active', listed_at: '2026-11-10T00:00:00Z', expires_at: null,
+  status: 'active', listed_at: '2026-11-10T00:00:00Z', expires_at: null, source: 'synthetic_v1', apply_url: null,
 })
 const hit = (id: string, title: string, score: number) => ({
   job_id: id, title, company: 'Acme', score, explanation: ['Matches 2 of 3 required skills (Python, SQL)', 'Missing: Go'],
@@ -78,4 +78,19 @@ it('shows the application pipeline and only offers allowed status moves', async 
   await userEvent.click(screen.getByRole('combobox', { name: 'Status for Backend Engineer' }))
   const options = screen.getAllByRole('option').map((o) => o.textContent)
   expect(options).toEqual(['Applied', 'Move to screening', 'Move to rejected', 'Move to withdrawn'])
+})
+
+it('labels real listings with the provider and sends the real-only filter', async () => {
+  server.use(http.post('/api/v1/jobs/search', async ({ request }) => {
+    searchBodies.push(await request.json())
+    const real = { ...hit('j9', 'Platform Engineer', 0.7), job: { ...job('j9', 'Platform Engineer'), source: 'adzuna_in', apply_url: 'https://www.adzuna.in/land/ad/9' } }
+    return HttpResponse.json({ results: [real, hit('j1', 'Backend Engineer', 0.6)], mode: 'hybrid', ranking: 'features', search_log_id: 'l', used_profile: false, timings_ms: {} })
+  }))
+  renderApp('/app/search?q=platform&real=1')
+  await screen.findByRole('link', { name: 'Platform Engineer' })
+  expect(searchBodies[0]).toMatchObject({ filters: { sources: ['adzuna_in'] } })
+  const adzuna = screen.getByRole('link', { name: 'Jobs by Adzuna' })
+  expect(adzuna).toHaveAttribute('href', 'https://www.adzuna.in')
+  expect(screen.getByText('Synthetic demo listing')).toBeInTheDocument()
+  expect(screen.getByRole('switch', { name: 'Real listings only' })).toBeChecked()
 })

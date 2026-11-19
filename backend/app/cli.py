@@ -315,6 +315,42 @@ def cmd_make_admin(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_fetch_jobs(args: argparse.Namespace) -> int:
+    from app.domains.ingestion.feeds import FeedNotConfiguredError, adzuna_client, refresh_adzuna
+
+    settings = get_settings()
+    try:
+        client = adzuna_client(settings)
+    except FeedNotConfiguredError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    queries = args.query or settings.job_feed_queries
+    if args.dry_run:
+        records, stats = client.fetch(queries, pages=settings.job_feed_pages)
+        print(
+            f"requests={stats.requests} results={stats.results} usable={stats.usable} "
+            f"skipped={stats.skipped} stopped_early={stats.stopped_early}"
+        )
+        for r in records[:5]:
+            print(
+                f"  {r['title']} | {r['company']} | {r.get('location')} | salary="
+                f"{r.get('salary_min')}-{r.get('salary_max')}"
+            )
+        return 0
+    with get_sessionmaker()() as session:
+        result = refresh_adzuna(session, settings, client, queries)
+    s = result.stats
+    print(
+        f"requests={s.requests} usable={s.usable} skipped={s.skipped} "
+        f"stopped_early={s.stopped_early}"
+    )
+    if result.run is not None:
+        _print_run(result.run)
+        if not args.no_embed:
+            return main(["embed-jobs"])
+    return 0 if result.run is not None else 1
+
+
 def cmd_seed_demo(args: argparse.Namespace) -> int:
     from app.demo import DEMO_EMAIL, new_password, seed_demo
 
@@ -439,6 +475,12 @@ def main(argv: list[str] | None = None) -> int:
 
     p = sub.add_parser("bench-performance", help="latency, query plans, exact vs HNSW")
     p.set_defaults(func=cmd_bench_performance)
+
+    p = sub.add_parser("fetch-jobs", help="pull real jobs from the Adzuna feed, then embed them")
+    p.add_argument("--query", action="append", help="search term (repeatable); default: settings")
+    p.add_argument("--dry-run", action="store_true", help="fetch and map only; write nothing")
+    p.add_argument("--no-embed", action="store_true")
+    p.set_defaults(func=cmd_fetch_jobs)
 
     p = sub.add_parser("seed-demo", help="create/reset the demo account (fictional profile)")
     p.add_argument("--password", help="defaults to DEMO_PASSWORD, else a random one is printed")

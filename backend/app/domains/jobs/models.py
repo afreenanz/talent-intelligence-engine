@@ -102,6 +102,8 @@ class Job(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     content_hash: Mapped[str] = mapped_column(CHAR(64), nullable=False)
 
     posted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))  # from source
+    # Link to the original ad (feeds only). Shown as 'View original ad'; attribution needs it.
+    apply_url: Mapped[str | None] = mapped_column(Text)
     expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     # Sort/recency key: posted_at when known, otherwise when we first saw the job. Kept separate
     # so we never invent a posted_at the source didn't give us.

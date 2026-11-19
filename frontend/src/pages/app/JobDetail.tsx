@@ -60,7 +60,7 @@ export default function JobDetail() {
           <p className="mt-1 text-lede">{j.company}</p>
           <JobFacts job={j} className="mt-3" />
           <p className="mt-2 text-micro text-muted-foreground">
-            <Listed iso={j.listed_at} />{j.source.startsWith('synthetic') && ' (synthetic demo listing)'}
+            <Listed iso={j.listed_at} />
           </p>
           {j.status !== 'active' && (
             <p className="mt-3 inline-block rounded-md border border-rose/40 px-2.5 py-1 text-small text-rose">
@@ -68,7 +68,12 @@ export default function JobDetail() {
             </p>
           )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          {j.apply_url && (
+            <Button asChild variant="outline">
+              <a href={j.apply_url} target="_blank" rel="noopener noreferrer">View original ad</a>
+            </Button>
+          )}
           <SaveButton jobId={j.id} withLabel />
           <ApplyAction job={j} />
         </div>

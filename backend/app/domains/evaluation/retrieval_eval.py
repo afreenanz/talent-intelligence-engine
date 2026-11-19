@@ -53,6 +53,7 @@ class Dataset:
     queries: list[Query]
     judgments: dict[str, dict[uuid.UUID, int]]  # query_id -> {job_id: grade}
     dropped_judgments: int = 0
+    source: str = "synthetic_v1"  # the feed the labels refer to; retrieval is scoped to it
 
 
 @dataclass(frozen=True)
@@ -101,7 +102,7 @@ def load_dataset(session: Session, directory: Path, source: str) -> Dataset:
     problems = m.validate_judgments(judgments)
     if problems:
         raise ValueError(f"unusable judgments: {problems[:5]}")
-    return Dataset(directory.name, queries, dict(judgments), dropped)
+    return Dataset(directory.name, queries, dict(judgments), dropped, source)
 
 
 def score_query(ranked: list[uuid.UUID], j: dict[uuid.UUID, int]) -> dict[str, float]:
@@ -129,7 +130,9 @@ def run_config(
             session,
             query=q.text,
             candidate_id=None,
-            filters=JobFilters(**q.filters),
+            # Retrieve only from the labelled corpus: unlabelled jobs from other feeds would
+            # otherwise be scored as misses and quietly lower every metric.
+            filters=JobFilters(**q.filters, sources=[dataset.source]),
             top_k=DEPTH,
             embedder=embedder,
             mode=config.mode,

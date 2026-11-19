@@ -159,9 +159,12 @@ class JobIngestor:
             "experience_max": exp_max,
             "posted_at": rec.posted_at,
             "expires_at": rec.expires_at,
+            "apply_url": rec.apply_url,
         }
         hash_input = {
-            **fields,
+            # apply_url only counts when present, so adding the column didn't change the hash
+            # (and force a re-import) of every existing record without one.
+            **{k: v for k, v in fields.items() if not (k == "apply_url" and v is None)},
             "required": sorted(normalize_skill_name(s) for s in rec.required_skills),
             "preferred": sorted(normalize_skill_name(s) for s in rec.preferred_skills),
         }

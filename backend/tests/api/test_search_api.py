@@ -121,3 +121,30 @@ def test_recommendations_with_empty_profile_is_clear_error(client: TestClient) -
 def test_docs_example_for_search_has_no_placeholder_filters(client: TestClient) -> None:
     schema = client.get("/openapi.json").json()["components"]["schemas"]["SearchRequest"]
     assert schema["examples"] == [{"query": "backend engineer", "top_k": 5}]
+
+
+def test_search_can_be_limited_to_real_feed_listings(
+    client: TestClient, db_session: Session
+) -> None:
+    ingestion.ingest(
+        db_session,
+        [
+            {
+                "external_id": "az-1",
+                "title": "Backend Engineer",
+                "company": "Real Co",
+                "description": "Python and PostgreSQL services for lending, end to end ownership.",
+                "location": "Pune",
+                "apply_url": "https://www.adzuna.in/land/ad/1",
+            }
+        ],
+        source="adzuna_in",
+        now=datetime.now(UTC),
+    )
+    embed_jobs(db_session, HashingEmbedder())
+    h = auth_header(register_and_login(client))
+    both = client.post("/api/v1/jobs/search", json={"query": "backend python"}, headers=h).json()
+    assert {r["company"] for r in both["results"]} >= {"Acme", "Real Co"}
+    body = {"query": "backend python", "filters": {"sources": ["adzuna_in"]}}
+    real = client.post("/api/v1/jobs/search", json=body, headers=h).json()
+    assert [r["company"] for r in real["results"]] == ["Real Co"]

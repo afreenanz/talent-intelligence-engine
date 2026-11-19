@@ -102,6 +102,7 @@ def _recommend(
     ranker: WeightedRanker,
     personalize: bool,
     k: int,
+    source: str,
 ) -> list[uuid.UUID]:
     ctx = (
         PersonalizationContext.from_preferences(prefs.effective_preferences(session, profile.id))
@@ -112,7 +113,7 @@ def _recommend(
         session,
         query=None,
         candidate_id=profile.id,
-        filters=JobFilters(),
+        filters=JobFilters(sources=[source]),  # only the labelled synthetic corpus
         top_k=100,
         embedder=embedder,
         extra_lexical_queries=ctx.preference_queries() if ctx else None,
@@ -154,6 +155,7 @@ def run_one(
     persona: str,
     seed: int,
     condition: str,
+    source: str,
 ) -> Outcome:
     liked, disliked = PERSONAS[persona]
     profile = _make_candidate(session, f"{abs(hash((persona, seed, condition)))}")
@@ -169,7 +171,13 @@ def run_one(
         rng = random.Random(seed)  # noqa: S311 (simulation, not security)
         for _ in range(ROUNDS):
             shown = _recommend(
-                session, profile, embedder, ranker, personalize=condition == "personalized", k=SHOWN
+                session,
+                profile,
+                embedder,
+                ranker,
+                personalize=condition == "personalized",
+                k=SHOWN,
+                source=source,
             )
             for pos, jid in enumerate(shown, start=1):
                 fam = family.get(jid)
@@ -190,7 +198,13 @@ def run_one(
                     )
                     touched.add(jid)
     final = _recommend(
-        session, profile, embedder, ranker, personalize=condition != "generic", k=100
+        session,
+        profile,
+        embedder,
+        ranker,
+        personalize=condition != "generic",
+        k=100,
+        source=source,
     )
     ndcg, ls, ds = _score(final, family, liked, disliked, touched)
     derived = {
@@ -214,7 +228,7 @@ def run(session: Session, embedder: Embedder, truth_file: Path, source: str) -> 
         for seed in range(SEEDS):
             for condition in ("generic", "personalized", "explicit preference only"):
                 outcomes.append(
-                    run_one(session, embedder, ranker, family, persona, seed, condition)
+                    run_one(session, embedder, ranker, family, persona, seed, condition, source)
                 )
     return outcomes
 

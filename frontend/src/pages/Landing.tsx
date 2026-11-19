@@ -19,7 +19,7 @@ function useReadout() {
   const [points, setPoints] = useState<number | null>(null)
   const onPoints = useCallback((n: number) => setPoints(n), [])
   const value = (n: number | undefined) => (n === undefined ? (isError ? 'n/a' : '…') : nf.format(n))
-  return { onPoints, panel: (
+  return { onPoints, realJobs: data?.real_jobs ?? 0, activeJobs: data?.active_jobs ?? 0, panel: (
     <BorderBeam radius={20} className="live-card hero-panel w-[17rem] max-w-full">
       <section aria-labelledby="live-index" className="p-4 text-small">
         <div className="mb-3 flex items-center justify-between">
@@ -46,7 +46,7 @@ const STEPS = [
 ]
 
 export default function Landing() {
-  const { onPoints, panel } = useReadout()
+  const { onPoints, panel, realJobs, activeJobs } = useReadout()
   return (
     <div className="dark bg-background text-foreground">
       <section className="relative h-[100svh] min-h-[620px] overflow-hidden bg-[radial-gradient(120%_80%_at_70%_20%,#10131c_0%,#07080c_60%)]">
@@ -105,8 +105,10 @@ export default function Landing() {
           ))}
         </ol>
         <p className="mt-10 max-w-[60ch] text-small text-muted-foreground">
-          The job listings in this demo are synthetic and labelled as such. Ranking quality is measured on
-          a public benchmark with human relevance labels. The numbers are on the evaluation page.
+          {realJobs > 0
+            ? `${nf.format(realJobs)} of the ${nf.format(activeJobs)} open roles are live listings from Adzuna; the rest are synthetic demo data. Every listing is labelled with its source.`
+            : 'The job listings in this demo are synthetic and labelled as such.'}{' '}
+          Ranking quality is measured on a public benchmark with human relevance labels. The numbers are on the evaluation page.
         </p>
       </section>
     </div>

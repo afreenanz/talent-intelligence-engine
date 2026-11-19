@@ -134,3 +134,25 @@ Vite + React 19 + TypeScript, Tailwind 4 with shadcn/ui (components copied into 
   resolver for a brand-new name too early makes the OS cache "does not exist" for minutes.
 - CI builds both images and smoke-tests the whole stack from an empty database.
 
+## ADR-015 Real job data from Adzuna (Milestone 11A)
+**Context.** All listings were synthetic; the next step was real jobs and, later, a larger labelled set.
+
+- **Adzuna India**, through its official API. Its terms allow "personal job search" and "personal and
+  academic research", and require each displayed ad to be labelled "Adzuna" (≥ 116 × 23 px) and
+  linked to the local Adzuna site. The UI shows a "Jobs by Adzuna" link on every listing from it.
+- **Not Remotive**, though its API is open: its terms say displaying its jobs "to collect signups or
+  email addresses constitutes a breach", and this app shows jobs only to signed-in users.
+- **Same pipeline as a file import.** The feed maps results to the existing record contract, so it gets
+  the same validation, normalisation, deduplication, expiry and skill extraction. `INCREMENTAL` mode: a
+  search API never returns the whole catalogue, so missing results must not be read as "removed".
+- **Predicted salaries are dropped.** Adzuna estimates a salary when the ad has none
+  (`salary_is_predicted`); showing an estimate as the employer's figure would be misleading.
+- **Known limitation: description snippets.** The API returns only part of each description, so skill
+  extraction and lexical search see less text than for a full posting. Measured, not hidden.
+- **Lifetime 30 days** after posting (`expires_at`), since the feed doesn't give closing dates.
+- **Evaluations are pinned to their labelled corpus.** `JobFilters.sources` scopes retrieval; the
+  retrieval and personalization evaluations pass the synthetic source. Without it, unlabelled real
+  jobs would be retrieved and scored as misses, silently lowering every metric.
+- **Schedule:** daily at 01:30 UTC via beat (12 requests/run with the default queries), plus
+  `python -m app.cli fetch-jobs` (`--dry-run` to preview).
+

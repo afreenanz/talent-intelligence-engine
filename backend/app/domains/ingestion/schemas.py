@@ -60,6 +60,7 @@ class JobRecordIn(BaseModel):
 
     posted_at: datetime | None = None
     expires_at: datetime | None = None
+    apply_url: str | None = Field(default=None, max_length=2000, pattern=r"^https?://")
 
     @field_validator("required_skills", "preferred_skills", mode="before")
     @classmethod
@@ -79,6 +80,7 @@ class JobRecordIn(BaseModel):
         "experience_text",
         "posted_at",
         "expires_at",
+        "apply_url",
         mode="before",
     )
     @classmethod

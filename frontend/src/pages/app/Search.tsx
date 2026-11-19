@@ -15,6 +15,7 @@ import { JOB_TYPE, WORK_MODE } from '@/lib/format'
 import type { EmploymentType, JobFilters, LocationType } from '@/lib/types'
 
 const ANY = 'any'
+const REAL_SOURCE = 'adzuna_in'
 
 /** Search state lives in the URL, so back/forward and shared links reproduce the same results. */
 function readParams(p: URLSearchParams): { q: string; filters: JobFilters; useProfile: boolean } {
@@ -27,6 +28,7 @@ function readParams(p: URLSearchParams): { q: string; filters: JobFilters; usePr
       ...(p.get('mode') ? { location_type: p.get('mode') as LocationType } : {}),
       ...(p.get('type') ? { employment_type: p.get('type') as EmploymentType } : {}),
       ...(lpa > 0 ? { min_salary: Math.round(lpa * 100_000) } : {}),
+      ...(p.get('real') === '1' ? { sources: [REAL_SOURCE] } : {}),
     },
   }
 }
@@ -36,7 +38,7 @@ export default function Search() {
   const { q, filters, useProfile } = readParams(params)
   const [draft, setDraft] = useState({
     q, city: params.get('city') ?? '', mode: params.get('mode') ?? ANY, type: params.get('type') ?? ANY,
-    minLpa: params.get('min_lpa') ?? '', profile: useProfile,
+    minLpa: params.get('min_lpa') ?? '', profile: useProfile, real: params.get('real') === '1',
   })
   const search = useSearch(q, filters, useProfile)
   const recent = useRecentSearches()
@@ -50,6 +52,7 @@ export default function Search() {
     if (draft.type !== ANY) next.set('type', draft.type)
     if (Number(draft.minLpa) > 0) next.set('min_lpa', draft.minLpa)
     if (draft.profile) next.set('profile', '1')
+    if (draft.real) next.set('real', '1')
     setParams(next)
   }
 
@@ -72,7 +75,7 @@ export default function Search() {
           </div>
           <Button type="submit" size="lg" className="h-10 px-5" disabled={!draft.q.trim()}>Search</Button>
         </div>
-        <div className="mt-4 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-[1fr_9rem_9rem_8rem_auto]">
+        <div className="mt-4 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-[1fr_9rem_9rem_8rem_auto_auto]">
           <div className="space-y-1.5">
             <Label htmlFor="city">City</Label>
             <Input id="city" placeholder="Any city" value={draft.city} onChange={(e) => setDraft({ ...draft, city: e.target.value })} />
@@ -105,6 +108,10 @@ export default function Search() {
           <div className="flex h-9 items-center gap-2 sm:mt-[1.375rem]">
             <Switch id="profile" checked={draft.profile} onCheckedChange={(v) => setDraft({ ...draft, profile: v })} />
             <Label htmlFor="profile" className="font-normal">Blend in my profile</Label>
+          </div>
+          <div className="flex h-9 items-center gap-2 sm:mt-[1.375rem]">
+            <Switch id="real" checked={draft.real} onCheckedChange={(v) => setDraft({ ...draft, real: v })} />
+            <Label htmlFor="real" className="font-normal">Real listings only</Label>
           </div>
         </div>
       </form>

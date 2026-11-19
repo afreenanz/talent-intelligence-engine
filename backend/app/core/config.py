@@ -52,6 +52,27 @@ class Settings(BaseSettings):
     embedding_model: str = "BAAI/bge-small-en-v1.5"
     embedding_device: str = "cpu"  # "mps" on Apple Silicon is possible; cpu is reproducible
 
+    # Real job feed (Adzuna). No key -> the feed is simply skipped; synthetic data still works.
+    adzuna_app_id: str | None = None
+    adzuna_app_key: SecretStr | None = None
+    adzuna_country: str = Field(default="in", pattern=r"^[a-z]{2}$")
+    job_feed_queries: list[str] = [
+        "software engineer",
+        "backend developer",
+        "frontend developer",
+        "full stack developer",
+        "data engineer",
+        "data scientist",
+        "machine learning engineer",
+        "devops engineer",
+        "android developer",
+        "qa engineer",
+        "product manager",
+        "ui ux designer",
+    ]
+    job_feed_pages: int = Field(default=1, ge=1, le=10)
+    job_feed_max_days_old: int = Field(default=30, ge=1, le=90)
+
     # Resume uploads. Stored outside the web root, in a git-ignored folder.
     upload_dir: str = "../data/private/uploads"
     max_resume_bytes: int = Field(default=5 * 1024 * 1024, ge=1024)

@@ -28,11 +28,14 @@ class JobSummary(BaseModel):
     status: JobStatus
     listed_at: datetime
     expires_at: datetime | None
+    # Where the listing came from ("synthetic_v1", "adzuna_in", ...). Feed listings must be
+    # attributed wherever they are shown, so every summary carries it.
+    source: str
+    apply_url: str | None = Field(description="link to the original ad (feed listings only)")
 
 
 class JobDetail(JobSummary):
     description: str
-    source: str
     external_id: str
     posted_at: datetime | None
     duplicate_of_job_id: uuid.UUID | None

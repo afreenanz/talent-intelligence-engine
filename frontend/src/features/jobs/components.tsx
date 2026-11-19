@@ -9,6 +9,27 @@ import { FEATURE_LABEL, JOB_TYPE, WORK_MODE, ago, experience, fit, place, salary
 import type { JobSummary, SearchHit } from '@/lib/types'
 import { cn } from '@/lib/utils'
 
+const FEED_SITES: Record<string, string> = { adzuna_in: 'https://www.adzuna.in' }
+const isSynthetic = (source: string) => source.startsWith('synthetic')
+
+/**
+ * Where a listing came from. Real feed listings carry the provider's label: Adzuna's terms ask for
+ * the word "Adzuna", at least 116 x 23 px, linked to the local Adzuna site, on every displayed ad.
+ * Demo listings say they're synthetic.
+ */
+export function SourceTag({ source }: { source: string }) {
+  const site = FEED_SITES[source]
+  if (site) {
+    return (
+      <a href={site} target="_blank" rel="noopener noreferrer"
+        className="relative z-[1] inline-flex h-[23px] min-w-[116px] items-center justify-center rounded-full border border-line px-2.5 text-micro font-semibold text-foreground hover:border-foreground/30">
+        Jobs by Adzuna
+      </a>
+    )
+  }
+  return isSynthetic(source) ? <span className="text-micro text-muted-foreground/80">Synthetic demo listing</span> : null
+}
+
 /** Plain facts about a job, as separate items (no dot-joined meta string). */
 export function JobFacts({ job, className }: { job: JobSummary; className?: string }) {
   const items = [
@@ -19,8 +40,9 @@ export function JobFacts({ job, className }: { job: JobSummary; className?: stri
     job.employment_type && job.employment_type !== 'full_time' ? JOB_TYPE[job.employment_type] : null,
   ].filter(Boolean) as string[]
   return (
-    <ul className={cn('flex flex-wrap gap-x-4 gap-y-1 text-small text-muted-foreground', className)}>
+    <ul className={cn('flex flex-wrap items-center gap-x-4 gap-y-1 text-small text-muted-foreground', className)}>
       {items.map((t) => <li key={t}>{t}</li>)}
+      <li><SourceTag source={job.source} /></li>
     </ul>
   )
 }

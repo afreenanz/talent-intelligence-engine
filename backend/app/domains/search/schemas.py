@@ -28,6 +28,11 @@ class JobFilters(BaseModel):
         default=None, ge=0, le=60, description="exclude jobs whose minimum experience is higher"
     )
     company: str | None = Field(default=None, max_length=100)
+    sources: list[str] | None = Field(
+        default=None,
+        max_length=10,
+        description="only jobs from these feeds, e.g. ['adzuna_in'] for real listings only",
+    )
 
 
 @dataclass(frozen=True)

@@ -1,0 +1,52 @@
+{
+  "count": 4,
+  "results": [
+    {
+      "id": "4954512345",
+      "title": "Senior <strong>Backend</strong> Engineer &amp; Platform",
+      "description": "We are hiring a backend engineer to build Python and FastAPI services on PostgreSQL, deployed with Docker on AWS. Hybrid, 3 days in our Bengaluru office…",
+      "company": {"display_name": "Acme Fintech Pvt Ltd"},
+      "location": {"display_name": "Bengaluru, Karnataka", "area": ["India", "Karnataka", "Bengaluru"]},
+      "salary_min": 1800000,
+      "salary_max": 2600000,
+      "salary_is_predicted": "0",
+      "contract_time": "full_time",
+      "contract_type": "permanent",
+      "created": "2026-11-15T09:12:44Z",
+      "redirect_url": "https://www.adzuna.in/land/ad/4954512345?se=abc&v=1",
+      "category": {"label": "IT Jobs", "tag": "it-jobs"}
+    },
+    {
+      "id": "4954599999",
+      "title": "Data Engineer",
+      "description": "Build batch and streaming pipelines with Airflow, Spark and SQL. Work from home, anywhere in India. Experience with BigQuery is a plus.",
+      "company": {"display_name": "Orbit Analytics"},
+      "location": {"display_name": "India"},
+      "salary_min": 1534000,
+      "salary_max": 1534000,
+      "salary_is_predicted": "1",
+      "contract_type": "contract",
+      "created": "2026-11-17T04:00:00Z",
+      "redirect_url": "https://www.adzuna.in/land/ad/4954599999?se=def&v=1"
+    },
+    {
+      "id": "4954500000",
+      "title": "QA Engineer",
+      "description": "Manual and automated testing with Selenium for a retail platform in Pune.",
+      "company": {},
+      "location": {"display_name": "Pune, Maharashtra"},
+      "created": "2026-11-16T10:00:00Z",
+      "redirect_url": "https://www.adzuna.in/land/ad/4954500000"
+    },
+    {
+      "id": "4954512345",
+      "title": "Senior <strong>Backend</strong> Engineer &amp; Platform",
+      "description": "We are hiring a backend engineer to build Python and FastAPI services on PostgreSQL, deployed with Docker on AWS. Hybrid, 3 days in our Bengaluru office…",
+      "company": {"display_name": "Acme Fintech Pvt Ltd"},
+      "location": {"display_name": "Bengaluru, Karnataka"},
+      "salary_is_predicted": "0",
+      "created": "2026-11-15T09:12:44Z",
+      "redirect_url": "https://www.adzuna.in/land/ad/4954512345?se=abc&v=1"
+    }
+  ]
+}

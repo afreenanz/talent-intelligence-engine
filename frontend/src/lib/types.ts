@@ -21,11 +21,13 @@ export interface JobSummary {
   status: 'active' | 'expired' | 'duplicate' | 'removed'
   listed_at: string
   expires_at: string | null
+  /** "synthetic_v1" for demo data, "adzuna_in" etc. for real feed listings. */
+  source: string
+  apply_url: string | null
 }
 
 export interface JobDetail extends JobSummary {
   description: string
-  source: string
   posted_at: string | null
   skills: { skill_id: number; name: string; importance: SkillImportance }[]
 }
@@ -60,6 +62,7 @@ export interface JobFilters {
   location_type?: LocationType
   employment_type?: EmploymentType
   min_salary?: number
+  sources?: string[]
 }
 
 export interface Page<T> {

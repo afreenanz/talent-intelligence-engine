@@ -70,3 +70,24 @@ def requeue_stale_resumes() -> int:
     if ids:
         log.warning("task_requeued_stale_resumes", count=len(ids))
     return len(ids)
+
+
+@celery_app.task(name="app.worker.tasks.refresh_job_feed")
+def refresh_job_feed() -> int:
+    """Daily: pull new jobs from Adzuna and embed them. Skipped quietly without a key."""
+    from app.core.config import get_settings
+    from app.domains.ingestion.feeds import FeedNotConfiguredError, refresh_adzuna
+    from app.domains.search.indexing import embed_jobs
+    from app.integrations.embeddings.sentence_transformer import get_embedder
+
+    settings = get_settings()
+    with get_sessionmaker()() as session:
+        try:
+            result = refresh_adzuna(session, settings)
+        except FeedNotConfiguredError:
+            log.info("job_feed_skipped", reason="no Adzuna key configured")
+            return 0
+        if result.run is None:
+            return 0
+        embed_jobs(session, get_embedder())
+        return result.run.inserted

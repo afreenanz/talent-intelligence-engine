@@ -187,4 +187,5 @@ export interface PublicStats {
   active_jobs: number
   companies_hiring: number
   skills_tracked: number
+  real_jobs: number
 }
