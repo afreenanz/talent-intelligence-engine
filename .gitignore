@@ -32,3 +32,9 @@ data/private/
 
 # Third-party datasets: downloaded by scripts, never committed
 data/external/
+
+# Database/upload backups (personal data)
+backups/
+
+# Local downloads of the repo itself
+/GITHUB ZIP FILE/

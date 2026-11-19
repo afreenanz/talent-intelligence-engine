@@ -22,6 +22,19 @@ Intelligent job discovery through retrieval, ranking and agentic AI.
 - **Security:** threat model, controls, audit results and known gaps in [docs/security.md](docs/security.md)
 - **Architecture** as built: [docs/architecture.md](docs/architecture.md); decisions: [docs/engineering-decisions.md](docs/engineering-decisions.md)
 
+## Documentation
+
+| Area | Documents |
+|---|---|
+| Architecture and decisions | [architecture.md](docs/architecture.md) (as built, with every deviation from the design) · [engineering-decisions.md](docs/engineering-decisions.md) (ADR-001 to 014) · [security.md](docs/security.md) |
+| Backend and database | [database-design.md](docs/database-design.md) (schema from the live database) · [api-documentation.md](docs/api-documentation.md) (generated, checked in CI) · [ingestion.md](docs/ingestion.md) · [resume-intelligence.md](docs/resume-intelligence.md) |
+| Retrieval and ranking | [retrieval-engine.md](docs/retrieval-engine.md) · [ranking-engine.md](docs/ranking-engine.md) (incl. personalization) |
+| Agent | [agent-architecture.md](docs/agent-architecture.md) · [memory-design.md](docs/memory-design.md) |
+| Evaluation and benchmarks | [evaluation-framework.md](docs/evaluation-framework.md) · [performance-benchmarks.md](docs/performance-benchmarks.md) · reports in [eval/reports/](eval/reports/) |
+| Frontend | [frontend.md](docs/frontend.md) · [frontend/README.md](frontend/README.md) |
+| Deployment and Docker | [deployment.md](docs/deployment.md) (run, configure, share, back up and restore, troubleshoot) · [docker-compose.yml](docker-compose.yml) · [infra/nginx/](infra/nginx/) |
+| Presenting it | [demo-script.md](docs/demo-script.md) · [TECHNICAL_INTERVIEW_NOTES.md](TECHNICAL_INTERVIEW_NOTES.md) |
+
 ## Run it (one command)
 Needs Docker (Docker Desktop or OrbStack).
 

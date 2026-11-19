@@ -4,6 +4,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Documentation pass
+- docs/frontend.md, docs/deployment.md; database, evaluation and memory docs brought up to date
+- Generated API reference with a CI freshness check; backup and restore scripts (tested)
+
 ### Milestone 10: Final review
 - Security audit and docs/security.md; dnspython 2.9.1 → 2.9.2 (CVE fix)
 - Performance re-measured; caching decision documented

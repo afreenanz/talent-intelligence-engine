@@ -1,6 +1,6 @@
 # Frontend
 
-React 19 + TypeScript + Vite, Tailwind 4, shadcn/ui, TanStack Query, React Router. Design notes and decisions: [ADR-013](../docs/engineering-decisions.md).
+React 19 + TypeScript + Vite, Tailwind 4, shadcn/ui, TanStack Query, React Router. Full documentation: [docs/frontend.md](../docs/frontend.md); decisions: [ADR-013](../docs/engineering-decisions.md).
 
 ## Run
 
