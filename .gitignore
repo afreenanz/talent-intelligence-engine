@@ -35,3 +35,6 @@ data/external/
 
 # Database/upload backups (personal data)
 backups/
+
+# Local downloads of the repo itself
+/GITHUB ZIP FILE/
