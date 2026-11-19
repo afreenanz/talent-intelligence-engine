@@ -1,8 +1,8 @@
 # Performance benchmarks
 
-> Status: **Measured (Milestone 7B)**. Source: [eval/reports/2026-11-17-performance.md](../eval/reports/2026-11-17-performance.md),
-> produced by `uv run python -m app.cli bench-performance` (from `backend/`). Re-run it to refresh;
-> numbers vary a few ms between runs. Caching (Redis) is measured in Milestone 9.
+> Status: **Measured (Milestone 7B), re-measured in Milestone 10.** Sources:
+> [2026-11-17](../eval/reports/2026-11-17-performance.md) and [2026-11-18](../eval/reports/2026-11-18-performance.md),
+> produced by `uv run python -m app.cli bench-performance` (from `backend/`). Numbers vary a few ms between runs.
 
 **Environment:** laptop CPU (Apple Silicon; models on CPU for reproducibility), Postgres 17 + pgvector
 in Docker, ~1,600 active jobs, warm process (first-request model loading of ~8–10 s per model excluded).
@@ -16,6 +16,7 @@ in Docker, ~1,600 active jobs, warm process (first-request model loading of ~8�
 | Rank 100 (stage 1 features) | 16.6 ms | 19.6 ms | one batched job/skill query |
 | + cross-encoder on top 50 | **477 ms** | 681 ms | why stage 2 is opt-in |
 | HTTP `POST /jobs/search` end to end | **54 ms** | 72 ms | auth, retrieval, ranking, personalization, search + impression logging |
+| … the same, Milestone 10 | **63 ms** | 70 ms | +~8 ms: results now carry a job summary (one batched query), which saves the browser 20 requests per search |
 | Document embedding throughput | 63 docs/s | | full job texts (~1,500 chars) |
 | Agent turn (live Gemini, free tier) | 2.4–6.5 s | 4.8–12.6 s | from the agent benchmark; dominated by LLM calls |
 
@@ -32,6 +33,17 @@ and the index plan on a warm one, which suggested a misleading 20 ms vs 8 ms gap
 out (autoanalyze had run; `ANALYZE` changed nothing). The benchmark now warms each query before `EXPLAIN ANALYZE`.
 
 ## Where time goes in a search request (p50 ≈ 54 ms)
-query embedding ≈ 8 ms → lexical + dense SQL ≈ 12 ms → ranking ≈ 17 ms → search log + impressions insert
-and response serialisation ≈ the rest. Next optimisations, only if needed: cache query embeddings and
-repeated searches in Redis (Milestone 9); batch impression inserts asynchronously.
+query embedding ≈ 8 ms → lexical + dense SQL ≈ 12 ms → ranking ≈ 17 ms → job summaries ≈ 8 ms → search log +
+impressions insert and response serialisation ≈ the rest.
+
+## Caching decision (Milestone 10): not built
+The roadmap planned a Redis cache for searches. Measured, it isn't worth it yet:
+- The only expensive cacheable step is the query embedding, **~8 ms**.
+- Whole-response caching doesn't fit: results depend on the user's profile and preferences, and
+  every search logs impressions that personalization learns from, so a cached response would skip
+  that write or need its own invalidation per user.
+- Correct invalidation (new jobs, expiry, preference changes) adds real complexity to save
+  single-digit milliseconds on a ~60 ms request.
+
+Revisit if p95 search exceeds ~200 ms (e.g. a much larger corpus), starting with an embedding cache
+keyed by `(model, normalized query)`, which never needs invalidation.

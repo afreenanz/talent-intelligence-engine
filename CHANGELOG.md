@@ -4,6 +4,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/). Each entry corr
 
 ## [Unreleased]
 
+### Milestone 10: Final review
+- Security audit and docs/security.md; dnspython 2.9.1 → 2.9.2 (CVE fix)
+- Performance re-measured; caching decision documented
+- Architecture doc as built; ROADMAP outcomes; demo script; interview prep
+
 ### Milestone 9B: Share link and hardening
 - `scripts/share.sh`: temporary public link via Cloudflare quick tunnel
 - Ports bound to localhost; real visitor address behind the tunnel; log rotation; `SIGNUP_ENABLED`
