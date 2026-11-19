@@ -32,3 +32,6 @@ data/private/
 
 # Third-party datasets: downloaded by scripts, never committed
 data/external/
+
+# Database/upload backups (personal data)
+backups/

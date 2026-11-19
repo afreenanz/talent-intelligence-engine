@@ -64,6 +64,9 @@ jobs:
       - name: Type check
         run: uv run mypy app
 
+      - name: API reference is up to date
+        run: uv run python -m scripts.gen_api_docs --check
+
       - name: Migrations match models
         run: uv run alembic upgrade head && uv run alembic check
 

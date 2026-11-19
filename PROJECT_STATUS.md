@@ -2,9 +2,17 @@
 
 _Last updated: 2026-11-18_
 
-**Current milestone:** 10: Final review, **awaiting review** (9B merged, PR #12)
-**Next:** nothing planned; optional presentation deck
+**Current milestone:** Documentation pass, **awaiting review** (M10 merged, PR #13; 11A real-job feed parked, PR #15 closed)
+**Next:** nothing planned
 **Decision (2026-11-18):** runs on the laptop only; no cloud hosting (free tiers have too little RAM for the models)
+
+## Documentation pass (verified 2026-11-19)
+- [x] database-design.md rebuilt from the live schema (columns, indexes, constraints, enums, migrations; deviations from design called out)
+- [x] evaluation-framework.md: all six evaluations, real dataset layout and commands; memory-design.md corrected (key names, when learned preferences update, what isn't built)
+- [x] API reference generated from the app (`scripts/gen_api_docs.py`): 39 endpoints with auth and rate limits; CI fails if it's stale
+- [x] New docs/frontend.md and docs/deployment.md
+- [x] scripts/backup.sh and scripts/restore.sh, verified end to end on a throwaway stack (backup, wipe, restore, sign in)
+- [x] README documentation index
 
 ## Milestone 10: Final review (verified 2026-11-19)
 - [x] Security audit ([docs/security.md](docs/security.md)): git history clean; pip-audit 1 finding (dnspython CVE, unreachable here) fixed by upgrading only that package; npm 4 moderate (dev-only shadcn CLI) accepted with reasons; ownership, JWT, upload and SQL checks

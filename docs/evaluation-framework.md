@@ -1,6 +1,8 @@
 # Evaluation Framework
 
-> Status: **Retrieval evaluation implemented (Milestone 3B)**: `app/domains/evaluation/` (metrics with hand-computed tests, runner, paired bootstrap, `evaluation_runs` table). Extraction, agent and response-quality evaluation land in Milestone 7.
+> Status: **Complete (Milestones 3B–7B, re-measured in 10).** Six evaluations: retrieval, ranking, personalization,
+> assistant, résumé extraction and performance. Code: `backend/app/domains/evaluation/`; reports: `eval/reports/`;
+> every run is stored in `evaluation_runs` and shown on the in-app Evaluation page (admin).
 
 ## Results so far (all produced by committed commands; reports in `eval/reports/`)
 
@@ -12,10 +14,17 @@
 | **Agent** | `eval-agent` | agent_v1: 23 scripted conversations, 14 categories | **23/23 passed in two independent runs**; groundedness 1.0; factual consistency 40/40 and 39/39; invalid-arg rate 0; ≈$0.027/run at paid-tier prices |
 | **Resume extraction** | `eval-extraction` | extraction_v1: 10 fictional resumes, hand-written expectations | experience in range 10/10; pre-selected skill precision 0.901 → **1.000** after v2 fixes (negation filter, dictionary finds become suggestions) |
 
-| Performance | `bench-performance` | retrieval_v1 queries, real models | HTTP search p50 54 ms; cross-encoder +0.48 s; HNSW not justified at 1.6k vectors ([performance-benchmarks.md](performance-benchmarks.md)) |
+| Performance | `bench-performance` | retrieval_v1 queries, real models | HTTP search p50 54 ms (7B) → 63 ms (10, job summaries added); cross-encoder +0.42–0.48 s; HNSW not justified at 1.6k vectors; no cache needed ([performance-benchmarks.md](performance-benchmarks.md)) |
 
-**Access:** every run is stored in `evaluation_runs`; `GET /api/v1/evaluations` (admin) lists them for the
-dashboard, without per-query payloads; `GET /api/v1/evaluations/{id}` returns everything.
+Run any of them from `backend/` with `uv run python -m app.cli <command>` (LLM-backed ones need
+`GEMINI_API_KEY`). The empty row in the table above separates quality evaluations from the performance benchmark.
+
+**Scoping:** retrieval and personalization retrieve only from the corpus their labels refer to
+(`JobFilters.sources`), so any other listings in the database can't be scored as misses.
+
+**Access:** every run is stored in `evaluation_runs`. The **Evaluation page** in the app (admin) shows the
+latest batch of each experiment with its dataset, split, date and commit. `GET /api/v1/evaluations` (admin) lists runs
+without per-query payloads; `GET /api/v1/evaluations/{id}` returns everything.
 `POST /api/v1/evaluations/run` can start only the free retrieval experiment. LLM-backed benchmarks are
 CLI-only so a click can't spend API quota.
 
@@ -44,16 +53,14 @@ injected skill still appears among *suggestions* (forbidden_skills_in_suggestion
 - Differences between pipelines are reported with a **paired bootstrap confidence interval over queries**, not as bare point estimates.
 - LLM-as-judge is never the only signal. Where it is used, its agreement with human labels is reported.
 
-## Datasets (`eval/datasets/<version>/`)
-| File | Content |
-|---|---|
-| `jobs.jsonl` | Frozen job corpus snapshot (synthetic, labelled as such) |
-| `queries.jsonl` | `{query_id, text, filters, candidate_ref?, split}` |
-| `qrels.tsv` | `query_id  job_id  grade(0–3)`, labelled by pooling |
-| `extraction_gold/` | Resume texts + hand-written expected JSON |
-| `agent_cases.jsonl` | `{case_id, user_turns, expected_tools, forbidden_tools, expected_outcome, category}` |
-
-The categories in `agent_cases` follow the brief: clear, ambiguous, no-match, conflicting preferences, invalid filters, missing profile, tool failure (injected), outdated jobs.
+## Datasets (`eval/datasets/`, as built)
+| Dataset | Files | Content |
+|---|---|---|
+| `retrieval_v1` | `queries.jsonl`, `qrels.tsv`, `README.md` | 40 queries (`query_id, text, category, split, filters, label_spec`), dev/test split; `qrels.tsv` = `query_id  external_id  grade`, generated from each query's `label_spec` against the synthetic generator's ground truth (**silver** labels; the README explains the rules) |
+| TalentCLEF 2026 Task A | downloaded to `data/external/` (git-ignored) by `scripts/fetch_talentclef.py` | 10 job-description queries × 472 synthetic CVs, **human expert binary labels**, CC BY 4.0. The test split's labels are not public (checked Nov 2026) |
+| `agent_v1` | `cases.jsonl` | 23 scripted conversations in 14 categories (clear, ambiguous, no match, conflicting preferences, invalid filters, missing profile, injected tool failure, outdated jobs, confirmation and decline, …) with expected/forbidden tools and DB effects |
+| `extraction_v1` | `resumes.jsonl`, `README.md` | 10 fictional résumés with hand-written expectations, including a planted prompt injection and negated skills |
+| personas | in code (`personalization_eval.py`) | 4 simulated users with fixed liked/disliked role families; relevance from the synthetic generator's ground truth |
 
 ## Metrics
 
@@ -66,5 +73,7 @@ The categories in `agent_cases` follow the brief: clear, ambiguous, no-match, co
 | Performance | p50/p95 latency per stage, embedding throughput, tokens in/out, estimated cost from a configured price table |
 
 ## Reports
-`python -m app.domains.evaluation.run --experiment retrieval_v1` writes the DB row plus
-`eval/reports/<date>-<experiment>.md`. The evaluation dashboard reads only from `evaluation_runs`.
+Each command writes the `evaluation_runs` row(s) and a Markdown report `eval/reports/<date>-<experiment>.md` with
+the configuration, results, confidence intervals and caveats. Reports are committed; the in-app Evaluation page
+reads only from `evaluation_runs`. Earlier versions of a report are kept when a fix changed the result
+(`…-v1-before-fixes.md`), so the before/after is visible.
